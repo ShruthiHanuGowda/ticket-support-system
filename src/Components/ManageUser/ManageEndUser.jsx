@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {
   Button,
-  Checkbox,
   Divider,
   FormControlLabel,
   FormGroup,
@@ -27,13 +26,12 @@ import { styled } from '@mui/material/styles'
 import SearchIcon from '@mui/icons-material/Search'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import FilterAltOffSharpIcon from '@mui/icons-material/FilterAltOffSharp'
-
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import EditIcon from '@mui/icons-material/Edit';
-
-
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 
 //--------- for Search bar ------
 
@@ -52,7 +50,7 @@ const Search = styled('div')(({ theme }) => ({
     width: 'auto',
   },
   [theme.breakpoints.down('sm')]: {
-   display:'none',
+    display: 'none',
   },
   menuPaper: {
     backgroundColor: 'lightblue',
@@ -93,21 +91,21 @@ const CheckboxFiled = styled(FormControlLabel)({
 
 // })
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein }
+function createData(sr,name,position,Department) {
+  return {sr,name,position,Department }
 }
 
 const rows = [
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Hold'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Progress'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Closed'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
+  createData('1',  'John Doe', 'Sales Executive', 'Sales'),
+  createData('2',  'John Doe', 'Manager', 'Sales'),
+  createData('3',  'John Doe', 'Marketing', 'Sales'),
+  createData('4',  'John Doe', 'Sales Executive', 'Sales'),
+  createData('5',  'John Doe', 'Sales Executive', 'Sales'),
+  createData('6',  'John Doe', 'Sales Executive', 'Sales'),
+  createData('7',  'John Doe', 'Sales Executive', 'Sales'),
 ]
 
-export const Home = () => {
+export const ManageUser = () => {
   // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -118,25 +116,20 @@ export const Home = () => {
     setAnchorEl(null)
   }
   const statusColors = {
-    Open: '#0B9611',
-    Hold: '#E05D5D',
-    Progress: '#FFB344',
-    Closed: '#777777',
+    'Sales Executive': '#044BA9',
+    Manager: '#E05D5D',
+    Marketing: '#0B9611',
+   
   }
   return (
-    // eslint-disable-next-line no-undef
     <Box>
-      <Typography sx={{ fontSize: '18px', color: '#3B3B3B' }}>
-        Welcome Client,
-      </Typography>
       <Grid container justifyContent={'space-between'}>
         <Grid item xm={2} md={3} lg={3}>
           <Typography variant="h5" letterSpacing={1}>
-            Dashboard
+          Manage End User
           </Typography>
         </Grid>
         <Grid item xm={10} md={6} lg={6}>
-
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -146,7 +139,6 @@ export const Home = () => {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-          
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button variant="contained">
@@ -155,38 +147,7 @@ export const Home = () => {
           </Button>
         </Grid>
       </Grid>
-      <Grid container marginTop={3}>
-        <Grid item xs={12}  md={10}  component={FormGroup}>
-          <CheckboxFiled
-            control={<Checkbox color="default" defaultChecked />}
-            label="ALL"
-          />
-          <CheckboxFiled control={<Checkbox color="default" />} label="OPEN" />
-          <CheckboxFiled control={<Checkbox color="default" />} label="HOLD" />
-          <CheckboxFiled
-            control={<Checkbox color="default" />}
-            label="CLOSED"
-          />
-          <CheckboxFiled
-            control={<Checkbox color="default" />}
-            label="IN PROGRESS"
-          />
-        </Grid>
-        <Grid item xs={12} md={2} textAlign="right">
-          <Button
-            variant="outlined"
-            sx={{
-              background: ' #044BA940',
-              border: '1px solid #044BA9',
-              color: '#044BA9',
-              textTransform: 'capitalize',
-            }}
-          >
-            <FilterAltOffSharpIcon />
-            &nbsp; Filters
-          </Button>
-        </Grid>
-      </Grid>
+
       <Divider sx={{ marginBottom: '0px', marginTop: '20px' }} />
       <TableContainer>
         <Table
@@ -203,84 +164,53 @@ export const Home = () => {
           <TableHead>
             <TableRow>
               <TableCell className="th" align="center">
-                TICKET #
+                S.No.
+              </TableCell>
+              <TableCell className="th" align="center">
+                NAME
+              </TableCell>
+              <TableCell className="th" align="center">
+                POSITION
               </TableCell>
               <TableCell className="th" align="center">
                 DEPARTMENT
-              </TableCell>
-              <TableCell className="th" align="center">
-                ASSIGNEE NAME
-              </TableCell>
-              <TableCell className="th" align="center">
-                ASSIGNEE DEPARTMENT
-              </TableCell>
-              <TableCell className="th" align="center">
-                STATUS
-              </TableCell>
+              </TableCell>              
               <TableCell className="th" align="center">
                 ACTION
               </TableCell>
             </TableRow>
-            <TableRow>
-          </TableRow>
-          </TableHead>       
+            <TableRow></TableRow>
+          </TableHead>
           <TableBody>
             {rows.map((row) => (
               <TableRow
                 className="tableRow"
-                key={row.name}
+                key={row.sr}
                 style={{ background: '#F4FBFF' }}
               >
                 <TableCell component="th" align="center" scope="row">
-                  {row.name}
+                  {row.sr}
                 </TableCell>
-                <TableCell align="center">{row.calories}</TableCell>
-                <TableCell align="center">{row.fat}</TableCell>
-                <TableCell align="center">{row.carbs}</TableCell>
+                <TableCell align="center">{row.name}</TableCell>
+              
                 <TableCell
                   align="center"
                   sx={{
-                    color: statusColors[row.protein] ?? 'black',
-                    fontWeight: '600',
-                    fontSize: '16px',
+                    color: statusColors[row.position] ?? 'black',
+                   
+                   
                   }}
                 >
-                  {row.protein}
+                  {row.position}
                 </TableCell>
-
+                <TableCell align="center">{row.Department}</TableCell>
                 <TableCell align="center">
-                  <Tooltip title="Action">
-                    <IconButton onClick={handleClick}>
-                      <MoreVertIcon sx={{ color: '#777777' }} />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Menu
-                    id="basic-menu"
-                   sx={{"& .MuiPaper-root": {
-                    backgroundColor: "#C0D2E9",
-                    boxShadow:'none',   
-                    width:'100px'       
-                  },
-                  "& .MuiList-root":{
-                    padding:'0'
-                  },
-                    "& .MuiMenuItem-root":{
-                      padding:"5px 10px ",
-                    fontSize:"13px",
-                    justifyContent:'space-between'
-                    }}}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                  >
-                    <MenuItem  onClick={handleClose}>Views <RemoveRedEyeIcon fontSize='14px'/></MenuItem>
-                    <MenuItem  onClick={handleClose}>Edit<EditIcon fontSize='14px'/></MenuItem>
-                    <MenuItem onClick={handleClose}>Transfer<CompareArrowsIcon fontSize='14px'/></MenuItem>
-                  </Menu>
+                  <IconButton>
+                    <EditOutlinedIcon sx={{ color: '#777777' }} />
+                  </IconButton>
+                  <IconButton>
+                    <DeleteOutlineOutlinedIcon sx={{ color: ' #E05D5D' }} />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}
