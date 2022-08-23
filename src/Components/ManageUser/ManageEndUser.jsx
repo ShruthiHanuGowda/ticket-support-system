@@ -32,7 +32,7 @@ import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
-
+import {useNavigate} from 'react-router-dom'
 //--------- for Search bar ------
 
 const Search = styled('div')(({ theme }) => ({
@@ -105,10 +105,18 @@ const rows = [
   createData('7',  'John Doe', 'Sales Executive', 'Sales'),
 ]
 
-export const ManageUser = () => {
+export const ManageUser = ({loggedin}) => {
   // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
+  const navigate =useNavigate();
+
+  React.useEffect(() => {   
+    if(!loggedin){
+      navigate('/login');
+    }
+    }, [loggedin])
+    
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
@@ -196,9 +204,7 @@ export const ManageUser = () => {
                 <TableCell
                   align="center"
                   sx={{
-                    color: statusColors[row.position] ?? 'black',
-                   
-                   
+                    color: statusColors[row.position] ?? 'black',                  
                   }}
                 >
                   {row.position}

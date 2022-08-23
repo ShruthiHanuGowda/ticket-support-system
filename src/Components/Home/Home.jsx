@@ -7,6 +7,7 @@ import {
   FormGroup,
   Grid,
   IconButton,
+  InputAdornment,
   InputBase,
   Menu,
   MenuItem,
@@ -27,14 +28,12 @@ import { styled } from '@mui/material/styles'
 import SearchIcon from '@mui/icons-material/Search'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import FilterAltOffSharpIcon from '@mui/icons-material/FilterAltOffSharp'
-
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import EditIcon from '@mui/icons-material/Edit';
-
-
-
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
+import EditIcon from '@mui/icons-material/Edit'
+import {useNavigate} from 'react-router-dom'
+import SearchBar from '../Common/SearchBar'
 //--------- for Search bar ------
 
 const Search = styled('div')(({ theme }) => ({
@@ -52,7 +51,7 @@ const Search = styled('div')(({ theme }) => ({
     width: 'auto',
   },
   [theme.breakpoints.down('sm')]: {
-   display:'none',
+    display: 'none',
   },
   menuPaper: {
     backgroundColor: 'lightblue',
@@ -82,32 +81,72 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }))
+
 //----------- end search Bar
+
+
 const CheckboxFiled = styled(FormControlLabel)({
   marginRight: '30px',
-
   color: '#777777',
 })
 
-// const useStyle = styled({
 
-// })
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein }
+function createData(srno, department, name, position, status) {
+  return { srno, department, name, position, status }
 }
 
 const rows = [
   createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Hold'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Progress'),
+  createData('#2345', 'Sales', 'bharat Doe', 'Sales Executive', 'Hold'),
+  createData('#2345', 'Sales', 'rahul Doe', 'Sales Executive', 'Progress'),
   createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Closed'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
+  createData('#145', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
   createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
   createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
 ]
 
-export const Home = () => {
+export const Home = ({loggedin}) => {
+  const navigate = useNavigate()
+   const [data, setData] = React.useState(rows);
+  const [activeFilter, setActiveFilter]=React.useState('');
+  const [filterList, setFilterList]=React.useState('');
+  console.log(data)
+  
+  React.useEffect(() => {   
+  if(!loggedin){
+    navigate('/login');
+  }
+  }, [loggedin])
+  
+
+
+//-----------onCheckBoxFillter-----
+const onCheckBoxFillter =(filter) =>{
+  console.log(filter)
+  // const { filterList, activeFilter } = this.state
+  if (filter === 'ALL') {
+    console.log(activeFilter)
+    if (activeFilter.length === filterList.length) {
+      // this.setState({ activeFilter: [] })
+      setActiveFilter([])
+    } else {
+      setActiveFilter(filterList)
+      // this.setState({
+      //   activeFilter: filterList.map((filter) => filter.value),
+      // })
+    }
+  } else {
+    if (activeFilter.includes(filter)) {
+      const filterIndex = activeFilter.indexOf(filter)
+      const newFilter = [...activeFilter]
+      newFilter.splice(filterIndex, 1)
+      this.setState({ activeFilter: newFilter })
+    } else {
+      this.setState({ activeFilter: [...activeFilter, filter] })
+    }
+  }
+}
   // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -124,8 +163,8 @@ export const Home = () => {
     Closed: '#777777',
   }
   return (
-    // eslint-disable-next-line no-undef
     <Box>
+      
       <Typography sx={{ fontSize: '18px', color: '#3B3B3B' }}>
         Welcome Client,
       </Typography>
@@ -134,19 +173,31 @@ export const Home = () => {
           <Typography variant="h5" letterSpacing={1}>
             Dashboard
           </Typography>
-        </Grid>
-        <Grid item xm={10} md={6} lg={6}>
-
-          <Search>
+        </Grid>      
+        <Grid item xm={10} md={6} lg={6}>   
+        <SearchBar rows={rows} setData={setData}/>      
+          {/* <Search sx={{ '& .MuiInputBase-root': { width: '100%' } }}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              onChange={requestSearch}
               placeholder="Search by ID, Department"
               inputProps={{ 'aria-label': 'search' }}
+              value={searched}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton>
+                    {!searched ? (
+                      " "
+                    ) : (
+                      <ClearOutlinedIcon onClick={cancelSearch} />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              }
             />
-          </Search>
-          
+          </Search> */}
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button variant="contained">
@@ -156,20 +207,22 @@ export const Home = () => {
         </Grid>
       </Grid>
       <Grid container marginTop={3}>
-        <Grid item xs={12}  md={10}  component={FormGroup}>
+        <Grid item xs={12} md={10} component={FormGroup}>
           <CheckboxFiled
-            control={<Checkbox color="default" defaultChecked />}
-            label="ALL"
+            control={<Checkbox color="default" onClick={()=> onCheckBoxFillter('All')} />}
+            label="ALL"            
           />
-          <CheckboxFiled control={<Checkbox color="default" />} label="OPEN" />
-          <CheckboxFiled control={<Checkbox color="default" />} label="HOLD" />
+          <CheckboxFiled control={<Checkbox color="default" />} onClick={()=> onCheckBoxFillter('open')} label="OPEN" />
+          <CheckboxFiled control={<Checkbox color="default"  onClick={()=> onCheckBoxFillter('hold')} />}  label="HOLD" />
           <CheckboxFiled
-            control={<Checkbox color="default" />}
+            control={<Checkbox color="default"  onClick={()=> onCheckBoxFillter('closed')}/>}
             label="CLOSED"
+            
           />
           <CheckboxFiled
-            control={<Checkbox color="default" />}
+            control={<Checkbox color="default" onClick={()=> onCheckBoxFillter('in progress')} />}
             label="IN PROGRESS"
+            
           />
         </Grid>
         <Grid item xs={12} md={2} textAlign="right">
@@ -221,31 +274,30 @@ export const Home = () => {
                 ACTION
               </TableCell>
             </TableRow>
-            <TableRow>
-          </TableRow>
-          </TableHead>       
+            <TableRow></TableRow>
+          </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {data.map((row, index) => (
               <TableRow
                 className="tableRow"
-                key={row.name}
+                key={index}
                 style={{ background: '#F4FBFF' }}
               >
                 <TableCell component="th" align="center" scope="row">
-                  {row.name}
+                  {row.srno}
                 </TableCell>
-                <TableCell align="center">{row.calories}</TableCell>
-                <TableCell align="center">{row.fat}</TableCell>
-                <TableCell align="center">{row.carbs}</TableCell>
+                <TableCell align="center">{row.department}</TableCell>
+                <TableCell align="center">{row.name}</TableCell>
+                <TableCell align="center">{row.position}</TableCell>
                 <TableCell
                   align="center"
                   sx={{
-                    color: statusColors[row.protein] ?? 'black',
+                    color: statusColors[row.status] ?? 'black',
                     fontWeight: '600',
                     fontSize: '16px',
                   }}
                 >
-                  {row.protein}
+                  {row.status}
                 </TableCell>
 
                 <TableCell align="center">
@@ -257,19 +309,21 @@ export const Home = () => {
 
                   <Menu
                     id="basic-menu"
-                   sx={{"& .MuiPaper-root": {
-                    backgroundColor: "#C0D2E9",
-                    boxShadow:'none',   
-                    width:'100px'       
-                  },
-                  "& .MuiList-root":{
-                    padding:'0'
-                  },
-                    "& .MuiMenuItem-root":{
-                      padding:"5px 10px ",
-                    fontSize:"13px",
-                    justifyContent:'space-between'
-                    }}}
+                    sx={{
+                      '& .MuiPaper-root': {
+                        backgroundColor: '#C0D2E9',
+                        boxShadow: 'none',
+                        width: '100px',
+                      },
+                      '& .MuiList-root': {
+                        padding: '0',
+                      },
+                      '& .MuiMenuItem-root': {
+                        padding: '5px 10px ',
+                        fontSize: '13px',
+                        justifyContent: 'space-between',
+                      },
+                    }}
                     anchorEl={anchorEl}
                     open={open}
                     onClose={handleClose}
@@ -277,9 +331,17 @@ export const Home = () => {
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                    <MenuItem  onClick={handleClose}>Views <RemoveRedEyeIcon fontSize='14px'/></MenuItem>
-                    <MenuItem  onClick={handleClose}>Edit<EditIcon fontSize='14px'/></MenuItem>
-                    <MenuItem onClick={handleClose}>Transfer<CompareArrowsIcon fontSize='14px'/></MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      Views <RemoveRedEyeIcon fontSize="14px" />
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      Edit
+                      <EditIcon fontSize="14px" />
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      Transfer
+                      <CompareArrowsIcon fontSize="14px" />
+                    </MenuItem>
                   </Menu>
                 </TableCell>
               </TableRow>
