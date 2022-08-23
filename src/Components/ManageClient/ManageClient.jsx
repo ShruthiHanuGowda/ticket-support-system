@@ -20,7 +20,7 @@ import { styled } from "@mui/material/styles";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import SearchBar from "../Common/SearchBar";
 
 function createData(name, calories, fat, carbs, protein) {
@@ -47,14 +47,14 @@ export const ManageClient = ({ loggedin }) => {
   }, [loggedin]);
 
   // ------for openAction in table Row---
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = React.useState(null);;
+  const open = Boolean(anchorEl);;
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget);;
+  };;
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null);;
+  };;
   const statusColors = {
     Open: "#0B9611",
     Hold: "#E05D5D",
@@ -73,7 +73,12 @@ export const ManageClient = ({ loggedin }) => {
         <SearchBar rows={rows} setData={setData}/>   
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
-          <Button variant="contained">
+          <Button
+            variant="contained"
+            component={Link}
+            to="../manage-client/create-client"
+            style={{ backgroundColor: "blue" }}
+          >
             <AddCircleOutlineIcon />
             &nbsp; Add New User
           </Button>
@@ -120,8 +125,8 @@ export const ManageClient = ({ loggedin }) => {
             {rows.map((row,index) => (
               <TableRow
                 className="tableRow"
-                key={index}
-                style={{ background: "#F4FBFF" }}
+                key={row.name}
+                style={{ background: '#F4FBFF' }}
               >
                 <TableCell component="th" align="center" scope="row">
                   {row.name}

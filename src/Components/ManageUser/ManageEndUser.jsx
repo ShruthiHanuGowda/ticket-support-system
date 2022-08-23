@@ -32,78 +32,78 @@ import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate ,Link} from 'react-router-dom'
 //--------- for Search bar ------
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: '#F4FBFF',
-  '&:hover': {
-    backgroundColor: '#F4FBFF',
+  backgroundColor: "#F4FBFF",
+  "&:hover": {
+    backgroundColor: "#F4FBFF",
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
-    width: 'auto',
+    width: "auto",
   },
-  [theme.breakpoints.down('sm')]: {
-    display: 'none',
+  [theme.breakpoints.down("sm")]: {
+    display: "none",
   },
   menuPaper: {
-    backgroundColor: 'lightblue',
+    backgroundColor: "lightblue",
   },
-}))
+}));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}))
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
+  color: "inherit",
+  "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '100%',
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "100%",
     },
   },
-}))
+}));
 //----------- end search Bar
-const CheckboxFiled = styled(FormControlLabel)({
-  marginRight: '30px',
+// const CheckboxFiled = styled(FormControlLabel)({
+//   marginRight: '30px',
 
-  color: '#777777',
-})
+//   color: '#777777',
+// })
 
 // const useStyle = styled({
 
 // })
 
-function createData(sr,name,position,Department) {
-  return {sr,name,position,Department }
+function createData(sr, name, position, Department) {
+  return { sr, name, position, Department };
 }
 
 const rows = [
-  createData('1',  'John Doe', 'Sales Executive', 'Sales'),
-  createData('2',  'John Doe', 'Manager', 'Sales'),
-  createData('3',  'John Doe', 'Marketing', 'Sales'),
-  createData('4',  'John Doe', 'Sales Executive', 'Sales'),
-  createData('5',  'John Doe', 'Sales Executive', 'Sales'),
-  createData('6',  'John Doe', 'Sales Executive', 'Sales'),
-  createData('7',  'John Doe', 'Sales Executive', 'Sales'),
-]
+  createData("1", "John Doe", "Sales Executive", "Sales"),
+  createData("2", "John Doe", "Manager", "Sales"),
+  createData("3", "John Doe", "Marketing", "Sales"),
+  createData("4", "John Doe", "Sales Executive", "Sales"),
+  createData("5", "John Doe", "Sales Executive", "Sales"),
+  createData("6", "John Doe", "Sales Executive", "Sales"),
+  createData("7", "John Doe", "Sales Executive", "Sales"),
+];
 
 export const ManageUser = ({loggedin}) => {
   // ------for openAction in table Row---
@@ -118,23 +118,22 @@ export const ManageUser = ({loggedin}) => {
     }, [loggedin])
     
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
   const statusColors = {
-    'Sales Executive': '#044BA9',
-    Manager: '#E05D5D',
-    Marketing: '#0B9611',
-   
-  }
+    "Sales Executive": "#044BA9",
+    Manager: "#E05D5D",
+    Marketing: "#0B9611",
+  };
   return (
     <Box>
-      <Grid container justifyContent={'space-between'}>
+      <Grid container justifyContent={"space-between"}>
         <Grid item xm={2} md={3} lg={3}>
           <Typography variant="h5" letterSpacing={1}>
-          Manage End User
+            Manage End User
           </Typography>
         </Grid>
         <Grid item xm={10} md={6} lg={6}>
@@ -144,28 +143,33 @@ export const ManageUser = ({loggedin}) => {
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search by ID, Department"
-              inputProps={{ 'aria-label': 'search' }}
+              inputProps={{ "aria-label": "search" }}
             />
           </Search>
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
-          <Button variant="contained">
+          <Button
+            variant="contained"
+            component={Link}
+            to="../manage-user/create-enduser"
+            style={{ backgroundColor: "blue" }}
+          >
             <AddCircleOutlineIcon />
-            &nbsp; Add New User
+            &nbsp; Add User
           </Button>
         </Grid>
       </Grid>
 
-      <Divider sx={{ marginBottom: '0px', marginTop: '20px' }} />
+      <Divider sx={{ marginBottom: "0px", marginTop: "20px" }} />
       <TableContainer>
         <Table
           sx={{
             minWidth: 650,
-            borderCollapse: 'separate',
-            borderSpacing: '0px 10px',
+            borderCollapse: "separate",
+            borderSpacing: "0px 10px",
             [`& .${tableCellClasses.root}`]: {
-              borderBottom: 'none',
-              padding: '6px',
+              borderBottom: "none",
+              padding: "6px",
             },
           }}
         >
@@ -182,7 +186,7 @@ export const ManageUser = ({loggedin}) => {
               </TableCell>
               <TableCell className="th" align="center">
                 DEPARTMENT
-              </TableCell>              
+              </TableCell>
               <TableCell className="th" align="center">
                 ACTION
               </TableCell>
@@ -194,13 +198,13 @@ export const ManageUser = ({loggedin}) => {
               <TableRow
                 className="tableRow"
                 key={row.sr}
-                style={{ background: '#F4FBFF' }}
+                style={{ background: "#F4FBFF" }}
               >
                 <TableCell component="th" align="center" scope="row">
                   {row.sr}
                 </TableCell>
                 <TableCell align="center">{row.name}</TableCell>
-              
+
                 <TableCell
                   align="center"
                   sx={{
@@ -212,10 +216,10 @@ export const ManageUser = ({loggedin}) => {
                 <TableCell align="center">{row.Department}</TableCell>
                 <TableCell align="center">
                   <IconButton>
-                    <EditOutlinedIcon sx={{ color: '#777777' }} />
+                    <EditOutlinedIcon sx={{ color: "#777777" }} />
                   </IconButton>
                   <IconButton>
-                    <DeleteOutlineOutlinedIcon sx={{ color: ' #E05D5D' }} />
+                    <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -224,7 +228,5 @@ export const ManageUser = ({loggedin}) => {
         </Table>
       </TableContainer>
     </Box>
-  )
-}
-
-
+  );
+};
