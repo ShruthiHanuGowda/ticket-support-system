@@ -18,17 +18,17 @@ import {
 import { Box } from "@mui/system";
 // import { makeStyles } from '@material-ui/core/styles';
 
-import { styled } from "@mui/material/styles";
-import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-//import FilterAltOffSharpIcon from '@mui/icons-material/FilterAltOffSharp'
-//import MoreVertIcon from '@mui/icons-material/MoreVert'
-//import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
-//import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
-//import EditIcon from '@mui/icons-material/Edit'
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { styled } from '@mui/material/styles'
+import SearchIcon from '@mui/icons-material/Search'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import FilterAltOffSharpIcon from '@mui/icons-material/FilterAltOffSharp'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
+import EditIcon from '@mui/icons-material/Edit'
 import { Link } from "react-router-dom";
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 
 //--------- for Search bar ------
 
@@ -102,10 +102,10 @@ const rows = [
   createData("7", "John Doe", "Sales Executive", "Sales"),
 ];
 
-export const ManageUser = () => {
+export const ManageUser = ({loggedin}) => {
   // ------for openAction in table Row---
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const open = Boolean(anchorEl)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -197,7 +197,9 @@ export const ManageUser = () => {
                 <TableCell
                   align="center"
                   sx={{
-                    color: statusColors[row.position] ?? "black",
+                    color: statusColors[row.position] ?? 'black',
+                   
+                   
                   }}
                 >
                   {row.position}

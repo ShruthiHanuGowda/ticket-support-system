@@ -4,6 +4,7 @@ const express = require("express");
 const path = require('path')
 const indexRouter = require("./routes/index");
 const apiResponse = require("./helpers/apiResponse");
+
 const app = express()
 
 app.use(express.json())
@@ -53,5 +54,7 @@ app.use((err, req, res) => {
 		return apiResponse.unauthorizedResponse(res, err.message);
 	}
 });
+
+  
 
 module.exports = app;
