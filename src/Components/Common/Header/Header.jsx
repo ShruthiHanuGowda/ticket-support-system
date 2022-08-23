@@ -25,14 +25,13 @@ import Kadellogo from '../../../Assets/Images/kadellabslogo.png'
 
 
 import Kl from '../../../Assets/Images/KL.png'
-import { BrowserRouter, Link, Outlet } from 'react-router-dom'
+import {  Link, Outlet } from 'react-router-dom'
 import {
   Avatar,
   Button,
   InputBase,
   Menu,
-  MenuItem,
-  Switch,
+  MenuItem, 
   Tooltip,
 } from '@mui/material'
 
@@ -195,6 +194,7 @@ export const Header= () => {
     },
     { name: 'Manage Client', path: '/manage-client' },
     { name: 'Manage User', path: '/manage-user' },
+    
   ]
   React.useEffect(() => {
     if (isBigScreen !== prevBigScreen && isBigScreen !== open) {

@@ -32,6 +32,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import EditIcon from '@mui/icons-material/Edit';
+import { Link } from 'react-router-dom'
 
 
 
@@ -149,7 +150,7 @@ export const Home = () => {
           
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
-          <Button variant="contained">
+        <Button variant="contained" component={Link} to="../manage-user/create-enduser"  style={{ backgroundColor: 'blue' }} >
             <AddCircleOutlineIcon />
             &nbsp; Add New User
           </Button>
@@ -277,7 +278,7 @@ export const Home = () => {
                       'aria-labelledby': 'basic-button',
                     }}
                   >
-                    <MenuItem  onClick={handleClose}>Views <RemoveRedEyeIcon fontSize='14px'/></MenuItem>
+                    <MenuItem  onClick={handleClose} component={Link} to="/ticket-details"  >Views <RemoveRedEyeIcon fontSize='14px'/></MenuItem>
                     <MenuItem  onClick={handleClose}>Edit<EditIcon fontSize='14px'/></MenuItem>
                     <MenuItem onClick={handleClose}>Transfer<CompareArrowsIcon fontSize='14px'/></MenuItem>
                   </Menu>
