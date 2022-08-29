@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   Button,
   Divider,
-  FormControlLabel,
   Grid,
   IconButton,
   InputBase,
@@ -21,14 +20,16 @@ import { Box } from "@mui/system";
 import { styled } from '@mui/material/styles'
 import SearchIcon from '@mui/icons-material/Search'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
-import FilterAltOffSharpIcon from '@mui/icons-material/FilterAltOffSharp'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
-import EditIcon from '@mui/icons-material/Edit'
-import { Link } from "react-router-dom";
+// import FilterAltOffSharpIcon from '@mui/icons-material/FilterAltOffSharp'
+// import MoreVertIcon from '@mui/icons-material/MoreVert'
+// import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
+// import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
+// import EditIcon from '@mui/icons-material/Edit'
+import { useNavigate , Link} from 'react-router-dom'
+
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
+
 
 //--------- for Search bar ------
 
@@ -76,7 +77,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       width: "100%",
     },
   },
+
 }));
+
+const useStyle = styled({
+  root:{
+    "&:hover":{
+      backgroundColor: "transparent"
+    }
+  }
+})
 //----------- end search Bar
 // const CheckboxFiled = styled(FormControlLabel)({
 //   marginRight: '30px',
@@ -103,8 +113,11 @@ const rows = [
 ];
 
 export const ManageUser = ({loggedin}) => {
+
+  const classes= useStyle()
   // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null)
+  const navigate = useNavigate()
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -117,6 +130,15 @@ export const ManageUser = ({loggedin}) => {
     Manager: "#E05D5D",
     Marketing: "#0B9611",
   };
+
+
+  React.useEffect(() => {   
+    if(!loggedin){
+      navigate('/manage-user');
+    }
+    }, [loggedin])
+    
+
   return (
     <Box>
       <Grid container justifyContent={"space-between"}>
@@ -141,9 +163,12 @@ export const ManageUser = ({loggedin}) => {
             variant="contained"
             component={Link}
             to="../manage-user/create-enduser"
-            style={{ backgroundColor: "blue" }}
+            color="primary"
+            className={classes.root}
+           // style={{ textColor: 'transparent' }} 
+           
           >
-            <AddCircleOutlineIcon />
+            <AddCircleOutlineIcon  />
             &nbsp; Add User
           </Button>
         </Grid>

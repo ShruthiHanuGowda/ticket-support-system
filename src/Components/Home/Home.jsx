@@ -118,7 +118,7 @@ export const Home = ({loggedin}) => {
   
   React.useEffect(() => {   
   if(!loggedin){
-    navigate('/login');
+    navigate('/');
   }
   }, [loggedin])
   

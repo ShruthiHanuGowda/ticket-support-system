@@ -129,7 +129,7 @@ export const Login = ({setIsLoggedin}) => {
       <Box>
         <AppBar sx={{ background: "#F4FBFF", boxShadow: "none" }}>
           <Toolbar>
-            <img src={Kadellogo} />
+            <img src={Kadellogo} alt="Kadellabs" />
           </Toolbar>
         </AppBar>
       </Box>

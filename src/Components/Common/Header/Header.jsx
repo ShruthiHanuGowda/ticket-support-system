@@ -25,6 +25,7 @@ import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
 
 
 import Kl from '../../../Assets/Images/KL.png'
+import Bharat from '../../../Assets/Images/Bharat.png'
 import { BrowserRouter, Link, Outlet, useNavigate } from 'react-router-dom'
 import {
   Avatar,
@@ -267,7 +268,7 @@ export const Header = ({setIsLoggedin}) => {
           <Box sx={{ flexGrow: 0, position: "absolute", right: "20px" }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar />
+                <Avatar alt="person" src={Bharat} />
                 <ArrowDropDownIcon />
               </IconButton>
             </Tooltip>

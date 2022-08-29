@@ -50,7 +50,7 @@ import {
               <InputLabel>Email <span style={{color:'red'}}>*</span></InputLabel>
               <TextField
                 placeholder="Email"
-                
+                border="none"
                 sx={{ background: "#F4FBFF", width:'100%', [theme.breakpoints.up('md')]: {
                   width: '491px  !important'
                 }}}
@@ -64,7 +64,7 @@ import {
                 id="grouped-select"
                 label="Grouping"
                 placeholder="Select Position"
-                
+                Value="Position"
                 sx={{ background: "#F4FBFF", width:'100%', [theme.breakpoints.up('md')]: {
                   width: '491px  !important'
                 }}}
