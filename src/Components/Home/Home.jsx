@@ -219,7 +219,8 @@ const onCheckBoxFillter =(filter) =>{
           <CheckboxFiled control={<Checkbox color="default"  onClick={()=> onCheckBoxFillter('hold')} />}  label="HOLD" />
           <CheckboxFiled
             control={<Checkbox color="default"  onClick={()=> onCheckBoxFillter('closed')}/>}
-            label="CLOSED"
+            label="CLOSED
+            "
             
           />
           <CheckboxFiled
