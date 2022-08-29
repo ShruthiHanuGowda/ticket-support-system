@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from "react";
 import {
   Button,
   Divider,
@@ -18,69 +18,28 @@ import {
   TableRow,
   Tooltip,
   Typography,
-} from '@mui/material'
-import { Box } from '@mui/system'
+} from "@mui/material";
+import { Box } from "@mui/system";
+import axios from "axios";
 // import { makeStyles } from '@material-ui/core/styles';
 
-import { styled } from '@mui/material/styles'
-import SearchIcon from '@mui/icons-material/Search'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
-import FilterAltOffSharpIcon from '@mui/icons-material/FilterAltOffSharp'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
-import {useNavigate ,Link} from 'react-router-dom'
-//--------- for Search bar ------
+import { styled } from "@mui/material/styles";
+import SearchIcon from "@mui/icons-material/Search";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import FilterAltOffSharpIcon from "@mui/icons-material/FilterAltOffSharp";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { useNavigate, Link } from "react-router-dom";
+import SearchBar from "../Common/SearchBar";
+import { useLocation } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { useState } from "react";
+import { useEffect } from "react";
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: "#F4FBFF",
-  "&:hover": {
-    backgroundColor: "#F4FBFF",
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-  [theme.breakpoints.down("sm")]: {
-    display: "none",
-  },
-  menuPaper: {
-    backgroundColor: "lightblue",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "100%",
-    },
-  },
-}));
-//----------- end search Bar
 // const CheckboxFiled = styled(FormControlLabel)({
 //   marginRight: '30px',
 
@@ -105,18 +64,38 @@ const rows = [
   createData("7", "John Doe", "Sales Executive", "Sales"),
 ];
 
-export const ManageUser = ({loggedin}) => {
+export const ManageUser = ({ loggedin }) => {
   // ------for openAction in table Row---
-  const [anchorEl, setAnchorEl] = React.useState(null)
-  const open = Boolean(anchorEl)
-  const navigate =useNavigate();
+  const [usersData, setUserData] = useState([]);
+  console.log(usersData);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [data, setData] = React.useState(usersData); 
+  console.log(data)
+  const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  React.useEffect(() => {   
-    if(!loggedin){
-      navigate('/login');
+  React.useEffect(() => {
+    console.log(data);
+    if (!loggedin) {
+      navigate("/login");
     }
-    }, [loggedin])
+    if (location.state) {
+      if (location.state.status == "201") {
+        toast.success(location.state.message);
+      } else toast.error(location.state.message);
+    }
+    fecthUserData();
+  }, [loggedin]);
+
+  const fecthUserData = async () => {
+    const userData = await axios.get("http://localhost:8000/user");
+    // console.log(userData.data.data);
+    setUserData(userData.data.data);
     
+    
+    // .then((res)=> console.log(res.data.data));
+  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -124,12 +103,19 @@ export const ManageUser = ({loggedin}) => {
     setAnchorEl(null);
   };
   const statusColors = {
-    "Sales Executive": "#044BA9",
-    Manager: "#E05D5D",
-    Marketing: "#0B9611",
+    "Head of Product": "#044BA9",
+    "Product Manager": "#E05D5D",
+    "VP of Marketing": "#0B9611",
+    "Technical Lead":"#0392cf",
+    "Senior Software Engineer":"#ffeead",
+    "Software Developer":"#a8e6cf ",
+    "Junior Software Developer":"#76b4bd",
+    "Intern Software Developer":"#603601"
+
   };
   return (
     <Box>
+      <Toaster />
       <Grid container justifyContent={"space-between"}>
         <Grid item xm={2} md={3} lg={3}>
           <Typography variant="h5" letterSpacing={1}>
@@ -137,15 +123,7 @@ export const ManageUser = ({loggedin}) => {
           </Typography>
         </Grid>
         <Grid item xm={10} md={6} lg={6}>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search by ID, Department"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+          <SearchBar rows={usersData} setData={setData} />
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button
@@ -191,39 +169,70 @@ export const ManageUser = ({loggedin}) => {
                 ACTION
               </TableCell>
             </TableRow>
-            <TableRow></TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                className="tableRow"
-                key={row.sr}
-                style={{ background: "#F4FBFF" }}
-              >
-                <TableCell component="th" align="center" scope="row">
-                  {row.sr}
-                </TableCell>
-                <TableCell align="center">{row.name}</TableCell>
+             
+              { data.length == 0 ? usersData.map((row, index) => (
+                  <TableRow
+                    className="tableRow"
+                    key={row._id}
+                    style={{ background: "#F4FBFF" }}
+                  >
+                    <TableCell component="th" align="center" scope="row">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell align="center" sx={{textTransform: 'capitalize'}}>{row.name}</TableCell>
 
-                <TableCell
-                  align="center"
-                  sx={{
-                    color: statusColors[row.position] ?? 'black',                  
-                  }}
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: statusColors[row.position] ?? "black",
+                      }}
+                    >
+                      {row.position}
+                    </TableCell>
+                    <TableCell align="center">{row.department}</TableCell>
+                    <TableCell align="center">
+                      <IconButton>
+                        <EditOutlinedIcon sx={{ color: "#777777" }} />
+                      </IconButton>
+                      <IconButton>
+                        <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              : data.map((row, index) => (
+                <TableRow
+                  className="tableRow"
+                  key={row._id}
+                  style={{ background: "#F4FBFF" }}
                 >
-                  {row.position}
-                </TableCell>
-                <TableCell align="center">{row.Department}</TableCell>
-                <TableCell align="center">
-                  <IconButton>
-                    <EditOutlinedIcon sx={{ color: "#777777" }} />
-                  </IconButton>
-                  <IconButton>
-                    <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell component="th" align="center" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell align="center">{row.name}</TableCell>
+
+                  <TableCell
+                    align="center"
+                    sx={{
+                      color: statusColors[row.position] ?? "black",
+                    }}
+                  >
+                    {row.position}
+                  </TableCell>
+                  <TableCell align="center">{row.department}</TableCell>
+                  <TableCell align="center">
+                    <IconButton>
+                      <EditOutlinedIcon sx={{ color: "#777777" }} />
+                    </IconButton>
+                    <IconButton>
+                      <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+        
           </TableBody>
         </Table>
       </TableContainer>

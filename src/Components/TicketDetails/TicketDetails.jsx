@@ -1,3 +1,4 @@
+import React from "react";
 import {
     Box,
     Grid,
@@ -8,20 +9,20 @@ import {
     Toolbar,
     Typography,
   } from "@mui/material";
-  import React from "react";
-  import Divider from "@mui/material/Divider";
-  import SaveAltIcon from "@mui/icons-material/SaveAlt";
-  import { useTheme } from '@mui/material/styles';
+
+import Divider from "@mui/material/Divider";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import { useTheme } from '@mui/material/styles';
   //import useMediaQuery from '@mui/material/useMediaQuery';
   
   //import { useTheme } from "@mui/material/styles";
-  import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-  import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
-  import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
-  import Card from "@mui/material/Card";
-  import Pdf from "../../Assets/Images/Pdf.png"
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
+import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
+import Card from "@mui/material/Card";
+import Pdf from "../../Assets/Images/Pdf.png"
   
-  export const TicketDetails = () => {
+export const TicketDetails = () => {
     // const theme = useTheme();
      const theme = useTheme();
    // const matches = useMediaQuery(theme.breakpoints.down( 'md'));

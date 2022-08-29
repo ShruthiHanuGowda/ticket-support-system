@@ -381,9 +381,7 @@ export const Header = ({setIsLoggedin}) => {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Outlet />
-        {/* <Route  exact path="/" element={<Dashboard />} />
-          <Route exact path="/ticket-detail" element={<TicketDetails />} />
-          <Route exact path="/manage-client" element={<ManageClient />} /> */}
+     
       </Box>
     </Box>
   );

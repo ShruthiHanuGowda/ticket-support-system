@@ -97,13 +97,13 @@ function createData(srno, department, name, position, status) {
 }
 
 const rows = [
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
-  createData('#2345', 'Sales', 'bharat Doe', 'Sales Executive', 'Hold'),
-  createData('#2345', 'Sales', 'rahul Doe', 'Sales Executive', 'Progress'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Closed'),
-  createData('#145', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
-  createData('#2345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
+  createData('1', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
+  createData('#2', 'Sales', 'bharat Doe', 'Sales Executive', 'Hold'),
+  createData('#22345', 'Sales', 'rahul Doe', 'Sales Executive', 'Progress'),
+  createData('#23145', 'Sales', 'John Doe', 'Sales Executive', 'Closed'),
+  createData('#1435', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
+  createData('#24345', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
+  createData('#23545', 'Sales', 'John Doe', 'Sales Executive', 'Open'),
 ]
 
 export const Home = ({loggedin}) => {
@@ -176,28 +176,6 @@ const onCheckBoxFillter =(filter) =>{
         </Grid>      
         <Grid item xm={10} md={6} lg={6}>   
         <SearchBar rows={rows} setData={setData}/>      
-          {/* <Search sx={{ '& .MuiInputBase-root': { width: '100%' } }}>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              onChange={requestSearch}
-              placeholder="Search by ID, Department"
-              inputProps={{ 'aria-label': 'search' }}
-              value={searched}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton>
-                    {!searched ? (
-                      " "
-                    ) : (
-                      <ClearOutlinedIcon onClick={cancelSearch} />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </Search> */}
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
         <Button variant="contained" component={Link} to="../manage-user/create-enduser"  style={{ backgroundColor: 'blue' }} >

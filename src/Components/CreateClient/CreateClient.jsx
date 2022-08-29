@@ -10,6 +10,9 @@ import {
     Typography,
     Button,
     Link,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
   
   } from "@mui/material";
   import { useTheme } from '@mui/material/styles';
@@ -100,6 +103,39 @@ import {
                 <MenuItem value={4}>senior</MenuItem>
               </Select>
             </Grid>
+            <Grid
+          item
+          md={6}
+          xs={2}
+          sx={{
+            marginTop: "30px",
+            marginLeft: "18px",
+          }}
+        >
+          <InputLabel>
+            Access to Ticket <span style={{ color: "red" }}>*</span>
+          </InputLabel>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="row-radio-buttons-group"
+            sx={{
+              width: "100%",
+              [theme.breakpoints.up("md")]: {
+                width: "491px ",
+              },
+            }}
+          >
+            <FormControlLabel value="view" control={<Radio />} label="View" />
+            <FormControlLabel value="edit" control={<Radio />} label="Edit" />
+            <FormControlLabel
+              value="transfer"
+              control={<Radio />}
+              label="Transfer"
+            />
+          </RadioGroup>
+        </Grid>
+
           </Grid>
           <Grid container mt={4}>
           <Button

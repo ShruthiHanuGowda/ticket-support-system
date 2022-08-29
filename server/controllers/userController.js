@@ -1,4 +1,3 @@
-
 const { 
     successResponse, 
     successResponseWithData,
@@ -14,19 +13,24 @@ app.get('/', async (req, res) => {
 
     return successResponseWithData(res, 'users array', data);
 });
+const getAllUserData = async(req, res ,next) =>{
+    console.log("getAllUserData")
+    const data = await userModel.find();
 
-app.post('/', async (req, res) => {
-    const data = req.body;
-    try {
-        if(data) {
-            const user_resp = await userDataService.addUsers(data);
-    
-            return successResponseWithData(res, 'user added', user_resp);
-        } else return successResponse(res, 'user couldnt be added');
-    } catch(ex) {
-        ErrorResponse(res, 'something went wrong '+ex.message);
-    }
-});
+    return successResponseWithData(res, 'users array', data);
+}
+// app.post('/', async (req, res) => {
+//     console.log("addd userr")
+//     const data = req.body;
+//     try {
+//         if(data) {
+//             const user_resp = await userDataService.addUsers(data);    
+//             return successResponseWithData(res, 'user added', user_resp);
+//         } else return successResponse(res, 'user couldnt be added');
+//     } catch(ex) {
+//         ErrorResponse(res, 'something went wrong '+ex.message);
+//     }
+// });
 
 app.put('/:id', async (req, res) => {
     const _id = req.params.id;
@@ -55,4 +59,30 @@ app.delete('/:id', async (req, res) => {
     }
 });
 
-module.exports = app;
+const addUser = async (req,res) =>{
+    const {name,email,department,position,role,password}= req.body;
+    let user ;
+        try{
+            user = new userModel({
+                name,
+                email,
+                department,
+                position,
+                role,
+                password
+    
+            });
+            await user.save();
+        }catch(err){
+            console.log(err);
+    
+        }
+        if(!user){
+            return res.status(500).json({message:'unable to add'})
+        }
+        return res.status(201).json({user,message:'User Add Susscesfully'});
+
+}
+ exports.addUser= addUser;
+ exports.getAllUserData =getAllUserData;
+//   module.exports = app;

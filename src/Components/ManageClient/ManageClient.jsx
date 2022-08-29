@@ -29,12 +29,12 @@ function createData(name, calories, fat, carbs, protein) {
 
 const rows = [
   createData("123", "Sales", "bharat", "Sales Executive", "Open"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Hold"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Progress"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Closed"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
+  createData("#2315", "Sales", "John Doe", "Sales Executive", "Hold"),
+  createData("#2312045", "Sales", "John Doe", "Sales Executive", "Progress"),
+  createData("#232145", "Sales", "John Doe", "Sales Executive", "Closed"),
+  createData("#2311245", "Sales", "John Doe", "Sales Executive", "Open"),
+  createData("#231245", "Sales", "John Doe", "Sales Executive", "Open"),
+  createData("#2312145", "Sales", "John Doe", "Sales Executive", "Open"),
 ];
 
 export const ManageClient = ({ loggedin }) => {
@@ -122,7 +122,7 @@ export const ManageClient = ({ loggedin }) => {
             <TableRow></TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row,index) => (
+            {data.map((row,index) => (
               <TableRow
                 className="tableRow"
                 key={row.name}

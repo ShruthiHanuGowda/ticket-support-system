@@ -71,10 +71,8 @@ export const Login = ({setIsLoggedin}) => {
     setData({
       ...data,
       [e.target.name]: e.target.value,
-    })
-  
+    })  
   }
-
     const onsubmit = async(e) =>{     
       e.preventDefault();
       console.log(data);
@@ -91,8 +89,8 @@ export const Login = ({setIsLoggedin}) => {
           navigate("/manage-client");
           console.log("client")
           setIsLoggedin(true);
-        }else if(res.userLoginData.role==="user"){
-          navigate("/manage-user");
+        }else if(res.userLoginData.role==="user" ){
+          navigate("/create-ticket");
           console.log("user")
           setIsLoggedin(true);
         }else{
