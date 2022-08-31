@@ -11,6 +11,7 @@ import { Login } from '../Components/AuthPage/LoginPage/login'
 import { CreateClient } from "../Components/CreateClient/CreateClient";
 import { CreateEndUser } from "../Components/CreateEndUser/CreateEndUser";
 import { TicketDetails } from "../Components/TicketDetails/TicketDetails";
+import { CreateTicket } from '../Components/CreateTicket/CreateTicket'
 export const Router = () => {
   const [isLoggedin, setIsLoggedin] = useState(false)
   return (
@@ -35,7 +36,9 @@ export const Router = () => {
           <Route path="/manage-client/create-client" exact element={<CreateClient />} />
           <Route path="/ticket-details" exact element={<TicketDetails />} />
           <Route path="/manage-user/create-enduser" exact  element={<CreateEndUser />} />
+          <Route path="/create-ticket" exact  element={<CreateTicket/>}/>
         </Route>
+      
         <Route path="/about" exact element={<About />} />
       </Switch>
       {/* <Footer /> */}

@@ -104,7 +104,7 @@ function createData(sr, name, position, Department) {
 
 const rows = [
   createData("1", "John Doe", "Sales Executive", "Sales"),
-  createData("2", "John Doe", "Manager", "Sales"),
+  createData("2", "John Doe", "Manage", "Sales"),
   createData("3", "John Doe", "Marketing", "Sales"),
   createData("4", "John Doe", "Sales Executive", "Sales"),
   createData("5", "John Doe", "Sales Executive", "Sales"),

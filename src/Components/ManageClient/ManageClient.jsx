@@ -80,7 +80,7 @@ const rows = [
   createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
   createData("#2345", "Sales", "John Doe", "Sales Executive", "Hold"),
   createData("#2345", "Sales", "John Doe", "Sales Executive", "Progress"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Closed"),
+  createData("#2346", "Sales", "John Doe", "Sales Executive", "Closed"),
   createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
   createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
   createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
