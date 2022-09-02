@@ -67,33 +67,27 @@ const rows = [
 export const ManageUser = ({ loggedin }) => {
   // ------for openAction in table Row---
   const [usersData, setUserData] = useState([]);
-  console.log(usersData);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [data, setData] = React.useState(usersData); 
-  console.log(data)
+  const [data, setData] = React.useState(usersData);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
   const location = useLocation();
 
   React.useEffect(() => {
-    console.log(data);
-    if (!loggedin) {
-      navigate("/login");
-    }
+    
+    //---- for Toster
     if (location.state) {
-      if (location.state.status == "201") {
-        toast.success(location.state.message);
-      } else toast.error(location.state.message);
+      console.log(location.state.message)
+      toast.success(location.state.message);
     }
     fecthUserData();
-  }, [loggedin]);
+  }, []);
 
   const fecthUserData = async () => {
-    const userData = await axios.get("http://localhost:8000/user");
+    const userData = await axios.get("/user");
     // console.log(userData.data.data);
     setUserData(userData.data.data);
-    
-    
+
     // .then((res)=> console.log(res.data.data));
   };
   const handleClick = (event) => {
@@ -102,16 +96,27 @@ export const ManageUser = ({ loggedin }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  //----------------for Delete User Data
+  const deleteUser = async(id) =>{
+    await axios.delete(`/user/${id}`).then((res) =>res.data );
+     window.location.reload(false);
+   }
+
+   const editUser = (id) =>{
+    navigate(`/create-enduser/${id}`)
+      // await axios.post(`http://localhost:8000/user/${id}`).then((res)=>console.log(res))
+   }
+
   const statusColors = {
     "Head of Product": "#044BA9",
     "Product Manager": "#E05D5D",
     "VP of Marketing": "#0B9611",
-    "Technical Lead":"#0392cf",
-    "Senior Software Engineer":"#ffeead",
-    "Software Developer":"#a8e6cf ",
-    "Junior Software Developer":"#76b4bd",
-    "Intern Software Developer":"#603601"
-
+    "Technical Lead": "#0392cf",
+    "Senior Software Engineer": "#ffeead",
+    "Software Developer": "#a8e6cf ",
+    "Junior Software Developer": "#76b4bd",
+    "Intern Software Developer": "#603601",
   };
   return (
     <Box>
@@ -171,8 +176,8 @@ export const ManageUser = ({ loggedin }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-             
-              { data.length == 0 ? usersData.map((row, index) => (
+            {data.length == 0
+              ? usersData.map((row, index) => (
                   <TableRow
                     className="tableRow"
                     key={row._id}
@@ -181,7 +186,42 @@ export const ManageUser = ({ loggedin }) => {
                     <TableCell component="th" align="center" scope="row">
                       {index + 1}
                     </TableCell>
-                    <TableCell align="center" sx={{textTransform: 'capitalize'}}>{row.name}</TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{ textTransform: "capitalize" }}
+                    >
+                      {row.name}
+                    </TableCell>
+
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: statusColors[row.position] ?? "black",
+                      }}
+                    >
+                      {row.position}
+                    </TableCell>
+                    <TableCell align="center">{row.department}</TableCell>
+                    <TableCell align="center">
+                      <IconButton  onClick={()=>{editUser(row._id)}}>
+                        <EditOutlinedIcon sx={{ color: "#777777" }} />
+                      </IconButton>
+                      <IconButton onClick={() => { deleteUser(row._id) }}>
+                        <DeleteOutlineOutlinedIcon  sx={{ color: " #E05D5D" }} />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              : data.map((row, index) => (
+                  <TableRow
+                    className="tableRow"
+                    key={row._id}
+                    style={{ background: "#F4FBFF" }}
+                  >
+                    <TableCell component="th" align="center" scope="row">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell align="center">{row.name}</TableCell>
 
                     <TableCell
                       align="center"
@@ -196,43 +236,12 @@ export const ManageUser = ({ loggedin }) => {
                       <IconButton>
                         <EditOutlinedIcon sx={{ color: "#777777" }} />
                       </IconButton>
-                      <IconButton>
-                        <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
+                      <IconButton onClick={() => { deleteUser(row._id) }} >
+                        <DeleteOutlineOutlinedIcon  sx={{ color: " #E05D5D" }} />
                       </IconButton>
                     </TableCell>
                   </TableRow>
-                ))
-              : data.map((row, index) => (
-                <TableRow
-                  className="tableRow"
-                  key={row._id}
-                  style={{ background: "#F4FBFF" }}
-                >
-                  <TableCell component="th" align="center" scope="row">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell align="center">{row.name}</TableCell>
-
-                  <TableCell
-                    align="center"
-                    sx={{
-                      color: statusColors[row.position] ?? "black",
-                    }}
-                  >
-                    {row.position}
-                  </TableCell>
-                  <TableCell align="center">{row.department}</TableCell>
-                  <TableCell align="center">
-                    <IconButton>
-                      <EditOutlinedIcon sx={{ color: "#777777" }} />
-                    </IconButton>
-                    <IconButton>
-                      <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-        
+                ))}
           </TableBody>
         </Table>
       </TableContainer>

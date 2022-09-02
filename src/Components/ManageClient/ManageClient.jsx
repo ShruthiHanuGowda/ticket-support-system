@@ -23,6 +23,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useNavigate,Link } from "react-router-dom";
 import SearchBar from "../Common/SearchBar";
 
+
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
@@ -37,14 +38,21 @@ const rows = [
   createData("#2312145", "Sales", "John Doe", "Sales Executive", "Open"),
 ];
 
-export const ManageClient = ({ loggedin }) => {
+export const ManageClient = ({ loggedin,isClient }) => {
   const navigate = useNavigate();
   const [data, setData] = React.useState(rows);
-  React.useEffect(() => {
-    if (!loggedin) {
-      navigate("/login");
-    }
-  }, [loggedin]);
+
+  // React.useEffect(() => {
+  //   if (!loggedin) {
+  //     navigate("/login");
+  //   }
+  //   // if(!isClient){
+  //   //   navigate("/login", {
+  //   //     state: { message: 'Please Login As Client', status: '400' },
+  //   //   })      
+    
+  // }, [loggedin]);
+
 
   // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null);;

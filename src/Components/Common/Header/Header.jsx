@@ -24,15 +24,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
 
 import Kl from "../../../Assets/Images/KL.png";
-import { BrowserRouter, Link, Outlet ,useNavigate} from "react-router-dom";
-import {
-  Avatar,
-  Button,
-  InputBase,
-  Menu,
-  MenuItem, 
-  Tooltip,
-} from "@mui/material";
+import { BrowserRouter, Link, Outlet, useNavigate } from "react-router-dom";
+import { Avatar, Button, InputBase, Menu, MenuItem, Tooltip } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 const drawerWidth = 240;
@@ -76,6 +69,7 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
@@ -180,17 +174,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-
-export const Header = ({setIsLoggedin}) => {
+export const Header = ({ setIsLoggedin }) => {
   const theme = useTheme();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+ 
   const isBigScreen = useMediaQuery("(min-width: 1140px)", false);
   const prevBigScreen = usePrevious(isBigScreen);
   const Routes = [
     {
       name: "Dashboard",
-      path: "/",
+      path: "/dashboard",
     },
     { name: "Manage Client", path: "/manage-client" },
     { name: "Manage User", path: "/manage-user" },
@@ -207,11 +201,13 @@ export const Header = ({setIsLoggedin}) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const logout = () =>{
+  const logout = () => {
     setIsLoggedin(false);
-    navigate("/")
-  }
-  
+    sessionStorage.removeItem('userData');
+    // sessionStorage.removeItem('token')
+    navigate("/");
+  };
+
   // -------for Avatar -------
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -226,17 +222,9 @@ export const Header = ({setIsLoggedin}) => {
   return (
     <Box sx={{ display: "-webkit-Box" }}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        open={open}
-        sx={{ paddingLeft: "10px", background: "#F4FBFF" }}
-      >
+      <AppBar position="fixed" open={open} sx={{ paddingLeft: "10px", background: "#F4FBFF" }}>
         <Toolbar style={{ paddingLeft: "0px" }}>
-          <img
-            style={{ ...(open && { display: "none" }) }}
-            src={Kl}
-            alt="logo"
-          />
+          <img style={{ ...(open && { display: "none" }) }} src={Kl} alt="logo" />
           <IconButton
             aria-label="open drawer"
             onClick={handleDrawerOpen}
@@ -256,10 +244,7 @@ export const Header = ({setIsLoggedin}) => {
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Search..."
-                  inputProps={{ "aria-label": "search" }}
-                />
+                <StyledInputBase placeholder="Search..." inputProps={{ "aria-label": "search" }} />
               </Search>
             </Button>
           </Box>
@@ -296,24 +281,19 @@ export const Header = ({setIsLoggedin}) => {
         </Toolbar>
       </AppBar>
       <Drawer
+        
         variant="permanent"
         open={open}
         sx={{
           backgroundColor: "#F4FBFF",
           "& .MuiPaper-root": { backgroundColor: "#F4FBFF" },
         }}
-      >
+      > 
         <DrawerHeader style={{ backgroundColor: "#F4FBFF" }}>
           <Typography>
             <img src={Kadellogo} alt="logo" />
           </Typography>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
+          <IconButton onClick={handleDrawerClose}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
         </DrawerHeader>
         <Divider />
         <List>
@@ -337,12 +317,7 @@ export const Header = ({setIsLoggedin}) => {
                 >
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText
-                  component={Link}
-                  primary={text.name}
-                  to={text.path}
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
+                <ListItemText component={Link} primary={text.name} to={text.path} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           ))}
@@ -365,11 +340,7 @@ export const Header = ({setIsLoggedin}) => {
                     justifyContent: "center",
                   }}
                 >
-                  {index % 2 === 0 ? (
-                    <PermIdentityOutlinedIcon />
-                  ) : (
-                    <LogoutIcon color="error" onClick={logout}/>
-                  )}
+                  {index % 2 === 0 ? <PermIdentityOutlinedIcon /> : <LogoutIcon color="error" onClick={logout} />}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -381,7 +352,6 @@ export const Header = ({setIsLoggedin}) => {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Outlet />
-     
       </Box>
     </Box>
   );

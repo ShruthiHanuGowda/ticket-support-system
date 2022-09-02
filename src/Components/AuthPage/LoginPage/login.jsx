@@ -7,10 +7,11 @@ import {
   AppBar,
   Toolbar,
 } from "@mui/material";
-import { useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const Component = styled(Box)`
   width: 500px;
@@ -61,70 +62,59 @@ const Fields = styled(TextField)`
   background: #fff;
 `;
 
-export const Login = ({setIsLoggedin}) => {
-  const navigate =useNavigate();
+export const Login = ({ setIsLoggedin }) => {
+  const navigate = useNavigate();
+  const Location = useLocation();
   const [data, setData] = useState({
-    userName: '',    
-    password: '',   
-  })
+    userName: "",
+    password: "",
+  });
+  
+
   const checkValidation = (e) => {
     setData({
       ...data,
       [e.target.name]: e.target.value,
-    })  
-  }
-    const onsubmit = async(e) =>{     
-      e.preventDefault();
-      console.log(data);
-      try {        
-        console.log(data);
-       const url='http://localhost:8000/login';
-        const { data: res }= await axios.post(url, data);
-     console.log(res)
-        if(res.userLoginData.role === 'admin'){
-          navigate("/");
-            console.log("dash")   
-            setIsLoggedin(true);     
-        }else if(res.userLoginData.role==="client"){
-          navigate("/manage-client");
-          console.log("client")
-          setIsLoggedin(true);
-        }else if(res.userLoginData.role==="user" ){
-          navigate("/create-ticket");
-          console.log("user")
-          setIsLoggedin(true);
-        }else{
-          navigate('/login')
-        }  
-       
-    } catch (error) {
-        if (
-            error.response &&
-            error.response.status >= 400 &&
-            error.response.status <= 500
-        ) {
-            console.log(error.response.data.message);
-        }
+    });
+  };
+  const onsubmit = async (e) => {
+    e.preventDefault();
 
+    const url = "/login";
+    const res = await axios.post(url, data);
+    
+    const userLogin = res.data.userLoginData;
+    const userData = JSON.stringify(userLogin)
+    sessionStorage.setItem('userData',userData)
+    console.log(userLogin.role);
+    if(userLogin.role === 'admin'){
+      navigate("/dashboard", { state: userLogin });
+    } else if(userLogin.role === 'client'){
+      navigate("/client-dashboard", { state: userLogin });
+    } else if(userLogin.role==="user" ){
+      navigate("/create-ticket", { state: userLogin });
+    } else{
+      console.log('iam here')
+      navigate('/')
     }
-      // const getUser = async (request,response)=>{
-      //   let user = await User.findOne({ username: request.body.username });
-      //   if (!user) {
-      //       return response.status(400).json({ msg: 'Username does not match'});
-      //   }
-      //   try {           
-      //       console.log(user);
-      //   }catch (error) {
-      //       return response.status(500).json({ msg: 'Errror while login in user'});
-      //   }
-      // }
-      
-     
-    }
+  };
+
+  // const getUser = async (request,response)=>{
+  //   let user = await User.findOne({ username: request.body.username });
+  //   if (!user) {
+  //       return response.status(400).json({ msg: 'Username does not match'});
+  //   }
+  //   try {
+  //       console.log(user);
+  //   }catch (error) {
+  //       return response.status(500).json({ msg: 'Errror while login in user'});
+  //   }
+  // }
 
   return (
     <Component>
       <Box>
+        <Toaster />
         <AppBar sx={{ background: "#F4FBFF", boxShadow: "none" }}>
           <Toolbar>
             <img src={Kadellogo} />
@@ -134,14 +124,14 @@ export const Login = ({setIsLoggedin}) => {
       <Box>
         <Heading>Welcome to Kadel Labs</Heading>
         <Detail>Login</Detail>
-        <Wrapper component='form' onSubmit={onsubmit}>
+        <Wrapper component="form" onSubmit={onsubmit}>
           Username
           <Fields
             id="outlined-basic"
             label="Enter Username"
             variant="outlined"
-            name="userName"            
-            onChange={checkValidation}         
+            name="userName"
+            onChange={checkValidation}
           />
           <br />
           Password
@@ -151,13 +141,13 @@ export const Login = ({setIsLoggedin}) => {
             label="Enter Password"
             variant="outlined"
             name="password"
-            
             onChange={checkValidation}
-            
           />
           {/* <Fields hintText="At least 8 characters"floatingLabelText="Enter your password"errorText="Your password is too short"/> */}
           <Forgot>Forgot Password</Forgot>
-          <LoginButton variant="contained" type="submit">LOGIN</LoginButton>
+          <LoginButton variant="contained" type="submit">
+            LOGIN
+          </LoginButton>
           {/* <Button>Create an account</Button> */}
         </Wrapper>
       </Box>

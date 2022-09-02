@@ -6,6 +6,8 @@ const { User } = require('../models/login')
 /* GET home page. */
 router.get('/', (req, res) => res.send('Hello World'))
 router.post('/user', userController.addUser)
+router.get('/user/:id',userController.getUserById)
+router.put('/user/:id', userController.UpdateUser)
 router.get('/user',userController.getAllUserData)
 router.post('/login', async (req, res) => {
   const email = req.body.userName
@@ -13,13 +15,14 @@ router.post('/login', async (req, res) => {
 
   const userLoginData = await User.findOne({ email: email }).then(
     (userLoginData) => {
-      console.log(userLoginData)
+      var token="vjnrvnerzovlzsk";
+      console.log(userLoginData);
 
       if (userLoginData) {
         if (password === userLoginData.password) {
           return res
             .status(200)
-            .json({ message: 'login sucess', userLoginData })
+            .json({ message: 'login sucess',token, userLoginData })
         } else {
           return res.json({ message: 'wrong credentials' })
         }
@@ -34,4 +37,5 @@ router.post('/login', async (req, res) => {
   }
 })
 
+router.delete("/user/:deleteId", userController.deleteUser);
 module.exports = router
