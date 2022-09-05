@@ -360,12 +360,16 @@ export const Home = ({ loggedin }) => {
                     <MenuItem
                       onClick={handleClose}
                       component={Link}
-                      to="../manage-user/create-enduser"
+                     
+                      to="../manage-user/ticket-details"
                       style={{ backgroundColor: "blue" }}
                     >
                       Views <RemoveRedEyeIcon fontSize="14px" />
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={handleClose} 
+                     component={Link}
+                     to="../manage-user/create-enduser"
+                      >
                       Edit
                       <EditIcon fontSize="14px" />
                     </MenuItem>

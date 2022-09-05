@@ -128,8 +128,8 @@ export const ManageClient = () => {
             to="../manage-client/create-client"
             style={{ backgroundColor: "blue" }}
           >
-            <AddCircleOutlineIcon />
-            &nbsp; Add New User
+             <AddCircleOutlineIcon style={{ color: "white" }} />
+            &nbsp;<h8 style={{ color: "white" }}>Add New User</h8>
           </Button>
         </Grid>
       </Grid>

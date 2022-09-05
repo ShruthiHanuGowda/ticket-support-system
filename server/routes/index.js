@@ -2,11 +2,14 @@ const express = require('express')
 const router = express.Router()
 const userController = require('../controllers/userController')
 const { User } = require('../models/login')
+const ticketController = require('../controllers/ticketController')
 
 /* GET home page. */
 router.get('/', (req, res) => res.send('Hello World'))
 router.use('/user', userController)
+router.post('/ticket', ticketController.addTicket)
 
+//router.get('/ticket', userController.getAllTicket)
 router.post('/login', async (req, res) => {
   const email = req.body.userName;
   const password = req.body.password;
