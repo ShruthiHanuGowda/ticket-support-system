@@ -28,6 +28,18 @@ import Kl from "../../../Assets/Images/KL.png";
 import { BrowserRouter, Link, Outlet, useNavigate } from "react-router-dom";
 import { Avatar, Button, Icon, InputBase, Menu, MenuItem, Tooltip } from "@mui/material";
 
+import Kl from '../../../Assets/Images/KL.png'
+import Bharat from '../../../Assets/Images/Bharat.png'
+import { BrowserRouter, Link, Outlet, useNavigate } from 'react-router-dom'
+import {
+  Avatar,
+  Button,
+  InputBase,
+  Menu,
+  MenuItem, 
+  Tooltip,
+} from "@mui/material";
+
 import SearchIcon from "@mui/icons-material/Search";
 const drawerWidth = 240;
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -51,7 +63,7 @@ const closedMixin = (theme) => ({
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-});
+});;
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -149,7 +161,7 @@ const Search = styled("div")(({ theme }) => ({
   menuPaper: {
     backgroundColor: "lightblue",
   },
-}));
+}));;
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -262,7 +274,7 @@ export const Header = ({ setIsLoggedin }) => {
           <Box sx={{ flexGrow: 0, position: "absolute", right: "20px" }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar />
+                <Avatar alt="person" src={Bharat} />
                 <ArrowDropDownIcon />
               </IconButton>
             </Tooltip>

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const userController = require('../controllers/userController')
 const { User } = require('../models/login')
+const ticketController = require('../controllers/ticketController')
 
 /* GET home page. */
 router.get('/', (req, res) => res.send('Hello World'))

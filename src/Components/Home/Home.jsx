@@ -35,7 +35,7 @@ const Search = styled("div")(({ theme }) => ({
   menuPaper: {
     backgroundColor: "lightblue",
   },
-}));
+}));;
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -60,8 +60,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+;
 
 //----------- end search Bar
+
 
 const CheckboxFiled = styled(FormControlLabel)({
   marginRight: "30px",
@@ -115,14 +117,14 @@ export const Home = ({ loggedin }) => {
     }
   };
   // ------for openAction in table Row---
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = React.useState(null);;
+  const open = Boolean(anchorEl);;
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget);;
+  };;
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null);;
+  };;
   const statusColors = {
     Open: "#0B9611",
     Hold: "#E05D5D",
@@ -142,9 +144,14 @@ export const Home = ({ loggedin }) => {
           <SearchBar rows={rows} setData={setData} />
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
-          <Button variant="contained" component={Link} to="../manage-user/create-enduser" style={{ backgroundColor: "blue" }}>
-            <AddCircleOutlineIcon />
-            &nbsp; Add New User
+          <Button
+            variant="contained" component={Link} to="../manage-user/create-enduser" style={{ backgroundColor: "blue" }}
+            component={Link}
+            to="../manage-user/create-enduser"
+            style={{ backgroundColor: "blue" }}
+          >
+            <AddCircleOutlineIcon style={{ color: "white" }} />
+            &nbsp;<h8 style={{ color: "white" }}>Add New User</h8>
           </Button>
         </Grid>
       </Grid>

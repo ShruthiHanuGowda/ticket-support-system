@@ -2,13 +2,9 @@ import * as React from "react";
 import {
   Button,
   Divider,
-  FormControlLabel,
-  FormGroup,
   Grid,
   IconButton,
   InputBase,
-  Menu,
-  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -16,7 +12,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
@@ -50,8 +45,8 @@ import { useEffect } from "react";
 
 // })
 
-function createData(sr, name, position, Department) {
-  return { sr, name, position, Department };
+function createData(sr,  name,  position,  Department) {
+  return {  sr,  name,  position,  Department };;
 }
 
 const rows = [
@@ -91,8 +86,8 @@ export const ManageUser = ({ loggedin }) => {
     // .then((res)=> console.log(res.data.data));
   };
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget);;
+  };;
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -124,7 +119,7 @@ export const ManageUser = ({ loggedin }) => {
       <Grid container justifyContent={"space-between"}>
         <Grid item xm={2} md={3} lg={3}>
           <Typography variant="h5" letterSpacing={1}>
-            Manage End User
+              Manage End User
           </Typography>
         </Grid>
         <Grid item xm={10} md={6} lg={6}>
@@ -132,13 +127,21 @@ export const ManageUser = ({ loggedin }) => {
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button
+           
             variant="contained"
             component={Link}
             to="../manage-user/create-enduser"
             style={{ backgroundColor: "blue" }}
+          
+            component={Link}
+            to="../manage-user/create-enduser"
+            color="primary"
+            className={classes.root}
+           // style={{ textColor: 'transparent' }} 
+           
           >
-            <AddCircleOutlineIcon />
-            &nbsp; Add User
+           <AddCircleOutlineIcon style={{ color: "white" }} />
+            &nbsp;<h8 style={{ color: "white" }}>Add User</h8>
           </Button>
         </Grid>
       </Grid>
