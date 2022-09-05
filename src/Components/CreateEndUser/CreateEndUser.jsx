@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react'
 import {
   Box,
   Grid,
@@ -10,103 +10,106 @@ import {
   Typography,
   Button,
   Link,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { Form } from "react-bootstrap";
-import { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
-import { useParams } from "react-router-dom";
+} from '@mui/material'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { Form } from 'react-bootstrap'
+import { useState } from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import toast, { Toaster } from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
 
 export const CreateEndUser = () => {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down("md"));
-  const navigate = useNavigate();
- 
+  const theme = useTheme()
+  const matches = useMediaQuery(theme.breakpoints.down('md'))
+  const navigate = useNavigate()
+
   // const [message , setMessage] =useState({})
-  const [singleUser,  setSingleUser] =useState({});
+  const [singleUser, setSingleUser] = useState({})
   console.log(singleUser)
   const [input, setInput] = useState({
-    name: "",
-    email: "",
-    department: "",
-    position: "",
-    password: "",
-    role: "user",
-  });
+    name: '',
+    email: '',
+    department: '',
+    position: '',
+    password: '',
+    role: 'user',
+  })
   const onchageTextFilid = (e) => {
     setInput((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
-    }));
-  };
+    }))
+  }
 
   function generatePassword() {
     var length = 8,
       charset =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-      retVal = "";
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+      retVal = ''
     for (var i = 0, n = charset.length; i < length; ++i) {
-      retVal += charset.charAt(Math.floor(Math.random() * n));
+      retVal += charset.charAt(Math.floor(Math.random() * n))
     }
-    return retVal;
+    return retVal
   }
 
   const sendData = async (temPass) => {
     await axios
-      .post("/user", {
+      .post('/user', {
         name: String(input.name),
         email: String(input.email),
         department: String(input.department),
         position: String(input.position),
-        role: String("user"),
+        role: String('user'),
         password: String(temPass),
       })
       .then((res) =>
-        navigate("/manage-user", {
+        navigate('/manage-user', {
           state: { message: res.data.message, status: res.status },
-        })       
-      ).catch(function (error) {
-        toast.error(error.response?.data?.message);
-      });
-  };
+        }),
+      )
+      .catch(function (error) {
+        toast.error(error.response?.data?.message)
+      })
+  }
   const handleSubmit = (e) => {
-    e.preventDefault();
-    let a = generatePassword();
-    sendData(a);
+    e.preventDefault()
+    let a = generatePassword()
+    sendData(a)
     // sendData(a).then((a) => {
     //   console.log(a);
     // });
-  };
+  }
 
   // ----------------for Update User Data
-  const _id = useParams().id;
+  const _id = useParams().id
   console.log(_id)
-  
+
   useEffect(() => {
-    const fecthUserData = async()=>{
-     return await axios.get(`/user/${_id}`).then((res)=>res.data).then((data)=>{
-      setInput(data.user)
-     })
-    }  
-    fecthUserData();
+    const fecthUserData = async () => {
+      return await axios
+        .get(`/user/${_id}`)
+        .then((res) => res.data)
+        .then((data) => {
+          setInput(data.user)
+        })
+    }
+    fecthUserData()
   }, [_id])
-  
 
   const handleUpdate = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     updateRequest()
-    .then((res) =>
-    
-    navigate("/manage-user", {
-      state: { message: res.message, status: res.status },
-    })       
-  ).catch(function (error) {
-    toast.error(error.response?.data?.message);
-  });
-  };
+      .then((res) =>
+        navigate('/manage-user', {
+          state: { message: res.message, status: res.status },
+        }),
+      )
+      .catch(function (error) {
+        toast.error(error.response?.data?.message)
+      })
+  }
 
   const updateRequest = async () => {
     return await axios
@@ -115,329 +118,329 @@ export const CreateEndUser = () => {
         email: String(input.email),
         department: String(input.department),
         position: String(input.position),
-        role: String("user"),
+        role: String('user'),
         password: String(input.temPass),
       })
-      .then((res) => res.data);
-  };
+      .then((res) => res.data)
+  }
 
-
-
-  if(!_id){
-  return (    
+  if (!_id) {
+    return (
       (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
       (
-       <Box
-        noValidate
-        autoComplete="off"
-        sx={{
-          width: "auto",
-          paddingX: "5",
-          [theme.breakpoints.down("md")]: {
-            paddingX: "1 !important",
-          },
-        }}
-      > <Toaster />
-        <Typography variant="h5" sx={{ my: 4 }}>
-          Create End User
-        </Typography>
-        <Form onSubmit={handleSubmit}>
-          <Grid container justify="center" spacing={4}>
-            <Grid item md={6} xs={12}>
-              <InputLabel>
-                Full Name <span style={{ color: "red" }}>*</span>
-              </InputLabel>
-              <TextField
-                placeholder="Full Name"
-                value={input.name}
-                name="name"
-                onChange={onchageTextFilid}
-                type="text"
-                required
-                sx={{
-                  background: "#F4FBFF",
-                  width: "100%",
-                  [theme.breakpoints.up("md")]: {
-                    width: "491px  !important",
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <InputLabel>
-                Email <span style={{ color: "red" }}>*</span>
-              </InputLabel>
-              <TextField
-                placeholder="Email"
-                value={input.email}
-                name="email"
-                type="email"
-                required
-                onChange={onchageTextFilid}
-                sx={{
-                  background: "#F4FBFF",
-                  width: "100%",
-                  [theme.breakpoints.up("md")]: {
-                    width: "491px  !important",
-                  },
-                }}
-              />
-            </Grid>
+        <Box
+          noValidate
+          autoComplete="off"
+          sx={{
+            width: 'auto',
+            paddingX: '5',
+            [theme.breakpoints.down('md')]: {
+              paddingX: '1 !important',
+            },
+          }}
+        >
+          {' '}
+          <Toaster />
+          <Typography variant="h5" sx={{ my: 4 }}>
+            Create End User
+          </Typography>
+          <Form onSubmit={handleSubmit}>
+            <Grid container justify="center" spacing={4}>
+              <Grid item md={6} xs={12}>
+                <InputLabel>
+                  Full Name <span style={{ color: 'red' }}>*</span>
+                </InputLabel>
+                <TextField
+                  placeholder="Full Name"
+                  value={input.name}
+                  name="name"
+                  onChange={onchageTextFilid}
+                  type="text"
+                  required
+                  sx={{
+                    background: '#F4FBFF',
+                    width: '100%',
+                    [theme.breakpoints.up('md')]: {
+                      width: '491px  !important',
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <InputLabel>
+                  Email <span style={{ color: 'red' }}>*</span>
+                </InputLabel>
+                <TextField
+                  placeholder="Email"
+                  value={input.email}
+                  name="email"
+                  type="email"
+                  required
+                  onChange={onchageTextFilid}
+                  sx={{
+                    background: '#F4FBFF',
+                    width: '100%',
+                    [theme.breakpoints.up('md')]: {
+                      width: '491px  !important',
+                    },
+                  }}
+                />
+              </Grid>
 
-            <Grid item md={6} xs={12}>
-              <InputLabel htmlFor="grouped-select">
-                Position <span style={{ color: "red" }}>*</span>
-              </InputLabel>
-              <Select
-                value={input.position}
-                name="position"
-                onChange={onchageTextFilid}
-                defaultValue=""
-                id="grouped-select"
-                label="Grouping"
-                placeholder="Select Position"
-                sx={{
-                  background: "#F4FBFF",
-                  width: "100%",
-                  [theme.breakpoints.up("md")]: {
-                    width: "491px  !important",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>Choose Position</em>
-                </MenuItem>
-                <MenuItem value={"Head of Product"}>Head of Product</MenuItem>
-                <MenuItem value={"Product Manager"}>Product Manager</MenuItem>
-                <MenuItem value={"VP of Marketing"}>VP of Marketing</MenuItem>
-                <MenuItem value={"Technical Lead"}>Technical Lead</MenuItem>
-                <MenuItem value={"Senior Software Engineer"}>
-                  Senior Software Engineer
-                </MenuItem>
-                <MenuItem value={"Software Developer"}>
-                  Software Developer
-                </MenuItem>
-                <MenuItem value={"Junior Software Developer"}>
-                  Junior Software Developer
-                </MenuItem>
-                <MenuItem value={"Intern Software Developer"}>
-                  Intern Software Developer
-                </MenuItem>
-              </Select>
-            </Grid>
+              <Grid item md={6} xs={12}>
+                <InputLabel htmlFor="grouped-select">
+                  Position <span style={{ color: 'red' }}>*</span>
+                </InputLabel>
+                <Select
+                  value={input.position}
+                  name="position"
+                  onChange={onchageTextFilid}
+                  defaultValue=""
+                  id="grouped-select"
+                  label="Grouping"
+                  placeholder="Select Position"
+                  sx={{
+                    background: '#F4FBFF',
+                    width: '100%',
+                    [theme.breakpoints.up('md')]: {
+                      width: '491px  !important',
+                    },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Choose Position</em>
+                  </MenuItem>
+                  <MenuItem value={'Head of Product'}>Head of Product</MenuItem>
+                  <MenuItem value={'Product Manager'}>Product Manager</MenuItem>
+                  <MenuItem value={'VP of Marketing'}>VP of Marketing</MenuItem>
+                  <MenuItem value={'Technical Lead'}>Technical Lead</MenuItem>
+                  <MenuItem value={'Senior Software Engineer'}>
+                    Senior Software Engineer
+                  </MenuItem>
+                  <MenuItem value={'Software Developer'}>
+                    Software Developer
+                  </MenuItem>
+                  <MenuItem value={'Junior Software Developer'}>
+                    Junior Software Developer
+                  </MenuItem>
+                  <MenuItem value={'Intern Software Developer'}>
+                    Intern Software Developer
+                  </MenuItem>
+                </Select>
+              </Grid>
 
-            <Grid item md={6} xs={12}>
-              <InputLabel htmlFor="grouped-select">
-                Department <span style={{ color: "red" }}>*</span>
-              </InputLabel>
-              <Select
-                value={input.department}
-                name="department"
-                onChange={onchageTextFilid}
-                id="grouped-select"
-                label="Grouping"
-                sx={{
-                  background: "#F4FBFF",
-                  width: "100%",
-                  [theme.breakpoints.up("md")]: {
-                    width: "491px ",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <ListSubheader>Software Engineer</ListSubheader>
-                <MenuItem value={"traineSE"}>traine</MenuItem>
-                <MenuItem value={"seniorSE"}>senior</MenuItem>
-                <ListSubheader>hr</ListSubheader>
-                <MenuItem value={"juniorHR"}>junior</MenuItem>
-                <MenuItem value={"seniorHR"}>senior</MenuItem>
-              </Select>
+              <Grid item md={6} xs={12}>
+                <InputLabel htmlFor="grouped-select">
+                  Department <span style={{ color: 'red' }}>*</span>
+                </InputLabel>
+                <Select
+                  value={input.department}
+                  name="department"
+                  onChange={onchageTextFilid}
+                  id="grouped-select"
+                  label="Grouping"
+                  sx={{
+                    background: '#F4FBFF',
+                    width: '100%',
+                    [theme.breakpoints.up('md')]: {
+                      width: '491px ',
+                    },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <ListSubheader>Software Engineer</ListSubheader>
+                  <MenuItem value={'traineSE'}>traine</MenuItem>
+                  <MenuItem value={'seniorSE'}>senior</MenuItem>
+                  <ListSubheader>hr</ListSubheader>
+                  <MenuItem value={'juniorHR'}>junior</MenuItem>
+                  <MenuItem value={'seniorHR'}>senior</MenuItem>
+                </Select>
+              </Grid>
+              <Grid item mt={4}>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  sx={{
+                    marginTop: '20px',
+                    marginRight: '11px',
+                    marginBottom: '19px',
+                  }}
+                >
+                  Create
+                </Button>
+                <Link
+                  variant="outlined"
+                  spacing={8}
+                  sx={{ marginTop: '22px', marginBottom: '15px' }}
+                >
+                  Discard
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item mt={4}>
-              <Button
-                variant="contained"
-                type="submit"
-                sx={{
-                  marginTop: "20px",
-                  marginRight: "11px",
-                  marginBottom: "19px",
-                }}
-              >
-                Create
-              </Button>
-              <Link
-                variant="outlined"
-                spacing={8}
-                sx={{ marginTop: "22px", marginBottom: "15px" }}
-              >
-                Discard
-              </Link>
-            </Grid>
-          </Grid>
-        </Form>
-      </Box>
+          </Form>
+        </Box>
       )
-  )}
-    else{
-      return(
+    )
+  } else {
+    return (
       (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
       (
-       <Box
-        noValidate
-        autoComplete="off"
-        sx={{
-          width: "auto",
-          paddingX: "5",
-          [theme.breakpoints.down("md")]: {
-            paddingX: "1 !important",
-          },
-        }}
-      > <Toaster />
-        <Typography variant="h5" sx={{ my: 4 }}>
-          Edit End User
-        </Typography>
-        <Form onSubmit={handleUpdate}>
-          <Grid container justify="center" spacing={4}>
-            <Grid item md={6} xs={12}>
-              <InputLabel>
-                Full Name <span style={{ color: "red" }}>*</span>
-              </InputLabel>
-              <TextField
-                placeholder="Full Name"
-                value={input.name}
-                name="name"
-                onChange={onchageTextFilid}
-                type="text"
-                required
-                sx={{
-                  background: "#F4FBFF",
-                  width: "100%",
-                  [theme.breakpoints.up("md")]: {
-                    width: "491px  !important",
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <InputLabel>
-                Email <span style={{ color: "red" }}>*</span>
-              </InputLabel>
-              <TextField
-                placeholder="Email"
-                value={input.email}
-                name="email"
-                type="email"
-                required
-                onChange={onchageTextFilid}
-                sx={{
-                  background: "#F4FBFF",
-                  width: "100%",
-                  [theme.breakpoints.up("md")]: {
-                    width: "491px  !important",
-                  },
-                }}
-              />
-            </Grid>
+        <Box
+          noValidate
+          autoComplete="off"
+          sx={{
+            width: 'auto',
+            paddingX: '5',
+            [theme.breakpoints.down('md')]: {
+              paddingX: '1 !important',
+            },
+          }}
+        >
+          {' '}
+          <Toaster />
+          <Typography variant="h5" sx={{ my: 4 }}>
+            Edit End User
+          </Typography>
+          <Form onSubmit={handleUpdate}>
+            <Grid container justify="center" spacing={4}>
+              <Grid item md={6} xs={12}>
+                <InputLabel>
+                  Full Name <span style={{ color: 'red' }}>*</span>
+                </InputLabel>
+                <TextField
+                  placeholder="Full Name"
+                  value={input.name}
+                  name="name"
+                  onChange={onchageTextFilid}
+                  type="text"
+                  required
+                  sx={{
+                    background: '#F4FBFF',
+                    width: '100%',
+                    [theme.breakpoints.up('md')]: {
+                      width: '491px  !important',
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <InputLabel>
+                  Email <span style={{ color: 'red' }}>*</span>
+                </InputLabel>
+                <TextField
+                  placeholder="Email"
+                  value={input.email}
+                  name="email"
+                  type="email"
+                  required
+                  onChange={onchageTextFilid}
+                  sx={{
+                    background: '#F4FBFF',
+                    width: '100%',
+                    [theme.breakpoints.up('md')]: {
+                      width: '491px  !important',
+                    },
+                  }}
+                />
+              </Grid>
 
-            <Grid item md={6} xs={12}>
-              <InputLabel htmlFor="grouped-select">
-                Position <span style={{ color: "red" }}>*</span>
-              </InputLabel>
-              <Select
-                value={input.position}
-                name="position"
-                onChange={onchageTextFilid}
-                defaultValue=""
-                id="grouped-select"
-                label="Grouping"
-                placeholder="Select Position"
-                sx={{
-                  background: "#F4FBFF",
-                  width: "100%",
-                  [theme.breakpoints.up("md")]: {
-                    width: "491px  !important",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>Choose Position</em>
-                </MenuItem>
-                <MenuItem value={"Head of Product"}>Head of Product</MenuItem>
-                <MenuItem value={"Product Manager"}>Product Manager</MenuItem>
-                <MenuItem value={"VP of Marketing"}>VP of Marketing</MenuItem>
-                <MenuItem value={"Technical Lead"}>Technical Lead</MenuItem>
-                <MenuItem value={"Senior Software Engineer"}>
-                  Senior Software Engineer
-                </MenuItem>
-                <MenuItem value={"Software Developer"}>
-                  Software Developer
-                </MenuItem>
-                <MenuItem value={"Junior Software Developer"}>
-                  Junior Software Developer
-                </MenuItem>
-                <MenuItem value={"Intern Software Developer"}>
-                  Intern Software Developer
-                </MenuItem>
-              </Select>
-            </Grid>
+              <Grid item md={6} xs={12}>
+                <InputLabel htmlFor="grouped-select">
+                  Position <span style={{ color: 'red' }}>*</span>
+                </InputLabel>
+                <Select
+                  value={input.position}
+                  name="position"
+                  onChange={onchageTextFilid}
+                  defaultValue=""
+                  id="grouped-select"
+                  label="Grouping"
+                  placeholder="Select Position"
+                  sx={{
+                    background: '#F4FBFF',
+                    width: '100%',
+                    [theme.breakpoints.up('md')]: {
+                      width: '491px  !important',
+                    },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Choose Position</em>
+                  </MenuItem>
+                  <MenuItem value={'Head of Product'}>Head of Product</MenuItem>
+                  <MenuItem value={'Product Manager'}>Product Manager</MenuItem>
+                  <MenuItem value={'VP of Marketing'}>VP of Marketing</MenuItem>
+                  <MenuItem value={'Technical Lead'}>Technical Lead</MenuItem>
+                  <MenuItem value={'Senior Software Engineer'}>
+                    Senior Software Engineer
+                  </MenuItem>
+                  <MenuItem value={'Software Developer'}>
+                    Software Developer
+                  </MenuItem>
+                  <MenuItem value={'Junior Software Developer'}>
+                    Junior Software Developer
+                  </MenuItem>
+                  <MenuItem value={'Intern Software Developer'}>
+                    Intern Software Developer
+                  </MenuItem>
+                </Select>
+              </Grid>
 
-            <Grid item md={6} xs={12}>
-              <InputLabel htmlFor="grouped-select">
-                Department <span style={{ color: "red" }}>*</span>
-              </InputLabel>
-              <Select
-                value={input.department}
-                name="department"
-                onChange={onchageTextFilid}
-                id="grouped-select"
-                label="Grouping"
-                sx={{
-                  background: "#F4FBFF",
-                  width: "100%",
-                  [theme.breakpoints.up("md")]: {
-                    width: "491px ",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <ListSubheader>Software Engineer</ListSubheader>
-                <MenuItem value={"traineSE"}>traine</MenuItem>
-                <MenuItem value={"seniorSE"}>senior</MenuItem>
-                <ListSubheader>hr</ListSubheader>
-                <MenuItem value={"juniorHR"}>junior</MenuItem>
-                <MenuItem value={"seniorHR"}>senior</MenuItem>
-              </Select>
+              <Grid item md={6} xs={12}>
+                <InputLabel htmlFor="grouped-select">
+                  Department <span style={{ color: 'red' }}>*</span>
+                </InputLabel>
+                <Select
+                  value={input.department}
+                  name="department"
+                  onChange={onchageTextFilid}
+                  id="grouped-select"
+                  label="Grouping"
+                  sx={{
+                    background: '#F4FBFF',
+                    width: '100%',
+                    [theme.breakpoints.up('md')]: {
+                      width: '491px ',
+                    },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <ListSubheader>Software Engineer</ListSubheader>
+                  <MenuItem value={'traineSE'}>traine</MenuItem>
+                  <MenuItem value={'seniorSE'}>senior</MenuItem>
+                  <ListSubheader>hr</ListSubheader>
+                  <MenuItem value={'juniorHR'}>junior</MenuItem>
+                  <MenuItem value={'seniorHR'}>senior</MenuItem>
+                </Select>
+              </Grid>
+              <Grid item mt={4}>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  sx={{
+                    marginTop: '20px',
+                    marginRight: '11px',
+                    marginBottom: '19px',
+                  }}
+                >
+                  Update
+                </Button>
+                <Link
+                  variant="outlined"
+                  spacing={8}
+                  sx={{ marginTop: '22px', marginBottom: '15px' }}
+                >
+                  Discard
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item mt={4}>
-              <Button
-                variant="contained"
-                type="submit"
-                sx={{
-                  marginTop: "20px",
-                  marginRight: "11px",
-                  marginBottom: "19px",
-                }}
-              >
-                Update
-              </Button>
-              <Link
-                variant="outlined"
-                spacing={8}
-                sx={{ marginTop: "22px", marginBottom: "15px" }}
-              >
-                Discard
-              </Link>
-            </Grid>
-          </Grid>
-        </Form>
-      </Box>
+          </Form>
+        </Box>
       )
-     )}
-     
-    
-  
-};
+    )
+  }
+}

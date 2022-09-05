@@ -66,7 +66,7 @@ export const Router = () => {
             <Route path="/manage-user" exact element={<ManageUser loggedin={isLoggedin} />} />
             <Route path="/manage-client" exact element={<ManageClient loggedin={isLoggedin} />} />
             <Route path="/manage-client/create-client" exact element={<CreateClient />} />
-            <Route path="/ticket-details" exact element={<TicketDetails />} />
+            {/* <Route path="/ticket-details" exact element={<TicketDetails />} /> */}
             <Route path="/manage-user/create-enduser" exact element={<CreateEndUser />} />
             <Route path="/create-enduser/:id" exact element={<CreateEndUser />} />
           </Route>
@@ -75,6 +75,10 @@ export const Router = () => {
           </Route>
           <Route element={<RequireAuth allowedRoles={['client']} />}>
             <Route path="/client-dashboard" exact element={<Home loggedin={isLoggedin} />} />
+            {/* <Route path="/ticket-details" exact element={<TicketDetails />} /> */}
+         </Route>
+         <Route element={<RequireAuth allowedRoles={['client','admin']} />}>
+        
             <Route path="/ticket-details" exact element={<TicketDetails />} />
          </Route>
         </Route>

@@ -17,15 +17,16 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
-import InboxIcon from "@mui/icons-material/Dashboard";
+import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import MailIcon from "@mui/icons-material/PeopleAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
 import Kl from "../../../Assets/Images/KL.png";
 import { BrowserRouter, Link, Outlet, useNavigate } from "react-router-dom";
-import { Avatar, Button, InputBase, Menu, MenuItem, Tooltip } from "@mui/material";
+import { Avatar, Button, Icon, InputBase, Menu, MenuItem, Tooltip } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 const drawerWidth = 240;
@@ -178,21 +179,32 @@ export const Header = ({ setIsLoggedin }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
- 
+  const [userLoginData, setuserLoginData] = React.useState({});
   const isBigScreen = useMediaQuery("(min-width: 1140px)", false);
   const prevBigScreen = usePrevious(isBigScreen);
+
   const Routes = [
     {
       name: "Dashboard",
       path: "/dashboard",
+      icon:DashboardOutlinedIcon,
+      access: ["admin"],
     },
-    { name: "Manage Client", path: "/manage-client" },
-    { name: "Manage User", path: "/manage-user" },
+    {
+      name: "Dashboard",
+      path: "/client-dashboard",
+      icon:DashboardOutlinedIcon,
+      access: ["client"],
+    },
+    { name: "Manage Client", path: "/manage-client" , icon:MailIcon, access: ["admin"],},
+    { name: "Manage User", path: "/manage-user",icon:PeopleAltOutlinedIcon,  access: ["admin"], },
   ];
   React.useEffect(() => {
     if (isBigScreen !== prevBigScreen && isBigScreen !== open) {
       setOpen((prev) => !prev);
     }
+    setuserLoginData(JSON.parse(sessionStorage.getItem("userData")));
+    // const userLoginData = JSON.parse(sessionStorage.getItem("userData"));
   }, [isBigScreen, prevBigScreen, open]);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -203,7 +215,7 @@ export const Header = ({ setIsLoggedin }) => {
   };
   const logout = () => {
     setIsLoggedin(false);
-    sessionStorage.removeItem('userData');
+    sessionStorage.removeItem("userData");
     // sessionStorage.removeItem('token')
     navigate("/");
   };
@@ -218,7 +230,6 @@ export const Header = ({ setIsLoggedin }) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
   return (
     <Box sx={{ display: "-webkit-Box" }}>
       <CssBaseline />
@@ -281,14 +292,13 @@ export const Header = ({ setIsLoggedin }) => {
         </Toolbar>
       </AppBar>
       <Drawer
-        
         variant="permanent"
         open={open}
         sx={{
           backgroundColor: "#F4FBFF",
           "& .MuiPaper-root": { backgroundColor: "#F4FBFF" },
         }}
-      > 
+      >
         <DrawerHeader style={{ backgroundColor: "#F4FBFF" }}>
           <Typography>
             <img src={Kadellogo} alt="logo" />
@@ -299,26 +309,29 @@ export const Header = ({ setIsLoggedin }) => {
         <List>
           {Routes.map((text, index) => (
             <ListItem key={text.name} disablePadding sx={{ display: "block" }}>
+            {userLoginData.role == text.access? 
               <ListItemButton
-                component={Link}
-                to={text.path}
+              component={Link}
+              to={text.path}
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText component={Link} primary={text.name} to={text.path} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
+                {< text.icon/>}
+             
+              </ListItemIcon>
+              <ListItemText component={Link} primary={text.name} to={text.path} sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>: ''  
+          }
             </ListItem>
           ))}
         </List>

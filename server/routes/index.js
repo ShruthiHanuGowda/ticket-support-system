@@ -24,7 +24,7 @@ router.post('/login', async (req, res) => {
             .status(200)
             .json({ message: 'login sucess',token, userLoginData })
         } else {
-          return res.json({ message: 'wrong credentials' })
+          return res.json({ message: 'Please Login Again! With Correct Email & Password..' })
         }
       } else {
         return res.status(404).json({ message: 'not register' })
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
   )
 
   if (!userLoginData) {
-    return res.status(400).json({ msg: 'Username does not match' })
+    return res.status(400).json({ message: 'Credentials does not match' })
   }
 })
 

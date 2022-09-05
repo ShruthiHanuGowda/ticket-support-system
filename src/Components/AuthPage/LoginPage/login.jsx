@@ -1,12 +1,4 @@
-import {
-  Box,
-  TextField,
-  Button,
-  styled,
-  Typography,
-  AppBar,
-  Toolbar,
-} from "@mui/material";
+import { Box, TextField, Button, styled, Typography, AppBar, Toolbar, Grid, Alert, AlertTitle } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
@@ -65,11 +57,24 @@ const Fields = styled(TextField)`
 export const Login = ({ setIsLoggedin }) => {
   const navigate = useNavigate();
   const Location = useLocation();
+  console.log(Location);
   const [data, setData] = useState({
     userName: "",
     password: "",
   });
-  
+
+  useEffect(() => {
+    if (Location.state) {
+      if (Location.state.status === "404") {
+        toast.error((t) => (
+          <span>
+            <Typography variant="h6">Unauthorized</Typography>
+            {Location.state.message} — <Button onClick={() => navigate(-1)}>GO BACK</Button>
+          </span>
+        ));
+      }
+    }
+  }, []);
 
   const checkValidation = (e) => {
     setData({
@@ -82,20 +87,23 @@ export const Login = ({ setIsLoggedin }) => {
 
     const url = "/login";
     const res = await axios.post(url, data);
-    
+    console.log(res)
     const userLogin = res.data.userLoginData;
-    const userData = JSON.stringify(userLogin)
-    sessionStorage.setItem('userData',userData)
-    console.log(userLogin.role);
-    if(userLogin.role === 'admin'){
+    const userData = JSON.stringify(userLogin);
+    sessionStorage.setItem("userData", userData);
+   
+    if (userLogin?.role === "admin") {
       navigate("/dashboard", { state: userLogin });
-    } else if(userLogin.role === 'client'){
+    } else if (userLogin?.role === "client") {
       navigate("/client-dashboard", { state: userLogin });
-    } else if(userLogin.role==="user" ){
+    } else if (userLogin?.role === "user") {
       navigate("/create-ticket", { state: userLogin });
-    } else{
-      console.log('iam here')
-      navigate('/')
+    } else {
+     
+      navigate("/")
+      toast.error(res.data.message)
+
+
     }
   };
 
@@ -112,7 +120,7 @@ export const Login = ({ setIsLoggedin }) => {
   // }
 
   return (
-    <Component>
+    <>
       <Box>
         <Toaster />
         <AppBar sx={{ background: "#F4FBFF", boxShadow: "none" }}>
@@ -121,28 +129,15 @@ export const Login = ({ setIsLoggedin }) => {
           </Toolbar>
         </AppBar>
       </Box>
-      <Box>
+      <Component className="Component">
         <Heading>Welcome to Kadel Labs</Heading>
         <Detail>Login</Detail>
         <Wrapper component="form" onSubmit={onsubmit}>
           Username
-          <Fields
-            id="outlined-basic"
-            label="Enter Username"
-            variant="outlined"
-            name="userName"
-            onChange={checkValidation}
-          />
+          <Fields id="outlined-basic" label="Enter Username" variant="outlined" name="userName" onChange={checkValidation} />
           <br />
           Password
-          <Fields
-            htmlFor="outlined-adornment-password"
-            id="outlined-basic"
-            label="Enter Password"
-            variant="outlined"
-            name="password"
-            onChange={checkValidation}
-          />
+          <Fields htmlFor="outlined-adornment-password" id="outlined-basic" label="Enter Password" variant="outlined" name="password" onChange={checkValidation} />
           {/* <Fields hintText="At least 8 characters"floatingLabelText="Enter your password"errorText="Your password is too short"/> */}
           <Forgot>Forgot Password</Forgot>
           <LoginButton variant="contained" type="submit">
@@ -150,11 +145,9 @@ export const Login = ({ setIsLoggedin }) => {
           </LoginButton>
           {/* <Button>Create an account</Button> */}
         </Wrapper>
-      </Box>
-      <Typography style={{ textAlign: "center" }}>
-        By clicking Login, you accept the{" "}
-      </Typography>
+      </Component>
+      <Typography style={{ textAlign: "center" }}>By clicking Login, you accept the </Typography>
       <Typography style={{ textAlign: "center" }}> Term & Condition</Typography>
-    </Component>
+    </>
   );
 };

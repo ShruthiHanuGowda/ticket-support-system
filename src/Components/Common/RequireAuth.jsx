@@ -23,7 +23,8 @@ const RequireAuth = ({ allowedRoles }) => {
 <>    
     {allowedRoles?.includes(Role)
         ? <Outlet />:
-         <Navigate to="/" />
+        
+         <Navigate to="/" state={{message:"Sorry, it's not allowed to go beyond this point!", status:"404"}} />
     }
 </>);
 }
