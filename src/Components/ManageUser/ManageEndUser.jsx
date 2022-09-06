@@ -1,19 +1,5 @@
 import * as React from "react";
-import {
-  Button,
-  Divider,
-  Grid,
-  IconButton,
-  InputBase,
-  Table,
-  TableBody,
-  TableCell,
-  tableCellClasses,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Button, Divider, Grid, IconButton, InputBase, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 // import { makeStyles } from '@material-ui/core/styles';
@@ -35,29 +21,11 @@ import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import { useEffect } from "react";
 
-// const CheckboxFiled = styled(FormControlLabel)({
-//   marginRight: '30px',
-
-//   color: '#777777',
-// })
-
-// const useStyle = styled({
-
-// })
-
-function createData(sr,  name,  position,  Department) {
-  return {  sr,  name,  position,  Department };;
+function createData(sr, name, position, Department) {
+  return { sr, name, position, Department };
 }
 
-const rows = [
-  createData("1", "John Doe", "Sales Executive", "Sales"),
-  createData("2", "John Doe", "Manager", "Sales"),
-  createData("3", "John Doe", "Marketing", "Sales"),
-  createData("4", "John Doe", "Sales Executive", "Sales"),
-  createData("5", "John Doe", "Sales Executive", "Sales"),
-  createData("6", "John Doe", "Sales Executive", "Sales"),
-  createData("7", "John Doe", "Sales Executive", "Sales"),
-];
+const rows = [createData("1", "John Doe", "Sales Executive", "Sales"), createData("2", "John Doe", "Manager", "Sales"), createData("3", "John Doe", "Marketing", "Sales"), createData("4", "John Doe", "Sales Executive", "Sales"), createData("5", "John Doe", "Sales Executive", "Sales"), createData("6", "John Doe", "Sales Executive", "Sales"), createData("7", "John Doe", "Sales Executive", "Sales")];
 
 export const ManageUser = ({ loggedin }) => {
   // ------for openAction in table Row---
@@ -69,10 +37,9 @@ export const ManageUser = ({ loggedin }) => {
   const location = useLocation();
 
   React.useEffect(() => {
-    
     //---- for Toster
     if (location.state) {
-      console.log(location.state.message)
+      console.log(location.state.message);
       toast.success(location.state.message);
     }
     fecthUserData();
@@ -86,22 +53,24 @@ export const ManageUser = ({ loggedin }) => {
     // .then((res)=> console.log(res.data.data));
   };
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);;
-  };;
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   //----------------for Delete User Data
-  const deleteUser = async(id) =>{
-    await axios.delete(`/user/${id}`).then((res) =>res.data );
-     window.location.reload(false);
-   }
+  const deleteUser = async (id) => {
+    const response = await axios.delete(`/user/${id}`);
+    toast.success(response.data.message)
+    // window.location.reload(false);
+    //navigate("#")
+  };
 
-   const editUser = (id) =>{
-    navigate(`/create-enduser/${id}`)
-      // await axios.post(`http://localhost:8000/user/${id}`).then((res)=>console.log(res))
-   }
+  const editUser = (id) => {
+    navigate(`/create-enduser/${id}`);
+    // await axios.post(`http://localhost:8000/user/${id}`).then((res)=>console.log(res))
+  };
 
   const statusColors = {
     "Head of Product": "#044BA9",
@@ -119,7 +88,7 @@ export const ManageUser = ({ loggedin }) => {
       <Grid container justifyContent={"space-between"}>
         <Grid item xm={2} md={3} lg={3}>
           <Typography variant="h5" letterSpacing={1}>
-              Manage End User
+            Manage End User
           </Typography>
         </Grid>
         <Grid item xm={10} md={6} lg={6}>
@@ -127,20 +96,15 @@ export const ManageUser = ({ loggedin }) => {
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button
-           
             variant="contained"
             component={Link}
             to="../manage-user/create-enduser"
             style={{ backgroundColor: "blue" }}
-          
-            component={Link}
-            to="../manage-user/create-enduser"
             color="primary"
-            className={classes.root}
-           // style={{ textColor: 'transparent' }} 
-           
+            // className={classes.root}
+            // style={{ textColor: 'transparent' }}
           >
-           <AddCircleOutlineIcon style={{ color: "white" }} />
+            <AddCircleOutlineIcon style={{ color: "white" }} />
             &nbsp;<h8 style={{ color: "white" }}>Add User</h8>
           </Button>
         </Grid>
@@ -181,18 +145,11 @@ export const ManageUser = ({ loggedin }) => {
           <TableBody>
             {data.length == 0
               ? usersData.map((row, index) => (
-                  <TableRow
-                    className="tableRow"
-                    key={row._id}
-                    style={{ background: "#F4FBFF" }}
-                  >
+                  <TableRow className="tableRow" key={row._id} style={{ background: "#F4FBFF" }}>
                     <TableCell component="th" align="center" scope="row">
                       {index + 1}
                     </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ textTransform: "capitalize" }}
-                    >
+                    <TableCell align="center" sx={{ textTransform: "capitalize" }}>
                       {row.name}
                     </TableCell>
 
@@ -206,21 +163,25 @@ export const ManageUser = ({ loggedin }) => {
                     </TableCell>
                     <TableCell align="center">{row.department}</TableCell>
                     <TableCell align="center">
-                      <IconButton  onClick={()=>{editUser(row._id)}}>
+                      <IconButton
+                        onClick={() => {
+                          editUser(row._id);
+                        }}
+                      >
                         <EditOutlinedIcon sx={{ color: "#777777" }} />
                       </IconButton>
-                      <IconButton onClick={() => { deleteUser(row._id) }}>
-                        <DeleteOutlineOutlinedIcon  sx={{ color: " #E05D5D" }} />
+                      <IconButton
+                        onClick={() => {
+                          deleteUser(row._id);
+                        }}
+                      >
+                        <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
                       </IconButton>
                     </TableCell>
                   </TableRow>
                 ))
               : data.map((row, index) => (
-                  <TableRow
-                    className="tableRow"
-                    key={row._id}
-                    style={{ background: "#F4FBFF" }}
-                  >
+                  <TableRow className="tableRow" key={row._id} style={{ background: "#F4FBFF" }}>
                     <TableCell component="th" align="center" scope="row">
                       {index + 1}
                     </TableCell>
@@ -239,8 +200,12 @@ export const ManageUser = ({ loggedin }) => {
                       <IconButton>
                         <EditOutlinedIcon sx={{ color: "#777777" }} />
                       </IconButton>
-                      <IconButton onClick={() => { deleteUser(row._id) }} >
-                        <DeleteOutlineOutlinedIcon  sx={{ color: " #E05D5D" }} />
+                      <IconButton
+                        onClick={() => {
+                          deleteUser(row._id);
+                        }}
+                      >
+                        <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
                       </IconButton>
                     </TableCell>
                   </TableRow>

@@ -11,7 +11,7 @@ import { Login } from "../Components/AuthPage/LoginPage/login";
 import { CreateClient } from "../Components/CreateClient/CreateClient";
 import { CreateEndUser } from "../Components/CreateEndUser/CreateEndUser";
 import { TicketDetails } from "../Components/TicketDetails/TicketDetails";
-import CreateTicket from "../Components/CreateTicket/CreateTicket";
+import {CreateTicket} from "../Components/CreateTicket/CreateTicket";
 import RequireAuth from "../Components/Common/RequireAuth";
 
 export const Router = () => {
