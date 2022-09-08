@@ -13,57 +13,8 @@ import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, Link } from "react-router-dom";
 import SearchBar from "../Common/SearchBar";
-//--------- for Search bar ------
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: "#F4FBFF",
-  "&:hover": {
-    backgroundColor: "#F4FBFF",
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-  [theme.breakpoints.down("sm")]: {
-    display: "none",
-  },
-  menuPaper: {
-    backgroundColor: "lightblue",
-  },
-}));;
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "100%",
-    },
-  },
-}));
-;
-
-//----------- end search Bar
-
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const CheckboxFiled = styled(FormControlLabel)({
   marginRight: "30px",
@@ -76,55 +27,60 @@ function createData(srno, department, name, position, status) {
 
 const rows = [createData("1", "Sales", "John Doe", "Sales Executive", "Open"), createData("#2", "Sales", "bharat Doe", "Sales Executive", "Hold"), createData("#22345", "Sales", "rahul Doe", "Sales Executive", "Progress"), createData("#23145", "Sales", "John Doe", "Sales Executive", "Closed"), createData("#1435", "Sales", "John Doe", "Sales Executive", "Open"), createData("#24345", "Sales", "John Doe", "Sales Executive", "Open"), createData("#23545", "Sales", "John Doe", "Sales Executive", "Open")];
 
-export const Home = ({ loggedin }) => {
+export const Home = () => {
   const navigate = useNavigate();
+  //----------------for CheckBox Functionlity
+  const [options, setOptions] = useState([
+    { label: "All", id: 0 },
+    { label: "Open", id: 1 },
+    { label: "Close", id: 2 },
+    { label: "Hold", id: 3 },
+    { label: "In Progress", id: 4 },
+  ]);
+  let [selectedOptions, setSelectedOptions] = useState([]);
   const [data, setData] = React.useState(rows);
-  const [activeFilter, setActiveFilter] = React.useState("");
-  const [filterList, setFilterList] = React.useState("");
-  console.log(data);
+  //  console.log(data);
+  useEffect(() => { fecthUserData([]) }, [])
+  const fecthUserData = async (filterValue) => {
+    console.log('filterValue received :', filterValue)
+    const { data } = await axios.post(`/getDataByFilter`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`
+      },
+      flags: filterValue
+    });
+    console.log('data from api', data.data)
+    setData(data.data);
 
-  // React.useEffect(() => {
-  //   if (!loggedin) {
-
-  //     navigate("/");
-  //   }
-  // }, [loggedin]);
-
-  //-----------onCheckBoxFillter-----
-  const onCheckBoxFillter = (filter) => {
-    console.log(filter);
-    // const { filterList, activeFilter } = this.state
-    if (filter === "ALL") {
-      console.log(activeFilter);
-      if (activeFilter.length === filterList.length) {
-        // this.setState({ activeFilter: [] })
-        setActiveFilter([]);
-      } else {
-        setActiveFilter(filterList);
-        // this.setState({
-        //   activeFilter: filterList.map((filter) => filter.value),
-        // })
+    // .then((res)=> console.log(res.data.data));
+  };
+  //--------------------------------------------------------------------
+  const onCheckBoxFillter = (filterValue) => {
+    // console.log(filterValue, "array:::", selectedOptions);
+    if (selectedOptions.includes(filterValue)) {
+      const indexx = selectedOptions.indexOf(filterValue);
+      if (indexx > -1) {
+        selectedOptions.splice(indexx, 1);
       }
+      // console.log('exists')
     } else {
-      if (activeFilter.includes(filter)) {
-        const filterIndex = activeFilter.indexOf(filter);
-        const newFilter = [...activeFilter];
-        newFilter.splice(filterIndex, 1);
-        this.setState({ activeFilter: newFilter });
-      } else {
-        this.setState({ activeFilter: [...activeFilter, filter] });
-      }
+      console.log("not exists");
+
+      // setSelectedOptions((prevState) => [...prevState, filterValue]);
+      selectedOptions.push(filterValue);
     }
+    console.log("selectedOptions", selectedOptions);
+    fecthUserData(selectedOptions);
   };
   // ------for openAction in table Row---
-  const [anchorEl, setAnchorEl] = React.useState(null);;
-  const open = Boolean(anchorEl);;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);;
-  };;
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => {
-    setAnchorEl(null);;
-  };;
+    setAnchorEl(null);
+  };
   const statusColors = {
     Open: "#0B9611",
     Hold: "#E05D5D",
@@ -133,7 +89,7 @@ export const Home = ({ loggedin }) => {
   };
   return (
     <Box>
-      <Typography sx={{ fontSize: "18px", color: "#3B3B3B" }}>Welcome Client,</Typography>
+      <Typography sx={{ fontSize: "18px", color: "#3B3B3B" }}>Welcome {JSON.parse(sessionStorage.getItem("userData")).role === "admin" ? "Admin" : "Client"},</Typography>
       <Grid container justifyContent={"space-between"}>
         <Grid item xm={2} md={3} lg={3}>
           <Typography variant="h5" letterSpacing={1}>
@@ -145,23 +101,31 @@ export const Home = ({ loggedin }) => {
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button
-            variant="contained" component={Link} to="../manage-user/create-enduser" style={{ backgroundColor: "blue" }}
+            variant="contained"
             component={Link}
             to="../manage-user/create-enduser"
-            style={{ backgroundColor: "blue" }}
+            sx={{
+              backgroundColor: "blue",
+              "&:hover": {
+                color: "white",
+              },
+            }}
           >
             <AddCircleOutlineIcon style={{ color: "white" }} />
-            &nbsp;<h8 style={{ color: "white" }}>Add New User</h8>
+            &nbsp;Add New User
           </Button>
         </Grid>
       </Grid>
       <Grid container marginTop={3}>
         <Grid item xs={12} md={10} component={FormGroup}>
-          <CheckboxFiled control={<Checkbox color="default" onClick={() => onCheckBoxFillter("All")} />} label="ALL" />
-          <CheckboxFiled control={<Checkbox color="default" />} onClick={() => onCheckBoxFillter("open")} label="OPEN" />
-          <CheckboxFiled control={<Checkbox color="default" onClick={() => onCheckBoxFillter("hold")} />} label="HOLD" />
-          <CheckboxFiled control={<Checkbox color="default" onClick={() => onCheckBoxFillter("closed")} />} label="CLOSED" />
-          <CheckboxFiled control={<Checkbox color="default" onClick={() => onCheckBoxFillter("in progress")} />} label="IN PROGRESS" />
+          {options.map((item, index) => {
+            return <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter(item.id)} />} label={item.label} key={item.id} />;
+          })}
+          {/* <CheckboxFiled control={<Checkbox color="default" defaultChecked={true} onClick={() => onCheckBoxFillter()} />} label="ALL" />
+          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} />} onClick={() => onCheckBoxFillter("admin")} label="OPEN" />
+          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter("client")} />} label="HOLD" />
+          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter("user")} />} label="CLOSED" />
+          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter("admin")} />} label="IN PROGRESS" /> */}
         </Grid>
         <Grid item xs={12} md={2} textAlign="right">
           <Button
@@ -231,7 +195,7 @@ export const Home = ({ loggedin }) => {
                     fontSize: "16px",
                   }}
                 >
-                  {row.status}
+                  {row.role}
                 </TableCell>
 
                 <TableCell align="center">

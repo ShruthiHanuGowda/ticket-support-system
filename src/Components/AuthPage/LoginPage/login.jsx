@@ -89,8 +89,11 @@ export const Login = ({ setIsLoggedin }) => {
     const res = await axios.post(url, data);
     console.log(res)
     const userLogin = res.data.userLoginData;
+    
     const userData = JSON.stringify(userLogin);
     sessionStorage.setItem("userData", userData);
+    sessionStorage.setItem("token", res.data.token);
+
    
     if (userLogin?.role === "admin") {
       navigate("/dashboard", { state: userLogin });

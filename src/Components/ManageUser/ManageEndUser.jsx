@@ -28,25 +28,31 @@ function createData(sr, name, position, Department) {
 const rows = [createData("1", "John Doe", "Sales Executive", "Sales"), createData("2", "John Doe", "Manager", "Sales"), createData("3", "John Doe", "Marketing", "Sales"), createData("4", "John Doe", "Sales Executive", "Sales"), createData("5", "John Doe", "Sales Executive", "Sales"), createData("6", "John Doe", "Sales Executive", "Sales"), createData("7", "John Doe", "Sales Executive", "Sales")];
 
 export const ManageUser = ({ loggedin }) => {
+  // console.log('loaded');
   // ------for openAction in table Row---
   const [usersData, setUserData] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [data, setData] = React.useState(usersData);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
-  const location = useLocation();
+  let location = useLocation();
 
   React.useEffect(() => {
     //---- for Toster
+    console.count('useEffect called');
     if (location.state) {
-      console.log(location.state.message);
+
+      console.log('location::',location)
+      console.log(location.state);
       toast.success(location.state.message);
+      location.state=null;
     }
     fecthUserData();
   }, []);
 
   const fecthUserData = async () => {
-    const userData = await axios.get("/user");
+   const Role ='user'
+    const userData = await axios.get(`/getUser/${Role}`, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('token')}`} });
     // console.log(userData.data.data);
     setUserData(userData.data.data);
 
@@ -62,8 +68,8 @@ export const ManageUser = ({ loggedin }) => {
   //----------------for Delete User Data
   const deleteUser = async (id) => {
     const response = await axios.delete(`/user/${id}`);
-    toast.success(response.data.message)
-    // window.location.reload(false);
+    await toast.success(response.data.message)
+   window.location.reload(false);
     //navigate("#")
   };
 
@@ -98,14 +104,17 @@ export const ManageUser = ({ loggedin }) => {
           <Button
             variant="contained"
             component={Link}
-            to="../manage-user/create-enduser"
-            style={{ backgroundColor: "blue" }}
-            color="primary"
-            // className={classes.root}
-            // style={{ textColor: 'transparent' }}
+            to="../manage-user/create-enduser"            
+            sx={{
+              backgroundColor: "blue",
+              '&:hover': {
+                color:"white"
+              },
+            }}
+           
           >
             <AddCircleOutlineIcon style={{ color: "white" }} />
-            &nbsp;<h8 style={{ color: "white" }}>Add User</h8>
+            &nbsp;Add User
           </Button>
         </Grid>
       </Grid>
@@ -145,7 +154,7 @@ export const ManageUser = ({ loggedin }) => {
           <TableBody>
             {data.length == 0
               ? usersData.map((row, index) => (
-                  <TableRow className="tableRow" key={row._id} style={{ background: "#F4FBFF" }}>
+                  <TableRow className="tableRow" key={row._id}  style={{ background: "#F4FBFF" }}>
                     <TableCell component="th" align="center" scope="row">
                       {index + 1}
                     </TableCell>

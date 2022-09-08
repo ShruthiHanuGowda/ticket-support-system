@@ -42,16 +42,9 @@ export const ManageClient = ({ loggedin,isClient }) => {
   const navigate = useNavigate();
   const [data, setData] = React.useState(rows);
 
-  // React.useEffect(() => {
-  //   if (!loggedin) {
-  //     navigate("/login");
-  //   }
-  //   // if(!isClient){
-  //   //   navigate("/login", {
-  //   //     state: { message: 'Please Login As Client', status: '400' },
-  //   //   })      
-    
-  // }, [loggedin]);
+  React.useEffect(() => {
+  console.log("hiii bharat")
+  }, []);
 
 
   // ------for openAction in table Row---
@@ -85,10 +78,15 @@ export const ManageClient = ({ loggedin,isClient }) => {
             variant="contained"
             component={Link}
             to="../manage-client/create-client"
-            style={{ backgroundColor: "blue" }}
+            sx={{
+              backgroundColor: "blue",
+              '&:hover': {
+                color:"white"
+              },
+            }}
           >
              <AddCircleOutlineIcon style={{ color: "white" }} />
-            &nbsp;<h8 style={{ color: "white" }}>Add New User</h8>
+            &nbsp;Add New User
           </Button>
         </Grid>
       </Grid>
@@ -133,7 +131,7 @@ export const ManageClient = ({ loggedin,isClient }) => {
             {data.map((row,index) => (
               <TableRow
                 className="tableRow"
-                key={row.name}
+                key={row._id}
                 style={{ background: '#F4FBFF' }}
               >
                 <TableCell component="th" align="center" scope="row">

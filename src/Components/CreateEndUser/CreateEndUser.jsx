@@ -76,9 +76,10 @@ export const CreateEndUser = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     let a = generatePassword()
+    console.log(a);
     sendData(a)
     // sendData(a).then((a) => {
-    //   console.log(a);
+    //   
     // });
   }
 
@@ -87,7 +88,7 @@ export const CreateEndUser = () => {
   console.log(_id)
 
   useEffect(() => {
-    const fecthUserData = async () => {
+    const fetchUserData = async () => {
       return await axios
         .get(`/user/${_id}`)
         .then((res) => res.data)
@@ -95,16 +96,18 @@ export const CreateEndUser = () => {
           setInput(data.user)
         })
     }
-    fecthUserData()
+    fetchUserData()
   }, [_id])
 
   const handleUpdate = (e) => {
     e.preventDefault()
     updateRequest()
       .then((res) =>
-        navigate('/manage-user', {
+      
+        {navigate('/manage-user', {
           state: { message: res.message, status: res.status },
-        }),
+        });
+      console.log('called')}
       )
       .catch(function (error) {
         toast.error(error.response?.data?.message)
