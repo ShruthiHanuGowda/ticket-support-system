@@ -1,37 +1,38 @@
-import {
-  Box,
-  Grid,
-  Table,
-  //TextField,
-  TableCell,
-  TableRow,
-  Toolbar,
-  Typography,
-} from "@mui/material";
 import React from "react";
+import {
+    Box,
+    Grid,
+    Table,
+    //TextField,
+    TableCell,
+    TableRow,
+    Toolbar,
+    Typography,
+  } from "@mui/material";
+
 import Divider from "@mui/material/Divider";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import { useTheme } from "@mui/material/styles";
-//import useMediaQuery from '@mui/material/useMediaQuery';
-
-//import { useTheme } from "@mui/material/styles";
+import { useTheme } from '@mui/material/styles';
+  //import useMediaQuery from '@mui/material/useMediaQuery';
+  
+  //import { useTheme } from "@mui/material/styles";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import Card from "@mui/material/Card";
-import Pdf from "../../Assets/Images/Pdf.png";
-
+import Pdf from "../../Assets/Images/Pdf.png"
+  
 export const TicketDetails = () => {
-  // const theme = useTheme();
-  const theme = useTheme();
-  // const matches = useMediaQuery(theme.breakpoints.down( 'md'));
-  const styles = {
-    media: {
-      height: 40,
-      width: 30,
-      // paddingTop: '56.25%',// 16:9,
-      //marginTop:'8'
-    },
+    // const theme = useTheme();
+     const theme = useTheme();
+   // const matches = useMediaQuery(theme.breakpoints.down( 'md'));
+    const styles = {
+      media: {
+        height: 40,
+        width:30,
+       // paddingTop: '56.25%',// 16:9,
+        //marginTop:'8'
+      }
   };
   return (
     <Box

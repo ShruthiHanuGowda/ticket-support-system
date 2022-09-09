@@ -1,141 +1,96 @@
 import * as React from "react";
-import {
-  Button,
-  Divider,
-  Grid,
-  IconButton,
-  InputBase,
-  Table,
-  TableBody,
-  TableCell,
-  tableCellClasses,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Button, Divider, Grid, IconButton, InputBase, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import axios from "axios";
 // import { makeStyles } from '@material-ui/core/styles';
 
 import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-// import FilterAltOffSharpIcon from '@mui/icons-material/FilterAltOffSharp'
-// import MoreVertIcon from '@mui/icons-material/MoreVert'
-// import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
-// import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
-// import EditIcon from '@mui/icons-material/Edit'
-import { useNavigate, Link } from "react-router-dom";
-
+import FilterAltOffSharpIcon from "@mui/icons-material/FilterAltOffSharp";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-
-//--------- for Search bar ------
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: "#F4FBFF",
-  "&:hover": {
-    backgroundColor: "#F4FBFF",
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-  [theme.breakpoints.down("sm")]: {
-    display: "none",
-  },
-  menuPaper: {
-    backgroundColor: "lightblue",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "100%",
-    },
-  },
-}));
-
-const useStyle = styled({
-  root: {
-    "&:hover": {
-      backgroundColor: "transparent",
-    },
-  },
-});
-//----------- end search Bar
-// const CheckboxFiled = styled(FormControlLabel)({
-//   marginRight: '30px',
-
-//   color: '#777777',
-// })
-
-// const useStyle = styled({
-
-// })
+import { useNavigate, Link } from "react-router-dom";
+import SearchBar from "../Common/SearchBar";
+import { useLocation } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { useState } from "react";
+import { useEffect } from "react";
 
 function createData(sr, name, position, Department) {
   return { sr, name, position, Department };
 }
 
-const rows = [
-  createData("1", "John Doe", "Sales Executive", "Sales"),
-  createData("2", "John Doe", "Manage", "Sales"),
-  createData("3", "John Doe", "Marketing", "Sales"),
-  createData("4", "John Doe", "Sales Executive", "Sales"),
-  createData("5", "John Doe", "Sales Executive", "Sales"),
-  createData("6", "John Doe", "Sales Executive", "Sales"),
-  createData("7", "John Doe", "Sales Executive", "Sales"),
-];
+const rows = [createData("1", "John Doe", "Sales Executive", "Sales"), createData("2", "John Doe", "Manager", "Sales"), createData("3", "John Doe", "Marketing", "Sales"), createData("4", "John Doe", "Sales Executive", "Sales"), createData("5", "John Doe", "Sales Executive", "Sales"), createData("6", "John Doe", "Sales Executive", "Sales"), createData("7", "John Doe", "Sales Executive", "Sales")];
 
 export const ManageUser = ({ loggedin }) => {
-  const classes = useStyle();
+  // console.log('loaded');
   // ------for openAction in table Row---
+  const [usersData, setUserData] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const navigate = useNavigate();
+  const [data, setData] = React.useState(usersData);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+  let location = useLocation();
+
+  React.useEffect(() => {
+    //---- for Toster
+    console.count('useEffect called');
+    if (location.state) {
+
+      console.log('location::',location)
+      console.log(location.state);
+      toast.success(location.state.message);
+      location.state=null;
+    }
+    fecthUserData();
+  }, []);
+
+  const fecthUserData = async () => {
+   const Role ='user'
+    const userData = await axios.get(`/getUser/${Role}`, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('token')}`} });
+    // console.log(userData.data.data);
+    setUserData(userData.data.data);
+
+    // .then((res)=> console.log(res.data.data));
+  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const statusColors = {
-    "Sales Executive": "#044BA9",
-    Manager: "#E05D5D",
-    Marketing: "#0B9611",
+
+  //----------------for Delete User Data
+  const deleteUser = async (id) => {
+    const response = await axios.delete(`/user/${id}`);
+    await toast.success(response.data.message)
+   window.location.reload(false);
+    //navigate("#")
   };
 
-  React.useEffect(() => {
-    if (!loggedin) {
-      navigate("/manage-user");
-    }
-  }, [loggedin]);
+  const editUser = (id) => {
+    navigate(`/create-enduser/${id}`);
+    // await axios.post(`http://localhost:8000/user/${id}`).then((res)=>console.log(res))
+  };
 
+  const statusColors = {
+    "Head of Product": "#044BA9",
+    "Product Manager": "#E05D5D",
+    "VP of Marketing": "#0B9611",
+    "Technical Lead": "#0392cf",
+    "Senior Software Engineer": "#ffeead",
+    "Software Developer": "#a8e6cf ",
+    "Junior Software Developer": "#76b4bd",
+    "Intern Software Developer": "#603601",
+  };
   return (
     <Box>
+      <Toaster />
       <Grid container justifyContent={"space-between"}>
         <Grid item xm={2} md={3} lg={3}>
           <Typography variant="h5" letterSpacing={1}>
@@ -143,27 +98,23 @@ export const ManageUser = ({ loggedin }) => {
           </Typography>
         </Grid>
         <Grid item xm={10} md={6} lg={6}>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search by ID, Department"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+          <SearchBar rows={usersData} setData={setData} />
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button
             variant="contained"
             component={Link}
-            to="../manage-user/create-enduser"
-            color="primary"
-            className={classes.root}
-            // style={{ textColor: 'transparent' }}
+            to="../manage-user/create-enduser"            
+            sx={{
+              backgroundColor: "blue",
+              '&:hover': {
+                color:"white"
+              },
+            }}
+           
           >
             <AddCircleOutlineIcon style={{ color: "white" }} />
-            &nbsp;<h8 style={{ color: "white" }}>Add New User</h8>
+            &nbsp;Add User
           </Button>
         </Grid>
       </Grid>
@@ -199,39 +150,75 @@ export const ManageUser = ({ loggedin }) => {
                 ACTION
               </TableCell>
             </TableRow>
-            <TableRow></TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                className="tableRow"
-                key={row.sr}
-                style={{ background: "#F4FBFF" }}
-              >
-                <TableCell component="th" align="center" scope="row">
-                  {row.sr}
-                </TableCell>
-                <TableCell align="center">{row.name}</TableCell>
+            {data.length == 0
+              ? usersData.map((row, index) => (
+                  <TableRow className="tableRow" key={row._id}  style={{ background: "#F4FBFF" }}>
+                    <TableCell component="th" align="center" scope="row">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell align="center" sx={{ textTransform: "capitalize" }}>
+                      {row.name}
+                    </TableCell>
 
-                <TableCell
-                  align="center"
-                  sx={{
-                    color: statusColors[row.position] ?? "black",
-                  }}
-                >
-                  {row.position}
-                </TableCell>
-                <TableCell align="center">{row.Department}</TableCell>
-                <TableCell align="center">
-                  <IconButton>
-                    <EditOutlinedIcon sx={{ color: "#777777" }} />
-                  </IconButton>
-                  <IconButton>
-                    <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: statusColors[row.position] ?? "black",
+                      }}
+                    >
+                      {row.position}
+                    </TableCell>
+                    <TableCell align="center">{row.department}</TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        onClick={() => {
+                          editUser(row._id);
+                        }}
+                      >
+                        <EditOutlinedIcon sx={{ color: "#777777" }} />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          deleteUser(row._id);
+                        }}
+                      >
+                        <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              : data.map((row, index) => (
+                  <TableRow className="tableRow" key={row._id} style={{ background: "#F4FBFF" }}>
+                    <TableCell component="th" align="center" scope="row">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell align="center">{row.name}</TableCell>
+
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: statusColors[row.position] ?? "black",
+                      }}
+                    >
+                      {row.position}
+                    </TableCell>
+                    <TableCell align="center">{row.department}</TableCell>
+                    <TableCell align="center">
+                      <IconButton>
+                        <EditOutlinedIcon sx={{ color: "#777777" }} />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          deleteUser(row._id);
+                        }}
+                      >
+                        <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
       </TableContainer>

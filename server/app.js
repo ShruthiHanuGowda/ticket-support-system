@@ -20,7 +20,8 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true 
 	//don't show the log when it is test
 	if (process.env.NODE_ENV !== "test") {
 		console.log("Connected to %s", MONGODB_URL);
-		console.log("App is running ... \n");
+		console.log("App is running on Port"+(process.env.PORT || '8000')+"\n");
+		
 		console.log("Press CTRL + C to stop the process. \n");
 	}
 })

@@ -17,85 +17,45 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { styled } from "@mui/material/styles";
-import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Link } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
+import SearchBar from "../Common/SearchBar";
 
-//--------- for Search bar ------
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: "#F4FBFF",
-  "&:hover": {
-    backgroundColor: "#F4FBFF",
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-  [theme.breakpoints.down("sm")]: {
-    display: "none",
-  },
-  menuPaper: {
-    backgroundColor: "lightblue",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "100%",
-    },
-  },
-}));
-//----------- end search Bar
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
 const rows = [
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Hold"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Progress"),
-  createData("#2346", "Sales", "John Doe", "Sales Executive", "Closed"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
-  createData("#2345", "Sales", "John Doe", "Sales Executive", "Open"),
+  createData("123", "Sales", "bharat", "Sales Executive", "Open"),
+  createData("#2315", "Sales", "John Doe", "Sales Executive", "Hold"),
+  createData("#2312045", "Sales", "John Doe", "Sales Executive", "Progress"),
+  createData("#232145", "Sales", "John Doe", "Sales Executive", "Closed"),
+  createData("#2311245", "Sales", "John Doe", "Sales Executive", "Open"),
+  createData("#231245", "Sales", "John Doe", "Sales Executive", "Open"),
+  createData("#2312145", "Sales", "John Doe", "Sales Executive", "Open"),
 ];
 
-export const ManageClient = () => {
+export const ManageClient = ({ loggedin,isClient }) => {
+  const navigate = useNavigate();
+  const [data, setData] = React.useState(rows);
+
+  React.useEffect(() => {
+  console.log("hiii bharat")
+  }, []);
+
+
   // ------for openAction in table Row---
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = React.useState(null);;
+  const open = Boolean(anchorEl);;
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget);;
+  };;
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null);;
+  };;
   const statusColors = {
     Open: "#0B9611",
     Hold: "#E05D5D",
@@ -111,25 +71,22 @@ export const ManageClient = () => {
           </Typography>
         </Grid>
         <Grid item xm={10} md={6} lg={6}>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search by ID, Department"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+        <SearchBar rows={rows} setData={setData}/>   
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button
             variant="contained"
             component={Link}
             to="../manage-client/create-client"
-            style={{ backgroundColor: "blue" }}
+            sx={{
+              backgroundColor: "blue",
+              '&:hover': {
+                color:"white"
+              },
+            }}
           >
-            <AddCircleOutlineIcon style={{ color: "white" }} />
-            &nbsp;<h8 style={{ color: "white" }}>Add New User</h8>
+             <AddCircleOutlineIcon style={{ color: "white" }} />
+            &nbsp;Add New User
           </Button>
         </Grid>
       </Grid>
@@ -171,11 +128,11 @@ export const ManageClient = () => {
             <TableRow></TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {data.map((row,index) => (
               <TableRow
                 className="tableRow"
-                key={row.name}
-                style={{ background: "#F4FBFF" }}
+                key={row._id}
+                style={{ background: '#F4FBFF' }}
               >
                 <TableCell component="th" align="center" scope="row">
                   {row.name}
@@ -209,3 +166,4 @@ export const ManageClient = () => {
     </Box>
   );
 };
+

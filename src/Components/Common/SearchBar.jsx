@@ -63,17 +63,22 @@ const SearchBar = ({rows,setData}) => {
    
    
     const requestSearch = (e) => {
+      
         if(e.target.value==''){
           setData(rows);
           setSearched('');
         }else{
           setSearched(e.target.value)
+          console.log(rows)
         // let searchedVal = e.target.value
         const filteredRows = rows.filter((row) => {
           return (
-            row.name.toLowerCase().includes(searched.toLowerCase()) ||
-            row.srno.toLowerCase().includes(searched.toLowerCase())
+            row.name?.toLowerCase().includes(searched.toLowerCase()) ||
+            row.srno?.toLowerCase().includes(searched.toLowerCase()) ||
+            row.fat?.toLowerCase().includes(searched.toLowerCase())
+            
           )
+          console.log(filteredRows);
         })
         setData(filteredRows)
         }
@@ -96,11 +101,11 @@ const SearchBar = ({rows,setData}) => {
        value={searched}
       endAdornment={
         <InputAdornment position="end">
-          <IconButton>
+          <IconButton onClick={cancelSearch}>
             {!searched ? (
               " "
             ) : (
-              <ClearOutlinedIcon onClick={cancelSearch} />
+              <ClearOutlinedIcon  />
             )}
            
           </IconButton>
