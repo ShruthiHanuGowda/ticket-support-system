@@ -143,8 +143,7 @@ import {
             sx={{
               marginTop: "20px",
               marginRight: "11px",
-              marginBottom: "19px"
-             
+              marginBottom: "19px",
             }}
           >
             Create
@@ -158,47 +157,8 @@ import {
             {" "}
             Discard{" "}
           </Link>
-          </Grid>
-        </Box>
-     
-    );
-  };
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+        </Grid>
+      </Box>
+    )
+  );
+};

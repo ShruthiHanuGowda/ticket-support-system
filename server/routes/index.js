@@ -14,7 +14,8 @@ router.post("/user", userController.addUser);
 router.get("/user/:id", checkUserAuth, userController.getUserById);
 router.put("/user/:id", userController.UpdateUser);
 router.post("/getDataByFilter", userController.getUserByStatus);
-
+router.post("/ticket", ticketController.addTicket);
+router.get("/getTicket", ticketController.getAllTIcketData);
 router.get("/getUser/:role?", checkUserAuth, userController.getAllUserData);
 router.post("/login", async (req, res) => {
   const email = req.body.userName;
