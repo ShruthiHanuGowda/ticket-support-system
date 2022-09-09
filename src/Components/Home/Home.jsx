@@ -34,6 +34,7 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 //--------- for Search bar ------
 
@@ -115,8 +116,15 @@ export const Home = ({ loggedin }) => {
     if (!loggedin) {
       navigate("/");
     }
+    getAllData();
   }, [loggedin]);
 
+  const getAllData = async () => {
+    console.log("in getAllDAta");
+    const ticketData = await axios.get("http://localhost:8000/getTicket");
+    console.log(ticketData);
+    setData(ticketData.data.data);
+  };
   //-----------onCheckBoxFillter-----
   const onCheckBoxFillter = (filter) => {
     console.log(filter);
@@ -360,16 +368,16 @@ export const Home = ({ loggedin }) => {
                     <MenuItem
                       onClick={handleClose}
                       component={Link}
-                     
                       to="../manage-user/ticket-details"
                       style={{ backgroundColor: "blue" }}
                     >
                       Views <RemoveRedEyeIcon fontSize="14px" />
                     </MenuItem>
-                    <MenuItem onClick={handleClose} 
-                     component={Link}
-                     to="../manage-user/create-enduser"
-                      >
+                    <MenuItem
+                      onClick={handleClose}
+                      component={Link}
+                      to="../manage-user/create-enduser"
+                    >
                       Edit
                       <EditIcon fontSize="14px" />
                     </MenuItem>

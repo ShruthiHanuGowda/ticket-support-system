@@ -17,19 +17,18 @@ import {
 import { Box } from "@mui/system";
 // import { makeStyles } from '@material-ui/core/styles';
 
-import { styled } from '@mui/material/styles'
-import SearchIcon from '@mui/icons-material/Search'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import { styled } from "@mui/material/styles";
+import SearchIcon from "@mui/icons-material/Search";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 // import FilterAltOffSharpIcon from '@mui/icons-material/FilterAltOffSharp'
 // import MoreVertIcon from '@mui/icons-material/MoreVert'
 // import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 // import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 // import EditIcon from '@mui/icons-material/Edit'
-import { useNavigate , Link} from 'react-router-dom'
+import { useNavigate, Link } from "react-router-dom";
 
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
-
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 //--------- for Search bar ------
 
@@ -77,16 +76,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       width: "100%",
     },
   },
-
 }));
 
 const useStyle = styled({
-  root:{
-    "&:hover":{
-      backgroundColor: "transparent"
-    }
-  }
-})
+  root: {
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+  },
+});
 //----------- end search Bar
 // const CheckboxFiled = styled(FormControlLabel)({
 //   marginRight: '30px',
@@ -112,13 +110,12 @@ const rows = [
   createData("7", "John Doe", "Sales Executive", "Sales"),
 ];
 
-export const ManageUser = ({loggedin}) => {
-
-  const classes= useStyle()
+export const ManageUser = ({ loggedin }) => {
+  const classes = useStyle();
   // ------for openAction in table Row---
-  const [anchorEl, setAnchorEl] = React.useState(null)
-  const navigate = useNavigate()
-  const open = Boolean(anchorEl)
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
+  const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -131,13 +128,11 @@ export const ManageUser = ({loggedin}) => {
     Marketing: "#0B9611",
   };
 
-
-  React.useEffect(() => {   
-    if(!loggedin){
-      navigate('/manage-user');
+  React.useEffect(() => {
+    if (!loggedin) {
+      navigate("/manage-user");
     }
-    }, [loggedin])
-    
+  }, [loggedin]);
 
   return (
     <Box>
@@ -165,10 +160,9 @@ export const ManageUser = ({loggedin}) => {
             to="../manage-user/create-enduser"
             color="primary"
             className={classes.root}
-           // style={{ textColor: 'transparent' }} 
-           
+            // style={{ textColor: 'transparent' }}
           >
-           <AddCircleOutlineIcon style={{ color: "white" }} />
+            <AddCircleOutlineIcon style={{ color: "white" }} />
             &nbsp;<h8 style={{ color: "white" }}>Add New User</h8>
           </Button>
         </Grid>
@@ -222,9 +216,7 @@ export const ManageUser = ({loggedin}) => {
                 <TableCell
                   align="center"
                   sx={{
-                    color: statusColors[row.position] ?? 'black',
-                   
-                   
+                    color: statusColors[row.position] ?? "black",
                   }}
                 >
                   {row.position}
