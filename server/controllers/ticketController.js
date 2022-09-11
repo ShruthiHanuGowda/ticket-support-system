@@ -7,52 +7,32 @@ const userDataService = require("../services/userDataService");
 const express = require("express");
 const { ticketModel } = require("../models/ticketSchema");
 const { default: axios } = require("axios");
-
-const fileUpload = require("express-fileupload");
+const multer = require("multer")
 const app = express.Router();
-// app.get("/", (req, res) => {
-//     res.send("up and running")
-//    });
 
-// app.post('/', async (req, res) => {
-//     try {
-//         if(!req.files) {
-//             res.send({
-//                 status: false,
-//                 message: 'No file uploaded'
-//             });
-//         } else {
-//             let data = [];
+const fileStorageEngine = multer.diskStorage({
+destination:(req,file,cb)=> {
+cb(null ,'../../src/Assets/UploadDocument' )
+},
+filename:(req,file,cb)=>{
+  cb(null,Date.now() + '--' + fileList.originename)
+},
 
-//             //loop all files
-//             _.forEach(_.keysIn(req.files.fileupload), (key) => {
-//                 let photo = req.files.fileupload[key];
 
-//                 //move photo to uploads directory
-//                 photo.mv('../../src/Assets/Images' );
+})
 
-//                 //push file details
-//                 data.push({
-//                     name: photo.name,
-//                     mimetype: photo.mimetype,
-//                     size: photo.size
-//                 });
-//             });
 
-//             //return response
-//             res.send({
-//                 status: true,
-//                 message: 'Files are uploaded',
-//                 data: data
-//             });
-//         }
-//     } catch (err) {
-//         res.status(500).send(err);
-//     }
-// });
-app.get("/", async (req, res) => {
-  console.log("nidhi pgl he====", req);
-  const data = await ticketModel.find();
+
+const upload = multer({storage: fileStorageEngine })
+
+
+app.post("/" ,upload.single('Images') ,  (req, res) =>{
+  console.log(req.files);
+  res.send('FIles upload')
+} )
+ 
+ app.get("/", async (req, res) => {
+    const data = await ticketModel.find();
 
   return successResponseWithData(res, "users array", data);
 });

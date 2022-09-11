@@ -22,6 +22,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useEffect } from "react";
 
 //   import Radio from '@mui/material/Radio';
 //   import RadioGroup from '@mui/material/RadioGroup';
@@ -29,21 +30,39 @@ import axios from "axios";
 // import FormControl from '@mui/material/FormControl';
 // import FormLabel from '@mui/material/FormLabel';
 
+
 export const CreateTicket = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
 
+
+  
   const [input, setInput] = useState({
     name: "",
-    department: "",
+    department: [],
     fileupload: "",
     issuetype: "",
     message: "",
   });
-  console.log(input);
+
+  useEffect(() => {
+    const userdata = JSON.parse(sessionStorage.getItem("userData"));
+    console.log(userdata);
+    setInput(userdata);
+  }, []);
+    console.log(input)
+
+  // const fecthUserData=async()=>{
+  //   const getTicketData = await axios.get("/getTicket");
+  //   console.log(getTicketData);
+  //   setData(getTicketData.data.data);
+  // }
+  
+
+
   const handleChange = (e) => {
-    setInput((prevState) => ({
+        setInput((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
@@ -80,7 +99,7 @@ export const CreateTicket = () => {
         <Typography variant="h5" sx={{ my: 4 }}>
           Create Ticket
         </Typography>
-        <Form onSubmit={handleSubmit}>
+        <Form enctype="multipart/form-data" onSubmit={handleSubmit}>
           <Grid container justify="center" spacing={4}>
             <Grid item md={6} xs={12}>
               <InputLabel spacing={2}>
@@ -89,8 +108,10 @@ export const CreateTicket = () => {
               <TextField
                 name="name"
                 value={input.name}
+             
                 placeholder="Name"
-                onChange={handleChange}
+                //  onChange={handleChange}
+                onChange={(e) => setInput(e.target.value)}
                 sx={{
                   background: "#F4FBFF",
                   width: "100%",
@@ -106,8 +127,8 @@ export const CreateTicket = () => {
                 Department <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <Select
-                defaultValue=""
-                id="grouped-select"
+                 
+                
                 label="Grouping"
                 // placeholder="Select Position"
                 name="department"

@@ -41,19 +41,25 @@ export const Home = () => {
   const [data, setData] = React.useState(rows);
   //  console.log(data);
   useEffect(() => { fecthUserData([]) }, [])
-  const fecthUserData = async (filterValue) => {
-    console.log('filterValue received :', filterValue)
-    const { data } = await axios.post(`/getDataByFilter`, {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`
-      },
-      flags: filterValue
-    });
-    console.log('data from api', data.data)
-    setData(data.data);
+  // const fecthUserData = async (filterValue) => {
+  //   console.log('filterValue received :', filterValue)
+  //   const { data } = await axios.post(`/getDataByFilter`, {
+  //     headers: {
+  //       Authorization: `Bearer ${sessionStorage.getItem("token")}`
+  //     },
+  //     flags: filterValue
+  //   });
+  //   console.log('data from api', data.data)
+  //   setData(data.data);
 
-    // .then((res)=> console.log(res.data.data));
-  };
+  //   // .then((res)=> console.log(res.data.data));
+  // };
+
+  const fecthUserData=async()=>{
+    const getTicketData = await axios.get("/getTicket");
+    console.log(getTicketData);
+    setData(getTicketData.data.data);
+  }
   //--------------------------------------------------------------------
   const onCheckBoxFillter = (filterValue) => {
     // console.log(filterValue, "array:::", selectedOptions);
@@ -179,14 +185,18 @@ export const Home = () => {
             <TableRow></TableRow>
           </TableHead>
           <TableBody>
+            
             {data.map((row, index) => (
+              
               <TableRow className="tableRow" key={index} style={{ background: "#F4FBFF" }}>
                 <TableCell component="th" align="center" scope="row">
-                  {row.srno}
+                  {row._id}
                 </TableCell>
                 <TableCell align="center">{row.department}</TableCell>
                 <TableCell align="center">{row.name}</TableCell>
+                <TableCell align="center">{row.issuetype}</TableCell>
                 <TableCell align="center">{row.position}</TableCell>
+
                 <TableCell
                   align="center"
                   sx={{
