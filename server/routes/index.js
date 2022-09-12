@@ -5,16 +5,24 @@ const { userModel } = require("../models/userSchema");
 const ticketController = require("../controllers/ticketController");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const path=require('path');
 const checkUserAuth = require("../middlewares/tokenMiddlewares");
  
 
 const multer = require("multer");
+
+
+router.use(express.static(__dirname)); 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../../src/Assets/UploadDocument");
+    console.log("destination",file)
+    // cb(null, "../../src/Assets/UploadDocument/");
+    cb(null, path.join(__dirname, '../../src/Assets/UploadDocument//'));
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+    console.log("filename",file)
+
+    cb(null, new Date().toISOString().replace(/:/g, '-')+ "-" + file.originalname);
   },
 });
 
@@ -36,9 +44,9 @@ router.post("/ticket", ticketController.addTicket);
 router.get("/getTicket", ticketController.getAllTIcketData);
 router.get("/getUser/:role?", checkUserAuth, userController.getAllUserData);
 
-router.post("/"  , function (req, res, next) {
-  console.warn(req.file);
-  res.end();
+router.post("/upload"  ,upload.any(), function (req, res, next) {
+  // console.log('line 40:::',req);
+  res.send("file upload successfully!!!");
 });
 
 
