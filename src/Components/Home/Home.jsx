@@ -1,5 +1,26 @@
 import * as React from "react";
-import { Button, Checkbox, Divider, FormControlLabel, FormGroup, Grid, IconButton, InputAdornment, InputBase, Menu, MenuItem, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputBase,
+  Menu,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 // import { makeStyles } from '@material-ui/core/styles';
 
@@ -25,7 +46,15 @@ function createData(srno, department, name, position, status) {
   return { srno, department, name, position, status };
 }
 
-const rows = [createData("1", "Sales", "John Doe", "Sales Executive", "Open"), createData("#2", "Sales", "bharat Doe", "Sales Executive", "Hold"), createData("#22345", "Sales", "rahul Doe", "Sales Executive", "Progress"), createData("#23145", "Sales", "John Doe", "Sales Executive", "Closed"), createData("#1435", "Sales", "John Doe", "Sales Executive", "Open"), createData("#24345", "Sales", "John Doe", "Sales Executive", "Open"), createData("#23545", "Sales", "John Doe", "Sales Executive", "Open")];
+const rows = [
+  createData("1", "Sales", "John Doe", "Sales Executive", "Open"),
+  createData("#2", "Sales", "bharat Doe", "Sales Executive", "Hold"),
+  createData("#22345", "Sales", "rahul Doe", "Sales Executive", "Progress"),
+  createData("#23145", "Sales", "John Doe", "Sales Executive", "Closed"),
+  createData("#1435", "Sales", "John Doe", "Sales Executive", "Open"),
+  createData("#24345", "Sales", "John Doe", "Sales Executive", "Open"),
+  createData("#23545", "Sales", "John Doe", "Sales Executive", "Open"),
+];
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -40,7 +69,9 @@ export const Home = () => {
   let [selectedOptions, setSelectedOptions] = useState([]);
   const [data, setData] = React.useState(rows);
   //  console.log(data);
-  useEffect(() => { fecthUserData([]) }, [])
+  useEffect(() => {
+    fecthUserData([]);
+  }, []);
   // const fecthUserData = async (filterValue) => {
   //   console.log('filterValue received :', filterValue)
   //   const { data } = await axios.post(`/getDataByFilter`, {
@@ -55,11 +86,11 @@ export const Home = () => {
   //   // .then((res)=> console.log(res.data.data));
   // };
 
-  const fecthUserData=async()=>{
+  const fecthUserData = async () => {
     const getTicketData = await axios.get("/getTicket");
     console.log(getTicketData);
     setData(getTicketData.data.data);
-  }
+  };
   //--------------------------------------------------------------------
   const onCheckBoxFillter = (filterValue) => {
     // console.log(filterValue, "array:::", selectedOptions);
@@ -95,7 +126,13 @@ export const Home = () => {
   };
   return (
     <Box>
-      <Typography sx={{ fontSize: "18px", color: "#3B3B3B" }}>Welcome {JSON.parse(sessionStorage.getItem("userData")).role === "admin" ? "Admin" : "Client"},</Typography>
+      <Typography sx={{ fontSize: "18px", color: "#3B3B3B" }}>
+        Welcome{" "}
+        {JSON.parse(sessionStorage.getItem("userData")).role === "admin"
+          ? "Admin"
+          : "Client"}
+        ,
+      </Typography>
       <Grid container justifyContent={"space-between"}>
         <Grid item xm={2} md={3} lg={3}>
           <Typography variant="h5" letterSpacing={1}>
@@ -125,7 +162,19 @@ export const Home = () => {
       <Grid container marginTop={3}>
         <Grid item xs={12} md={10} component={FormGroup}>
           {options.map((item, index) => {
-            return <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter(item.id)} />} label={item.label} key={item.id} />;
+            return (
+              <CheckboxFiled
+                control={
+                  <Checkbox
+                    color="default"
+                    defaultChecked={false}
+                    onClick={() => onCheckBoxFillter(item.id)}
+                  />
+                }
+                label={item.label}
+                key={item.id}
+              />
+            );
           })}
           {/* <CheckboxFiled control={<Checkbox color="default" defaultChecked={true} onClick={() => onCheckBoxFillter()} />} label="ALL" />
           <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} />} onClick={() => onCheckBoxFillter("admin")} label="OPEN" />
@@ -185,10 +234,12 @@ export const Home = () => {
             <TableRow></TableRow>
           </TableHead>
           <TableBody>
-            
             {data.map((row, index) => (
-              
-              <TableRow className="tableRow" key={index} style={{ background: "#F4FBFF" }}>
+              <TableRow
+                className="tableRow"
+                key={index}
+                style={{ background: "#F4FBFF" }}
+              >
                 <TableCell component="th" align="center" scope="row">
                   {row._id}
                 </TableCell>
@@ -239,7 +290,11 @@ export const Home = () => {
                       "aria-labelledby": "basic-button",
                     }}
                   >
-                    <MenuItem onClick={handleClose} component={Link} to="/ticket-details">
+                    <MenuItem
+                      onClick={handleClose}
+                      component={Link}
+                      to="/ticket-details"
+                    >
                       Views <RemoveRedEyeIcon fontSize="14px" />
                     </MenuItem>
                     <MenuItem onClick={handleClose}>

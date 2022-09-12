@@ -1,4 +1,8 @@
-const { successResponse, successResponseWithData, ErrorResponse } = require("../helpers/apiResponse");
+const {
+  successResponse,
+  successResponseWithData,
+  ErrorResponse,
+} = require("../helpers/apiResponse");
 const userDataService = require("../services/userDataService");
 const express = require("express");
 const { userModel } = require("../models/userSchema");
@@ -32,54 +36,69 @@ const getUserByStatus = async (req, res) => {
     await userModel
       .find({})
       .then((result) => {
-        return res.status(200).json({ message: 'data fetched succesfully', data: result });
+        return res
+          .status(200)
+          .json({ message: "data fetched succesfully", data: result });
       })
       .catch((err) => {
-        return res.status(500).json({ mesage: "something went wrong", description: err });
+        return res
+          .status(500)
+          .json({ mesage: "something went wrong", description: err });
       });
     // return res.status(400).json({ mesage: 'no flags passed' })
   } else {
     console.log("flags passed", data);
-    if (data.includes(1) || data.includes(2) || data.includes(3) || data.includes(4)) {
+    if (
+      data.includes(1) ||
+      data.includes(2) ||
+      data.includes(3) ||
+      data.includes(4)
+    ) {
       const flagArray = [];
       for (let i of data) {
         // console.log(i)
         switch (parseInt(i)) {
           case 1:
-            flagArray.push('user')
+            flagArray.push("user");
             break;
           case 2:
-            flagArray.push('admin')
+            flagArray.push("admin");
             break;
           case 3:
-            flagArray.push('client')
+            flagArray.push("client");
             break;
           case 4:
-            flagArray.push('demo')
+            flagArray.push("demo");
             break;
           default:
             break;
-
         }
       }
       console.log(flagArray);
       await userModel
         .find({ role: { $in: flagArray } })
         .then((result) => {
-          return res.status(200).json({ message: 'data fetched succesfully', data: result });
+          return res
+            .status(200)
+            .json({ message: "data fetched succesfully", data: result });
         })
         .catch((err) => {
-          return res.status(500).json({ mesage: "something went wrong", description: err });
+          return res
+            .status(500)
+            .json({ mesage: "something went wrong", description: err });
         });
-    }
-    else {
+    } else {
       await userModel
         .find({})
         .then((result) => {
-          return res.status(200).json({ message: 'data fetched succesfully', data: result });
+          return res
+            .status(200)
+            .json({ message: "data fetched succesfully", data: result });
         })
         .catch((err) => {
-          return res.status(500).json({ mesage: "something went wrong", description: err });
+          return res
+            .status(500)
+            .json({ mesage: "something went wrong", description: err });
         });
     }
   }

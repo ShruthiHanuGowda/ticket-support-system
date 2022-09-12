@@ -7,32 +7,27 @@ const userDataService = require("../services/userDataService");
 const express = require("express");
 const { ticketModel } = require("../models/ticketSchema");
 const { default: axios } = require("axios");
-const multer = require("multer")
+const multer = require("multer");
 const app = express.Router();
 
 const fileStorageEngine = multer.diskStorage({
-destination:(req,file,cb)=> {
-cb(null ,'../../src/Assets/UploadDocument' )
-},
-filename:(req,file,cb)=>{
-  cb(null,Date.now() + '--' + fileList.originename)
-},
+  destination: (req, file, cb) => {
+    cb(null, "../../src/Assets/UploadDocument");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "--" + fileList.originename);
+  },
+});
 
+const upload = multer({ storage: fileStorageEngine });
 
-})
-
-
-
-const upload = multer({storage: fileStorageEngine })
-
-
-app.post("/" ,upload.single('Images') ,  (req, res) =>{
+app.post("/", upload.single("Images"), (req, res) => {
   console.log(req.files);
-  res.send('FIles upload')
-} )
- 
- app.get("/", async (req, res) => {
-    const data = await ticketModel.find();
+  res.send("FIles upload");
+});
+
+app.get("/", async (req, res) => {
+  const data = await ticketModel.find();
 
   return successResponseWithData(res, "users array", data);
 });

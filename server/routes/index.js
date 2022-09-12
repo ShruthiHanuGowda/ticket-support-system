@@ -6,26 +6,24 @@ const ticketController = require("../controllers/ticketController");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checkUserAuth = require("../middlewares/tokenMiddlewares");
+ 
+
 const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "../../src/Assets/UploadDocument");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 
-// const multer = require("multer");
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "../upload");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + "-" + file.originalname);
-//   },
-// });
-
-// const upload = multer({ storage: storage });
-//const multer = require('multer');
-
+ 
 // const fileStorageEngine = multer.diskStorage({
 //   destination: (req , file , cb) 
 // })
 
-//const upload = multer({storage})
+const upload = multer({storage})
 
 // router.use()
 /* GET home page. */
@@ -38,10 +36,10 @@ router.post("/ticket", ticketController.addTicket);
 router.get("/getTicket", ticketController.getAllTIcketData);
 router.get("/getUser/:role?", checkUserAuth, userController.getAllUserData);
 
-// router.post("/", upload.single(), function (req, res, next) {
-//   console.warn(req.file);
-//   res.end();
-// });
+router.post("/"  , function (req, res, next) {
+  console.warn(req.file);
+  res.end();
+});
 
 
 router.post("/login", async (req, res) => {
