@@ -51,16 +51,11 @@ export const CreateTicket = () => {
     console.log(userdata);
     setInput(userdata);
   }, []);
-    console.log(input)
+  //   console.log(input)
 
-  // const fecthUserData=async()=>{
-  //   const getTicketData = await axios.get("/getTicket");
-  //   console.log(getTicketData);
-  //   setData(getTicketData.data.data);
-  // }
+
+
   
-
-
   const handleChange = (e) => {
         setInput((prevState) => ({
       ...prevState,
@@ -79,6 +74,7 @@ export const CreateTicket = () => {
       fileupload: String(input.fileupload),
       issuetype: String(input.issuetype),
       message: String(input.message),
+      status: String("open"),
     });
   };
   console.log("Ticket Add Successfully!!");

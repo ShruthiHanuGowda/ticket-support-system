@@ -1,38 +1,53 @@
 import React from "react";
 import {
-    Box,
-    Grid,
-    Table,
-    //TextField,
-    TableCell,
-    TableRow,
-    Toolbar,
-    Typography,
-  } from "@mui/material";
+  Box,
+  Grid,
+  Table,
+  //TextField,
+  TableCell,
+  TableRow,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 
 import Divider from "@mui/material/Divider";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import { useTheme } from '@mui/material/styles';
-  //import useMediaQuery from '@mui/material/useMediaQuery';
-  
-  //import { useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
+//import useMediaQuery from '@mui/material/useMediaQuery';
+
+//import { useTheme } from "@mui/material/styles";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import Card from "@mui/material/Card";
-import Pdf from "../../Assets/Images/Pdf.png"
-  
+import Pdf from "../../Assets/Images/Pdf.png";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+
 export const TicketDetails = () => {
-    // const theme = useTheme();
-     const theme = useTheme();
-   // const matches = useMediaQuery(theme.breakpoints.down( 'md'));
-    const styles = {
-      media: {
-        height: 40,
-        width:30,
-       // paddingTop: '56.25%',// 16:9,
-        //marginTop:'8'
-      }
+  const [data , setData ]=useState({})
+  const id = useParams().id;
+  console.log(data)
+  useEffect(() => {    
+    const fecthTicketDetail = async () => {
+       await axios.get(`/getSingleTicket/${id}`).then((res)=>{
+        setData(res.data.ticket)
+       })
+    };
+    fecthTicketDetail();
+  }, []);
+  // const theme = useTheme();
+  const theme = useTheme();
+  // const matches = useMediaQuery(theme.breakpoints.down( 'md'));
+  const styles = {
+    media: {
+      height: 40,
+      width: 30,
+      // paddingTop: '56.25%',// 16:9,
+      //marginTop:'8'
+    },
   };
   return (
     <Box
@@ -58,7 +73,7 @@ export const TicketDetails = () => {
         Ticket Details
       </Typography>
       <Typography variant="h6" sx={{ ml: 1, fontSize: 25, fontweight: 600 }}>
-        Ticket ID: #2345
+        Ticket ID: #{data._id}
       </Typography>
 
       <Grid container spacing={6} justify="space-between">
@@ -109,7 +124,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ m: 0, color: "#3B3B3B", border: "none" }}
                 >
-                  Lorem ipsum
+                  {data.department}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -140,7 +155,7 @@ export const TicketDetails = () => {
                   <FiberManualRecordIcon
                     sx={{ color: "green", fontSize: "8px" }}
                   />{" "}
-                  Open{" "}
+                  {data.status}{" "}
                   <CreateOutlinedIcon
                     sx={{ color: "black", fontSize: "15px" }}
                   />
@@ -202,7 +217,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  Lorem ipsum
+                {data.name}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -218,7 +233,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  Medium
+                 {data.name}
                 </TableCell>
               </TableRow>
             </Table>
@@ -253,7 +268,6 @@ export const TicketDetails = () => {
                   display: "flex",
                   ml: 2,
                   width: 360,
-
                   background: "#F4FBFF",
                 }}
               >

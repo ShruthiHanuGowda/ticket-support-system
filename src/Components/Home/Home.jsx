@@ -32,7 +32,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import EditIcon from "@mui/icons-material/Edit";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import SearchBar from "../Common/SearchBar";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -111,15 +111,22 @@ export const Home = () => {
   };
   // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [SingleData, setSingleData] = React.useState(null);
+
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  console.log(anchorEl)
+  const handleClick = (e,row) => {
+    console.log(e.currentTarget)
+    console.log(row)
+    setAnchorEl(e.currentTarget);
+    setSingleData(row)
   };
   const handleClose = () => {
     setAnchorEl(null);
+    Navigate(`/create-ticket `);
   };
   const statusColors = {
-    Open: "#0B9611",
+    open: "#0B9611",
     Hold: "#E05D5D",
     Progress: "#FFB344",
     Closed: "#777777",
@@ -175,12 +182,7 @@ export const Home = () => {
                 key={item.id}
               />
             );
-          })}
-          {/* <CheckboxFiled control={<Checkbox color="default" defaultChecked={true} onClick={() => onCheckBoxFillter()} />} label="ALL" />
-          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} />} onClick={() => onCheckBoxFillter("admin")} label="OPEN" />
-          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter("client")} />} label="HOLD" />
-          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter("user")} />} label="CLOSED" />
-          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter("admin")} />} label="IN PROGRESS" /> */}
+          })}        
         </Grid>
         <Grid item xs={12} md={2} textAlign="right">
           <Button
@@ -241,13 +243,13 @@ export const Home = () => {
                 style={{ background: "#F4FBFF" }}
               >
                 <TableCell component="th" align="center" scope="row">
-                  {row._id}
+                  {index + 1001}
                 </TableCell>
                 <TableCell align="center">{row.department}</TableCell>
                 <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{row.issuetype}</TableCell>
-                <TableCell align="center">{row.position}</TableCell>
-
+                {/* <TableCell align="center">{row.issuetype}</TableCell> */}
+                <TableCell align="center">{row.issuetype
+}</TableCell>                
                 <TableCell
                   align="center"
                   sx={{
@@ -256,16 +258,14 @@ export const Home = () => {
                     fontSize: "16px",
                   }}
                 >
-                  {row.role}
+                  {row.status}
                 </TableCell>
-
                 <TableCell align="center">
                   <Tooltip title="Action">
-                    <IconButton onClick={handleClick}>
+                    <IconButton onClick={(e)=>handleClick(e,row)}>
                       <MoreVertIcon sx={{ color: "#777777" }} />
                     </IconButton>
                   </Tooltip>
-
                   <Menu
                     id="basic-menu"
                     sx={{
@@ -284,6 +284,7 @@ export const Home = () => {
                       },
                     }}
                     anchorEl={anchorEl}
+                    SingleData={SingleData}
                     open={open}
                     onClose={handleClose}
                     MenuListProps={{
@@ -293,11 +294,15 @@ export const Home = () => {
                     <MenuItem
                       onClick={handleClose}
                       component={Link}
-                      to="/ticket-details"
+                      to={`/ticket-details/${SingleData?._id}`}
                     >
                       Views <RemoveRedEyeIcon fontSize="14px" />
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem
+                      onClick={handleClose}
+                      component={Link}
+                      to="/ticket-details"
+                    >
                       Edit
                       <EditIcon fontSize="14px" />
                     </MenuItem>

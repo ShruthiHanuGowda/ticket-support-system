@@ -37,9 +37,30 @@ const getAllTIcketData = async (req, res) => {
   return res.status(200).json({ data });
 };
 
+// const getTIcketById = async(req , res) =>{
+//   const id = req.params.id;
+// }
+
+
+const getTIcketById = async (req, res, next) => {
+  const id = req.params.id;
+  console.log(id, "hii");
+  let ticket;
+  try {
+    console.log(id);
+    ticket = await ticketModel.findById(id);
+  } catch (err) {
+    console.log(err);
+  }
+  if (!ticket) {
+    return res.status(404).json({ message: "No Product Id Found" });
+  }
+  return res.status(200).json({ ticket });
+};
+
 const addTicket = async (req, res) => {
   // console.log("body reqyest  data===== " , req.body)
-  const { name, department, fileupload, issuetype, message } = req.body;
+  const { name, department, fileupload, issuetype, message,status } = req.body;
   // console.log(ticketExist, "ticketExist");
 
   try {
@@ -50,6 +71,7 @@ const addTicket = async (req, res) => {
       fileupload,
       issuetype,
       message,
+      status
     });
     await ticket.save();
 
@@ -63,6 +85,6 @@ const addTicket = async (req, res) => {
 };
 exports.getAllTIcketData = getAllTIcketData;
 exports.addTicket = addTicket;
-
+exports.getTIcketById = getTIcketById;
 // //   module.exports = addTicket;
 // module.exports=app;

@@ -79,7 +79,7 @@ export const Router = () => {
          </Route>
          <Route element={<RequireAuth allowedRoles={['client','admin']} />}>
         
-            <Route path="/ticket-details" exact element={<TicketDetails />} />
+            <Route path="/ticket-details/:id" exact element={<TicketDetails />} />
          </Route>
         </Route>
 

@@ -17,6 +17,10 @@ const ticketSchema = mongoose.Schema({
   message: {
     type: String,
   },
+  status: {
+    type: String,
+  },
+  
 });
 
 module.exports.ticketModel = mongoose.model("ticket", ticketSchema, "ticket");
