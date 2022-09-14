@@ -30,14 +30,11 @@ import { useEffect } from "react";
 // import FormControl from '@mui/material/FormControl';
 // import FormLabel from '@mui/material/FormLabel';
 
-
 export const CreateTicket = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
 
-
-  
   const [input, setInput] = useState({
     name: "",
     department: [],
@@ -53,11 +50,8 @@ export const CreateTicket = () => {
   }, []);
   //   console.log(input)
 
-
-
-  
   const handleChange = (e) => {
-        setInput((prevState) => ({
+    setInput((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
@@ -104,7 +98,6 @@ export const CreateTicket = () => {
               <TextField
                 name="name"
                 value={input.name}
-             
                 placeholder="Name"
                 //  onChange={handleChange}
                 onChange={(e) => setInput(e.target.value)}
@@ -123,8 +116,6 @@ export const CreateTicket = () => {
                 Department <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <Select
-                 
-                
                 label="Grouping"
                 // placeholder="Select Position"
                 name="department"

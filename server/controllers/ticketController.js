@@ -7,24 +7,24 @@ const userDataService = require("../services/userDataService");
 const express = require("express");
 const { ticketModel } = require("../models/ticketSchema");
 const { default: axios } = require("axios");
-const multer = require("multer");
+//const multer = require("multer");
 const app = express.Router();
 
-const fileStorageEngine = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "../../src/Assets/UploadDocument");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "--" + fileList.originename);
-  },
-});
+// const fileStorageEngine = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "../../src/Assets/UploadDocument");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + "--" + fileList.originename);
+//   },
+// });
 
-const upload = multer({ storage: fileStorageEngine });
+// const upload = multer({ storage: fileStorageEngine });
 
-app.post("/", upload.single("Images"), (req, res) => {
-  console.log(req.files);
-  res.send("FIles upload");
-});
+// app.post("/", upload.single("Images"), (req, res) => {
+//   console.log(req.files);
+//   res.send("FIles upload");
+// });
 
 app.get("/", async (req, res) => {
   const data = await ticketModel.find();
@@ -40,7 +40,6 @@ const getAllTIcketData = async (req, res) => {
 // const getTIcketById = async(req , res) =>{
 //   const id = req.params.id;
 // }
-
 
 const getTIcketById = async (req, res, next) => {
   const id = req.params.id;
@@ -60,7 +59,7 @@ const getTIcketById = async (req, res, next) => {
 
 const addTicket = async (req, res) => {
   // console.log("body reqyest  data===== " , req.body)
-  const { name, department, fileupload, issuetype, message,status } = req.body;
+  const { name, department, fileupload, issuetype, message, status } = req.body;
   // console.log(ticketExist, "ticketExist");
 
   try {
@@ -71,7 +70,7 @@ const addTicket = async (req, res) => {
       fileupload,
       issuetype,
       message,
-      status
+      status,
     });
     await ticket.save();
 
@@ -83,8 +82,27 @@ const addTicket = async (req, res) => {
     console.log(err, "eorrr");
   }
 };
+
+
+const UpdateTicket = async (req, res) => {
+  const _id = req.params.id;
+  const data =req.body;
+  console.log("hiaddyyastt=000000=====",data)
+  try {
+    if (_id) {
+    
+      await ticketModel.updateOne({_id:_id},{$set:data}) ;
+
+      return res.status(200).json({ message: "user updated " });
+      // return successResponseWithData(res, 'user updated', user_resp)
+    } else return successResponse(res, "sorry user couldnt be updated");
+  } catch (ex) {
+    ErrorResponse(res, "something went wrong " + ex.message);
+  }
+};
 exports.getAllTIcketData = getAllTIcketData;
 exports.addTicket = addTicket;
 exports.getTIcketById = getTIcketById;
+exports.UpdateTicket=UpdateTicket;
 // //   module.exports = addTicket;
 // module.exports=app;

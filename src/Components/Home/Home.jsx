@@ -60,11 +60,11 @@ export const Home = () => {
   const navigate = useNavigate();
   //----------------for CheckBox Functionlity
   const [options, setOptions] = useState([
-    { label: "All", id: 0 },
-    { label: "Open", id: 1 },
-    { label: "Close", id: 2 },
-    { label: "Hold", id: 3 },
-    { label: "In Progress", id: 4 },
+    { label: "All"},
+    { label: "Open" },
+    { label: "Close" },
+    { label: "Hold" },
+    { label: "In Progress" },
   ]);
   let [selectedOptions, setSelectedOptions] = useState([]);
   const [data, setData] = React.useState(rows);
@@ -114,12 +114,12 @@ export const Home = () => {
   const [SingleData, setSingleData] = React.useState(null);
 
   const open = Boolean(anchorEl);
-  console.log(anchorEl)
-  const handleClick = (e,row) => {
-    console.log(e.currentTarget)
-    console.log(row)
+  console.log(anchorEl);
+  const handleClick = (e, row) => {
+    console.log(e.currentTarget);
+    console.log(row);
     setAnchorEl(e.currentTarget);
-    setSingleData(row)
+    setSingleData(row);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -182,7 +182,7 @@ export const Home = () => {
                 key={item.id}
               />
             );
-          })}        
+          })}
         </Grid>
         <Grid item xs={12} md={2} textAlign="right">
           <Button
@@ -248,8 +248,7 @@ export const Home = () => {
                 <TableCell align="center">{row.department}</TableCell>
                 <TableCell align="center">{row.name}</TableCell>
                 {/* <TableCell align="center">{row.issuetype}</TableCell> */}
-                <TableCell align="center">{row.issuetype
-}</TableCell>                
+                <TableCell align="center">{row.issuetype}</TableCell>
                 <TableCell
                   align="center"
                   sx={{
@@ -262,7 +261,7 @@ export const Home = () => {
                 </TableCell>
                 <TableCell align="center">
                   <Tooltip title="Action">
-                    <IconButton onClick={(e)=>handleClick(e,row)}>
+                    <IconButton onClick={(e) => handleClick(e, row)}>
                       <MoreVertIcon sx={{ color: "#777777" }} />
                     </IconButton>
                   </Tooltip>
@@ -295,13 +294,14 @@ export const Home = () => {
                       onClick={handleClose}
                       component={Link}
                       to={`/ticket-details/${SingleData?._id}`}
+
                     >
                       Views <RemoveRedEyeIcon fontSize="14px" />
                     </MenuItem>
                     <MenuItem
                       onClick={handleClose}
                       component={Link}
-                      to="/ticket-details"
+                     to={`/ticket-details/${SingleData?._id}`}
                     >
                       Edit
                       <EditIcon fontSize="14px" />

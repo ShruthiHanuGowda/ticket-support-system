@@ -3,7 +3,6 @@ import {
   Box,
   Grid,
   Table,
-  //TextField,
   TableCell,
   TableRow,
   Toolbar,
@@ -13,9 +12,6 @@ import {
 import Divider from "@mui/material/Divider";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import { useTheme } from "@mui/material/styles";
-//import useMediaQuery from '@mui/material/useMediaQuery';
-
-//import { useTheme } from "@mui/material/styles";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
@@ -25,19 +21,40 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import DailogBoxModel from "../TicketDetails/dailogBox" 
 
 export const TicketDetails = () => {
-  const [data , setData ]=useState({})
+  const [data, setData] = useState({});
+  const [edit, setedit] = useState(false);
+  const [statusOpen, setStatusOpen] = React.useState(false);
+
+  const handleStatusClose = (value) => {
+    setStatusOpen(false);
+   
+  };
   const id = useParams().id;
-  console.log(data)
-  useEffect(() => {    
+  console.log(data);
+  useEffect(() => {
     const fecthTicketDetail = async () => {
-       await axios.get(`/getSingleTicket/${id}`).then((res)=>{
-        setData(res.data.ticket)
-       })
+      await axios.get(`/getSingleTicket/${id}`).then((res) => {
+        setData(res.data.ticket);
+      });
     };
     fecthTicketDetail();
   }, []);
+
+const handleOpenDialogBox = () =>{
+  console.log("hiiii")
+  setedit(true)
+  setStatusOpen(true)
+  // return(
+  //   <DailogBoxModel  seteOpen={true}/>
+  // )
+}
+
+
+
+
   // const theme = useTheme();
   const theme = useTheme();
   // const matches = useMediaQuery(theme.breakpoints.down( 'md'));
@@ -48,8 +65,12 @@ export const TicketDetails = () => {
       // paddingTop: '56.25%',// 16:9,
       //marginTop:'8'
     },
+
+
+    
   };
   return (
+   
     <Box
       component="form"
       noValidate
@@ -62,6 +83,9 @@ export const TicketDetails = () => {
         },
       }}
     >
+        {edit?<DailogBoxModel   open={statusOpen}
+        onClose={setStatusOpen}
+        id={id}/>:""}
       <Typography
         paragraph
         sx={{
@@ -157,6 +181,8 @@ export const TicketDetails = () => {
                   />{" "}
                   {data.status}{" "}
                   <CreateOutlinedIcon
+                  
+                  onClick={handleOpenDialogBox}
                     sx={{ color: "black", fontSize: "15px" }}
                   />
                 </TableCell>
@@ -206,6 +232,8 @@ export const TicketDetails = () => {
                       fontSize: "15px",
                       marginLeft: "100px",
                     }}
+                    onClick={handleOpenDialogBox}
+
                   />
                   <CreateOutlinedIcon
                     sx={{ color: "black", fontSize: "15px" }}
@@ -217,7 +245,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                {data.name}
+                  {data.name}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -233,7 +261,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                 {data.name}
+                  {data.name}
                 </TableCell>
               </TableRow>
             </Table>
@@ -272,14 +300,13 @@ export const TicketDetails = () => {
                 }}
               >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  {/* <img src={Pdf} alt="pdf" style={styles.media}  /> */}
-                  {/* <CardContent sx={{ flex: "1 0 auto" }}> */}
                   <Typography
                     component="div"
                     variant="h5"
                     sx={{ ml: 2, color: "black" }}
                   >
                     <img src={Pdf} alt="pdf" style={styles.media} />
+                    {data.fileupload}
                     attachment_2345.pdf <SaveAltIcon sx={{ ml: 3 }} />
                   </Typography>
                   <Typography

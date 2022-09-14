@@ -11,12 +11,14 @@ import { Login } from "../Components/AuthPage/LoginPage/login";
 import { CreateClient } from "../Components/CreateClient/CreateClient";
 import { CreateEndUser } from "../Components/CreateEndUser/CreateEndUser";
 import { TicketDetails } from "../Components/TicketDetails/TicketDetails";
-import {CreateTicket} from "../Components/CreateTicket/CreateTicket";
+import { CreateTicket } from "../Components/CreateTicket/CreateTicket";
 import RequireAuth from "../Components/Common/RequireAuth";
 
 export const Router = () => {
   const [loginUserData, setloginUserData] = useState({});
-  const [isLoggedin, setIsLoggedin] = useState(sessionStorage.getItem("token") ? true : false);
+  const [isLoggedin, setIsLoggedin] = useState(
+    sessionStorage.getItem("token") ? true : false
+  );
   useEffect(() => {
     getRole();
   }, []);
@@ -29,8 +31,7 @@ export const Router = () => {
   // if(sessionStorage.getItem('loginUserData')){
   return (
     <>
-
-{/* <Switch>
+      {/* <Switch>
   <Route path="/" exact element={<Login />} />
   <Route path="/dashboard" exact element={<Home loggedin={isLoggedin} />} />
   <Route path="/create-ticket" exact element={<CreateTicket />} />
@@ -54,42 +55,70 @@ export const Router = () => {
 
       </Switch> */}
 
-      <Switch> 
-           {/* public routes */}
-          <Route path="/" exact element={<Login />} />
+      <Switch>
+        {/* public routes */}
+        <Route path="/" exact element={<Login />} />
         <Route path="/" element={<Header setIsLoggedin={setIsLoggedin} />}>
-       
-
           {/* we want to protect these routes */}
-          <Route element={<RequireAuth allowedRoles={['admin']} />}>
-            <Route path="/dashboard" exact element={<Home loggedin={isLoggedin} />} />
-            <Route path="/manage-user" exact element={<ManageUser loggedin={isLoggedin} />} />
-            <Route path="/manage-client" exact element={<ManageClient loggedin={isLoggedin} />} />
-            <Route path="/manage-client/create-client" exact element={<CreateClient />} />
+          <Route element={<RequireAuth allowedRoles={["admin"]} />}>
+            <Route
+              path="/dashboard"
+              exact
+              element={<Home loggedin={isLoggedin} />}
+            />
+            <Route
+              path="/manage-user"
+              exact
+              element={<ManageUser loggedin={isLoggedin} />}
+            />
+            <Route
+              path="/manage-client"
+              exact
+              element={<ManageClient loggedin={isLoggedin} />}
+            />
+            <Route
+              path="/manage-client/create-client"
+              exact
+              element={<CreateClient />}
+            />
             {/* <Route path="/ticket-details" exact element={<TicketDetails />} /> */}
-            <Route path="/manage-user/create-enduser" exact element={<CreateEndUser />} />
-            <Route path="/create-enduser/:id" exact element={<CreateEndUser />} />
+            <Route
+              path="/manage-user/create-enduser"
+              exact
+              element={<CreateEndUser />}
+            />
+            <Route
+              path="/create-enduser/:id"
+              exact
+              element={<CreateEndUser />}
+            />
           </Route>
-          <Route element={<RequireAuth allowedRoles={['user']} />}>
-            <Route path="/create-ticket" exact element={<CreateTicket loggedin={isLoggedin} />} />
+          <Route element={<RequireAuth allowedRoles={["user"]} />}>
+            <Route
+              path="/create-ticket"
+              exact
+              element={<CreateTicket loggedin={isLoggedin} />}
+            />
           </Route>
-          <Route element={<RequireAuth allowedRoles={['client']} />}>
-            <Route path="/client-dashboard" exact element={<Home loggedin={isLoggedin} />} />
+          <Route element={<RequireAuth allowedRoles={["client"]} />}>
+            <Route
+              path="/client-dashboard"
+              exact
+              element={<Home loggedin={isLoggedin} />}
+            />
             {/* <Route path="/ticket-details" exact element={<TicketDetails />} /> */}
-         </Route>
-         <Route element={<RequireAuth allowedRoles={['client','admin']} />}>
-        
-            <Route path="/ticket-details/:id" exact element={<TicketDetails />} />
-         </Route>
+          </Route>
+          <Route element={<RequireAuth allowedRoles={["client", "admin"]} />}>
+            <Route
+              path="/ticket-details/:id"
+              exact
+              element={<TicketDetails />}
+            />
+          </Route>
         </Route>
+      </Switch>
 
-       </Switch>
-
-      
-
-
-
-        {/*----------------------- for comment */}
+      {/*----------------------- for comment */}
       {/* {
         loginUSerData.role==='admin' ?
         <Switch>
