@@ -11,7 +11,7 @@ import { Login } from "../Components/AuthPage/LoginPage/login";
 import { CreateClient } from "../Components/CreateClient/CreateClient";
 import { CreateEndUser } from "../Components/CreateEndUser/CreateEndUser";
 import { TicketDetails } from "../Components/TicketDetails/TicketDetails";
-import {CreateTicket} from "../Components/CreateTicket/CreateTicket";
+import { CreateTicket } from "../Components/CreateTicket/CreateTicket";
 import RequireAuth from "../Components/Common/RequireAuth";
 
 export const Router = () => {
@@ -30,7 +30,7 @@ export const Router = () => {
   return (
     <>
 
-{/* <Switch>
+      {/* <Switch>
   <Route path="/" exact element={<Login />} />
   <Route path="/dashboard" exact element={<Home loggedin={isLoggedin} />} />
   <Route path="/create-ticket" exact element={<CreateTicket />} />
@@ -54,11 +54,11 @@ export const Router = () => {
 
       </Switch> */}
 
-      <Switch> 
-           {/* public routes */}
-          <Route path="/" exact element={<Login />} />
+      <Switch>
+        {/* public routes */}
+        <Route path="/" exact element={<Login />} />
         <Route path="/" element={<Header setIsLoggedin={setIsLoggedin} />}>
-       
+
 
           {/* we want to protect these routes */}
           <Route element={<RequireAuth allowedRoles={['admin']} />}>
@@ -66,6 +66,7 @@ export const Router = () => {
             <Route path="/manage-user" exact element={<ManageUser loggedin={isLoggedin} />} />
             <Route path="/manage-client" exact element={<ManageClient loggedin={isLoggedin} />} />
             <Route path="/manage-client/create-client" exact element={<CreateClient />} />
+            <Route path="/manage-client/create-client/:id" exact element={<CreateClient />} />
             {/* <Route path="/ticket-details" exact element={<TicketDetails />} /> */}
             <Route path="/manage-user/create-enduser" exact element={<CreateEndUser />} />
             <Route path="/create-enduser/:id" exact element={<CreateEndUser />} />
@@ -76,20 +77,19 @@ export const Router = () => {
           <Route element={<RequireAuth allowedRoles={['client']} />}>
             <Route path="/client-dashboard" exact element={<Home loggedin={isLoggedin} />} />
             {/* <Route path="/ticket-details" exact element={<TicketDetails />} /> */}
-         </Route>
-         <Route element={<RequireAuth allowedRoles={['client','admin']} />}>
-        
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['client', 'admin']} />}>
             <Route path="/ticket-details" exact element={<TicketDetails />} />
-         </Route>
+          </Route>
         </Route>
 
-       </Switch>
-
-      
+      </Switch>
 
 
 
-        {/*----------------------- for comment */}
+
+
+      {/*----------------------- for comment */}
       {/* {
         loginUSerData.role==='admin' ?
         <Switch>

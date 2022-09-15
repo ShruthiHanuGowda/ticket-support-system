@@ -1,66 +1,78 @@
 import * as React from "react";
-import {
-  Button,
-  Divider,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  InputBase,
-  Table,
-  TableBody,
-  TableCell,
-  tableCellClasses,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Button, Divider, FormControlLabel, Grid, IconButton, InputBase, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { styled } from "@mui/material/styles";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { useNavigate,Link } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import SearchBar from "../Common/SearchBar";
-
+import { useLocation } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import axios from 'axios';
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  createData("123", "Sales", "bharat", "Sales Executive", "Open"),
-  createData("#2315", "Sales", "John Doe", "Sales Executive", "Hold"),
-  createData("#2312045", "Sales", "John Doe", "Sales Executive", "Progress"),
-  createData("#232145", "Sales", "John Doe", "Sales Executive", "Closed"),
-  createData("#2311245", "Sales", "John Doe", "Sales Executive", "Open"),
-  createData("#231245", "Sales", "John Doe", "Sales Executive", "Open"),
-  createData("#2312145", "Sales", "John Doe", "Sales Executive", "Open"),
-];
+const rows = [createData("123", "Sales", "bharat", "Sales Executive", "Open"), createData("#2315", "Sales", "John Doe", "Sales Executive", "Hold"), createData("#2312045", "Sales", "John Doe", "Sales Executive", "Progress"), createData("#232145", "Sales", "John Doe", "Sales Executive", "Closed"), createData("#2311245", "Sales", "John Doe", "Sales Executive", "Open"), createData("#231245", "Sales", "John Doe", "Sales Executive", "Open"), createData("#2312145", "Sales", "John Doe", "Sales Executive", "Open")];
 
-export const ManageClient = ({ loggedin,isClient }) => {
+export const ManageClient = ({ loggedin, isClient }) => {
   const navigate = useNavigate();
-  const [data, setData] = React.useState(rows);
-
-  React.useEffect(() => {
-  console.log("hiii bharat")
+  let location = useLocation();
+  const [usersData, setUserData] = useState([]);
+  const [data, setData] = useState(usersData);
+  useEffect(() => {
+    console.log(data)
+    //---- for Toster
+    console.count("useEffect called");
+    if (location.state) {
+      console.log("location::", location);
+      console.log(location.state);
+      toast.success(location.state.message);
+      location.state = null;
+    }
+    fecthUserData();
   }, []);
 
-
+  const fecthUserData = async () => {
+    const Role = "client";
+    const { data } = await axios.get(`/getUser/${Role}`, { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` } });
+    console.log(data.data);
+    setUserData(data.data);
+    setData(data.data);
+    // .then((res)=> console.log(res.data.data));
+  };
   // ------for openAction in table Row---
-  const [anchorEl, setAnchorEl] = React.useState(null);;
-  const open = Boolean(anchorEl);;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);;
-  };;
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => {
-    setAnchorEl(null);;
-  };;
+    setAnchorEl(null);
+  };
   const statusColors = {
     Open: "#0B9611",
     Hold: "#E05D5D",
     Progress: "#FFB344",
     Closed: "#777777",
+  };
+
+  const deleteUser = async (id) => {
+    const response = await axios.delete(`/user/${id}`);
+    toast.success(response.data.message)
+    setUserData([]);
+    fecthUserData();
+    // window.location.reload(false);
+    //navigate("#")
+  };
+
+  const editUser = (id) => {
+    navigate(`/manage-client/create-client/${id}`);
+    // await axios.post(`http://localhost:8000/user/${id}`).then((res)=>console.log(res))
   };
   return (
     <Box>
@@ -71,7 +83,7 @@ export const ManageClient = ({ loggedin,isClient }) => {
           </Typography>
         </Grid>
         <Grid item xm={10} md={6} lg={6}>
-        <SearchBar rows={rows} setData={setData}/>   
+          <SearchBar rows={rows} setData={setData} />
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button
@@ -80,12 +92,12 @@ export const ManageClient = ({ loggedin,isClient }) => {
             to="../manage-client/create-client"
             sx={{
               backgroundColor: "blue",
-              '&:hover': {
-                color:"white"
+              "&:hover": {
+                color: "white",
               },
             }}
           >
-             <AddCircleOutlineIcon style={{ color: "white" }} />
+            <AddCircleOutlineIcon style={{ color: "white" }} />
             &nbsp;Add New User
           </Button>
         </Grid>
@@ -128,33 +140,31 @@ export const ManageClient = ({ loggedin,isClient }) => {
             <TableRow></TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row,index) => (
-              <TableRow
-                className="tableRow"
-                key={row._id}
-                style={{ background: '#F4FBFF' }}
-              >
+            {data.map((row, index) => (
+              <TableRow className="tableRow" key={row._id} style={{ background: "#F4FBFF" }}>
                 <TableCell component="th" align="center" scope="row">
-                  {row.name}
+                  {index + 1}
                 </TableCell>
-                <TableCell align="center">{row.calories}</TableCell>
-                <TableCell align="center">{row.fat}</TableCell>
-                <TableCell align="center">{row.carbs}</TableCell>
+                <TableCell align="center">{row.name}</TableCell>
+                <TableCell align="center">{row.position}</TableCell>
+                <TableCell align="center">{row.department}</TableCell>
                 <TableCell
-                  align="center"
-                  sx={{
-                    color: statusColors[row.protein] ?? "black",
-                    fontWeight: "600",
-                    fontSize: "16px",
-                  }}
-                >
-                  {row.protein}
+                  align="center">
+                  {row.email}
                 </TableCell>
                 <TableCell align="center">
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      editUser(row._id);
+                    }}
+                  >
                     <EditOutlinedIcon sx={{ color: "#777777" }} />
                   </IconButton>
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      deleteUser(row._id);
+                    }}
+                  >
                     <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
                   </IconButton>
                 </TableCell>
@@ -166,4 +176,3 @@ export const ManageClient = ({ loggedin,isClient }) => {
     </Box>
   );
 };
-

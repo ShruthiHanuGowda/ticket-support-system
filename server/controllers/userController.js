@@ -6,6 +6,7 @@ const { default: axios } = require("axios");
 const { Navigate } = require("react-router-dom");
 const app = express.Router();
 const bcrypt = require("bcrypt");
+const EmailSend = require("../services/emailSend")
 
 app.get("/", async (req, res) => {
   const data = await userModel.find();
@@ -16,10 +17,10 @@ app.get("/", async (req, res) => {
 const getAllUserData = async (req, res, next) => {
   const Role = req.params.role;
 
-  console.log("getAllUserData", Role);
+  // console.log("getAllUserData", Role);
   // if (typeof Role == undefined) return res.send({ message: 'no option selected' })
   const data = await userModel.find({ role: Role });
-  console.warn(data);
+  // console.warn(data);
 
   return successResponseWithData(res, "users array", data);
 };
@@ -115,12 +116,14 @@ const UpdateUser = async (req, res) => {
   }
 };
 const addUser = async (req, res) => {
+  console.log(req.body)
   const { name, email, department, position, role, password } = req.body;
+  console.log(name, email, password)
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
   console.log(hashPassword);
   const userExist = await userModel.findOne({ email: email });
-  console.log(userExist, "userExist");
+
   try {
     if (userExist) {
       return res.status(422).json({ message: "Email already exists! " });
@@ -139,12 +142,19 @@ const addUser = async (req, res) => {
     if (!user) {
       return res.status(500).json({ message: "unable to add" });
     }
+    // <EmailSend email={user.email} />
+    console.log("haysdyy---------------------", name, email, password)
+    // await EmailSend.sendMail(name, email, password)
+    sendMailNodemailer(name, email, password);
     return res.status(201).json({ user, message: "User Add Susscesfully" });
   } catch (err) {
     console.log(err, "eorrr");
   }
 };
-
+const sendMailNodemailer = async (name, email, password) => {
+  console.log("in sendMAil Gufn====", email, password, name)
+  await EmailSend.sendMail(name, email, password)
+}
 const deleteUser = async (req, res, next) => {
   const id = req.params.deleteId;
   console.log(id);

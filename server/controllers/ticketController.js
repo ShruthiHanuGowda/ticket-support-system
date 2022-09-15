@@ -1,14 +1,10 @@
-const {
-  successResponse,
-  successResponseWithData,
-  ErrorResponse,
-} = require("../helpers/apiResponse");
+const { successResponse, successResponseWithData, ErrorResponse } = require("../helpers/apiResponse");
 const userDataService = require("../services/userDataService");
 const express = require("express");
 const { ticketModel } = require("../models/ticketSchema");
 const { default: axios } = require("axios");
 
-const fileUpload = require("express-fileupload");
+// const fileUpload = require("express-fileupload");
 const app = express.Router();
 // app.get("/", (req, res) => {
 //     res.send("up and running")
@@ -86,8 +82,70 @@ const addTicket = async (req, res) => {
     console.log(err, "eorrr");
   }
 };
+const getTicketByStatus = async (req, res) => {
+  const data = req.body?.flags;
+  console.log("=================00000000======", data);
+  // const status=new userModel();
+  console.log("data received", data);
+  if (data && data.length === 0) {
+    console.log("no data");
+    await ticketModel
+      .find({})
+      .then((result) => {
+        return res.status(200).json({ message: "data fetched succesfully", data: result });
+      })
+      .catch((err) => {
+        return res.status(500).json({ mesage: "something went wrong", description: err });
+      });
+    // return res.status(400).json({ mesage: 'no flags passed' })
+  } else {
+    console.log("flags passed", data);
+    if (data.includes(1) || data.includes(2) || data.includes(3) || data.includes(4)) {
+      const flagArray = [];
+      for (let i of data) {
+        // console.log(i)
+        switch (parseInt(i)) {
+          case 1:
+            flagArray.push("Open");
+            console.log(">::::::", flagArray)
+            break;
+          case 2:
+            flagArray.push("Close");
+            break;
+          case 3:
+            flagArray.push("Hold");
+            break;
+          case 4:
+            flagArray.push("In Progress");
+            break;
+          default:
+            break;
+        }
+      }
+      console.log("mknnjjkk", flagArray);
+      await ticketModel
+        .find({ status: { $in: flagArray } })
+        .then((result) => {
+          console.log("result----", result)
+          return res.status(200).json({ message: "data fetcheds succesfully", data: result });
+        })
+        .catch((err) => {
+          return res.status(500).json({ message: "something went wrong", description: err });
+        });
+    } else {
+      await ticketModel
+        .find({})
+        .then((result) => {
+          return res.status(200).json({ message: "data fetched succesfully", data: result });
+        })
+        .catch((err) => {
+          return res.status(500).json({ mesage: "something went wrong", description: err });
+        });
+    }
+  }
+};
 exports.getAllTIcketData = getAllTIcketData;
 exports.addTicket = addTicket;
-
+exports.getTicketByStatus = getTicketByStatus;
 // //   module.exports = addTicket;
 // module.exports=app;

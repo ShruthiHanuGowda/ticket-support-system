@@ -1,9 +1,13 @@
-import { Box, TextField, Button, styled, Typography, AppBar, Toolbar, Grid, Alert, AlertTitle } from "@mui/material";
+import { Box, TextField, Button, styled, Typography, AppBar, Toolbar, Grid, Alert, AlertTitle, FormControl, InputLabel, OutlinedInput } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 
 const Component = styled(Box)`
   width: 500px;
@@ -37,7 +41,6 @@ const Wrapper = styled(Box)`
     margin-top: 15px;
   }
 `;
-
 const LoginButton = styled(Button)`
   width: 120px;
   height: 25px;
@@ -57,13 +60,14 @@ const Fields = styled(TextField)`
 export const Login = ({ setIsLoggedin }) => {
   const navigate = useNavigate();
   const Location = useLocation();
-  console.log(Location);
+
   const [data, setData] = useState({
     userName: "",
     password: "",
+    showPassword: false,
   });
-
   useEffect(() => {
+    console.log(Location);
     if (Location.state) {
       if (Location.state.status === "404") {
         toast.error((t) => (
@@ -75,12 +79,20 @@ export const Login = ({ setIsLoggedin }) => {
       }
     }
   }, []);
-
   const checkValidation = (e) => {
     setData({
       ...data,
       [e.target.name]: e.target.value,
     });
+  };
+  const handleClickShowPassword = () => {
+    setData({
+      ...data, showPassword: !data.showPassword
+    })
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
   const onsubmit = async (e) => {
     e.preventDefault();
@@ -89,12 +101,11 @@ export const Login = ({ setIsLoggedin }) => {
     const res = await axios.post(url, data);
     console.log(res)
     const userLogin = res.data.userLoginData;
-    
+
     const userData = JSON.stringify(userLogin);
     sessionStorage.setItem("userData", userData);
     sessionStorage.setItem("token", res.data.token);
 
-   
     if (userLogin?.role === "admin") {
       navigate("/dashboard", { state: userLogin });
     } else if (userLogin?.role === "client") {
@@ -102,10 +113,9 @@ export const Login = ({ setIsLoggedin }) => {
     } else if (userLogin?.role === "user") {
       navigate("/create-ticket", { state: userLogin });
     } else {
-     
+
       navigate("/")
       toast.error(res.data.message)
-
 
     }
   };
@@ -139,8 +149,27 @@ export const Login = ({ setIsLoggedin }) => {
           Username
           <Fields id="outlined-basic" label="Enter Username" variant="outlined" name="userName" onChange={checkValidation} />
           <br />
-          Password
-          <Fields htmlFor="outlined-adornment-password" id="outlined-basic" label="Enter Password" variant="outlined" name="password" onChange={checkValidation} />
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            name="password"
+            onChange={checkValidation}
+            type={data.showPassword ? "text" : "password"}
+            value={data.password}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {data.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
           {/* <Fields hintText="At least 8 characters"floatingLabelText="Enter your password"errorText="Your password is too short"/> */}
           <Forgot>Forgot Password</Forgot>
           <LoginButton variant="contained" type="submit">

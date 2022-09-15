@@ -54,7 +54,7 @@ export const CreateTicket = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(input);
-    await axios.post("http://localhost:8000/ticket", {
+    await axios.post("/ticket", {
       name: String(input.name),
       department: String(input.department),
       fileupload: String(input.fileupload),

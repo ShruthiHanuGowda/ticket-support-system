@@ -11,9 +11,10 @@ const checkUserAuth = require("../middlewares/tokenMiddlewares")
 /* GET home page. */
 router.get("/", (req, res) => res.send("Hello World"));
 router.post("/user", userController.addUser);
-router.get("/user/:id", checkUserAuth, userController.getUserById);
+router.get("/user/:id", userController.getUserById);
 router.put("/user/:id", userController.UpdateUser);
-router.post("/getDataByFilter", userController.getUserByStatus);
+router.post("/getDataByFilter", ticketController.getTicketByStatus);
+
 router.post("/ticket", ticketController.addTicket);
 router.get("/getTicket", ticketController.getAllTIcketData);
 router.get("/getUser/:role?", checkUserAuth, userController.getAllUserData);
@@ -22,13 +23,13 @@ router.post("/login", async (req, res) => {
   const password = req.body.password;
   const userLoginData = await userModel.findOne({ email: email }).then(async (userLoginData) => {
     // var token = "vjnrvnerzovlzsk";
-    console.log(userLoginData._id)
+    console.log("userLogin data =====", userLoginData)
     if (userLoginData) {
       const isMatch = await bcrypt.compare(password, userLoginData.password);
       if (isMatch) {
         // Generate JWT Token
         const token = jwt.sign({ _id: userLoginData._id }, process.env.JWT_SECRET_KEY, { expiresIn: '6h' })
-
+        console.log(token)
         return res.status(200).json({ message: "login sucess", token, userLoginData });
       } else {
         return res.json({

@@ -50,13 +50,15 @@ export const Home = () => {
       flags: filterValue
     });
     console.log('data from api', data.data)
+    console.log(data.message)
     setData(data.data);
+
 
     // .then((res)=> console.log(res.data.data));
   };
   //--------------------------------------------------------------------
   const onCheckBoxFillter = (filterValue) => {
-    // console.log(filterValue, "array:::", selectedOptions);
+    console.log(filterValue)
     if (selectedOptions.includes(filterValue)) {
       const indexx = selectedOptions.indexOf(filterValue);
       if (indexx > -1) {
@@ -84,8 +86,8 @@ export const Home = () => {
   const statusColors = {
     Open: "#0B9611",
     Hold: "#E05D5D",
-    Progress: "#FFB344",
-    Closed: "#777777",
+    'In Progress': "#FFB344",
+    Close: "#777777",
   };
   return (
     <Box>
@@ -121,11 +123,6 @@ export const Home = () => {
           {options.map((item, index) => {
             return <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter(item.id)} />} label={item.label} key={item.id} />;
           })}
-          {/* <CheckboxFiled control={<Checkbox color="default" defaultChecked={true} onClick={() => onCheckBoxFillter()} />} label="ALL" />
-          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} />} onClick={() => onCheckBoxFillter("admin")} label="OPEN" />
-          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter("client")} />} label="HOLD" />
-          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter("user")} />} label="CLOSED" />
-          <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter("admin")} />} label="IN PROGRESS" /> */}
         </Grid>
         <Grid item xs={12} md={2} textAlign="right">
           <Button
@@ -182,11 +179,11 @@ export const Home = () => {
             {data.map((row, index) => (
               <TableRow className="tableRow" key={index} style={{ background: "#F4FBFF" }}>
                 <TableCell component="th" align="center" scope="row">
-                  {row.srno}
+                  {index + 1001}
                 </TableCell>
                 <TableCell align="center">{row.department}</TableCell>
                 <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{row.position}</TableCell>
+                <TableCell align="center">{row.department}</TableCell>
                 <TableCell
                   align="center"
                   sx={{
@@ -195,7 +192,7 @@ export const Home = () => {
                     fontSize: "16px",
                   }}
                 >
-                  {row.role}
+                  {row.status}
                 </TableCell>
 
                 <TableCell align="center">
