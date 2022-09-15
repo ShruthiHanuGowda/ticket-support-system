@@ -1,5 +1,19 @@
 import * as React from "react";
-import { Button, Divider, Grid, IconButton, InputBase, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Grid,
+  IconButton,
+  InputBase,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 // import { makeStyles } from '@material-ui/core/styles';
@@ -25,7 +39,15 @@ function createData(sr, name, position, Department) {
   return { sr, name, position, Department };
 }
 
-const rows = [createData("1", "John Doe", "Sales Executive", "Sales"), createData("2", "John Doe", "Manager", "Sales"), createData("3", "John Doe", "Marketing", "Sales"), createData("4", "John Doe", "Sales Executive", "Sales"), createData("5", "John Doe", "Sales Executive", "Sales"), createData("6", "John Doe", "Sales Executive", "Sales"), createData("7", "John Doe", "Sales Executive", "Sales")];
+const rows = [
+  createData("1", "John Doe", "Sales Executive", "Sales"),
+  createData("2", "John Doe", "Manager", "Sales"),
+  createData("3", "John Doe", "Marketing", "Sales"),
+  createData("4", "John Doe", "Sales Executive", "Sales"),
+  createData("5", "John Doe", "Sales Executive", "Sales"),
+  createData("6", "John Doe", "Sales Executive", "Sales"),
+  createData("7", "John Doe", "Sales Executive", "Sales"),
+];
 
 export const ManageUser = ({ loggedin }) => {
   // console.log('loaded');
@@ -39,20 +61,21 @@ export const ManageUser = ({ loggedin }) => {
 
   React.useEffect(() => {
     //---- for Toster
-    console.count('useEffect called');
+    console.count("useEffect called");
     if (location.state) {
-
-      console.log('location::',location)
+      console.log("location::", location);
       console.log(location.state);
       toast.success(location.state.message);
-      location.state=null;
+      location.state = null;
     }
     fecthUserData();
   }, []);
 
   const fecthUserData = async () => {
-   const Role ='user'
-    const userData = await axios.get(`/getUser/${Role}`, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('token')}`} });
+    const Role = "user";
+    const userData = await axios.get(`/getUser/${Role}`, {
+      headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+    });
     // console.log(userData.data.data);
     setUserData(userData.data.data);
 
@@ -68,8 +91,8 @@ export const ManageUser = ({ loggedin }) => {
   //----------------for Delete User Data
   const deleteUser = async (id) => {
     const response = await axios.delete(`/user/${id}`);
-    await toast.success(response.data.message)
-   window.location.reload(false);
+    await toast.success(response.data.message);
+    window.location.reload(false);
     //navigate("#")
   };
 
@@ -104,14 +127,13 @@ export const ManageUser = ({ loggedin }) => {
           <Button
             variant="contained"
             component={Link}
-            to="../manage-user/create-enduser"            
+            to="../manage-user/create-enduser"
             sx={{
               backgroundColor: "blue",
-              '&:hover': {
-                color:"white"
+              "&:hover": {
+                color: "white",
               },
             }}
-           
           >
             <AddCircleOutlineIcon style={{ color: "white" }} />
             &nbsp;Add User
@@ -154,11 +176,18 @@ export const ManageUser = ({ loggedin }) => {
           <TableBody>
             {data.length == 0
               ? usersData.map((row, index) => (
-                  <TableRow className="tableRow" key={row._id}  style={{ background: "#F4FBFF" }}>
+                  <TableRow
+                    className="tableRow"
+                    key={row._id}
+                    style={{ background: "#F4FBFF" }}
+                  >
                     <TableCell component="th" align="center" scope="row">
                       {index + 1}
                     </TableCell>
-                    <TableCell align="center" sx={{ textTransform: "capitalize" }}>
+                    <TableCell
+                      align="center"
+                      sx={{ textTransform: "capitalize" }}
+                    >
                       {row.name}
                     </TableCell>
 
@@ -190,7 +219,11 @@ export const ManageUser = ({ loggedin }) => {
                   </TableRow>
                 ))
               : data.map((row, index) => (
-                  <TableRow className="tableRow" key={row._id} style={{ background: "#F4FBFF" }}>
+                  <TableRow
+                    className="tableRow"
+                    key={row._id}
+                    style={{ background: "#F4FBFF" }}
+                  >
                     <TableCell component="th" align="center" scope="row">
                       {index + 1}
                     </TableCell>

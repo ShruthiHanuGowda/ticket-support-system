@@ -1,13 +1,25 @@
-import { Box, CssBaseline, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, styled, Typography } from '@mui/material'
-import React from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import {
+  Box,
+  CssBaseline,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  styled,
+  Typography,
+} from "@mui/material";
+import React from "react";
+import { Link, Outlet } from "react-router-dom";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import InboxIcon from "@mui/icons-material/Dashboard";
 import MailIcon from "@mui/icons-material/PeopleAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
-import { useTheme } from '@emotion/react';
+import { useTheme } from "@emotion/react";
 //import { styled, useTheme } from "@mui/material/styles";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -42,7 +54,7 @@ const closedMixin = (theme) => ({
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
 });
- 
+
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -90,22 +102,19 @@ const usePrevious = (value) => {
   return ref.current;
 };
 
-
-
 //------------------------------------------------
-export const SideBarPage = ({setOpen,open}) => {
+export const SideBarPage = ({ setOpen, open }) => {
   // const [open, setOpen] = React.useState(true);
- 
+
   const theme = useTheme();
-  console.log(open)
+  console.log(open);
   const handleDrawerClose = () => {
     setOpen(false);
   };
   const isBigScreen = useMediaQuery("(min-width: 1140px)", false);
   const prevBigScreen = usePrevious(isBigScreen);
 
-
-const logout = () => {
+  const logout = () => {
     // setIsLoggedin(false);
     // sessionStorage.clear();
     // navigate("/login");
@@ -119,9 +128,9 @@ const logout = () => {
     // { name: "Manage User", path: "/manage-user" },
   ];
   return (
-   <Box>
-    <CssBaseline />
-    <Drawer
+    <Box>
+      <CssBaseline />
+      <Drawer
         variant="permanent"
         open={open}
         sx={{
@@ -131,9 +140,15 @@ const logout = () => {
       >
         <DrawerHeader style={{ backgroundColor: "#F4FBFF" }}>
           <Typography>
-            <img  src={Kadellogo} alt="logo" />
+            <img src={Kadellogo} alt="logo" />
           </Typography>
-          <IconButton  onClick={handleDrawerClose}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "rtl" ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
+          </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
@@ -157,7 +172,12 @@ const logout = () => {
                 >
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText component={Link} primary={text.name} to={text.path} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText
+                  component={Link}
+                  primary={text.name}
+                  to={text.path}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
               </ListItemButton>
             </ListItem>
           ))}
@@ -180,7 +200,11 @@ const logout = () => {
                     justifyContent: "center",
                   }}
                 >
-                  {index % 2 === 0 ? <PermIdentityOutlinedIcon /> : <LogoutIcon color="error" onClick={logout} />}
+                  {index % 2 === 0 ? (
+                    <PermIdentityOutlinedIcon />
+                  ) : (
+                    <LogoutIcon color="error" onClick={logout} />
+                  )}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -192,6 +216,6 @@ const logout = () => {
         <DrawerHeader />
         <Outlet />
       </Box>
-   </Box>
-  )
-}
+    </Box>
+  );
+};

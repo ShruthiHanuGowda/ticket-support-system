@@ -29,15 +29,13 @@ export const TicketDetails = () => {
   const [data, setData] = useState({});
   const [edit, setedit] = useState(false);
   const [statusOpen, setStatusOpen] = React.useState(false);
-
   const [flagValue, setFlagValue] = useState(null);
-  console.log(flagValue);
 
   const handleStatusClose = (value) => {
     setStatusOpen(false);
   };
   const id = useParams().id;
-  console.log(data);
+
   useEffect(() => {
     const fecthTicketDetail = async () => {
       await axios.get(`/getSingleTicket/${id}`).then((res) => {
@@ -56,20 +54,16 @@ export const TicketDetails = () => {
     // )
   };
 
-  // const handleDialogBox = () => {
-  //   console.log("hiiii");
-  //   setAssignee(true);
-  //   setStatusOpen(true);
-  //   // return(
-  //   //   <DailogBoxModel  seteOpen={true}/>
-  //   // )
-  // };
-
-  // const theme = useTheme();
   const getImageURL = (imageIdArg) => {
-    axios.get(`/getImageUrl/${imageIdArg}`).then((res)=>{
-      console.log('image link received :::',res)
-    }).catch((err)=>{console.log('error',err)})
+    axios
+      .get(`/getImageUrl/${imageIdArg}`)
+      .then(({ data }) => {
+        console.log("image link received :::", data.data);
+        window.open(data.data, "_blank");
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   };
   const theme = useTheme();
   // const matches = useMediaQuery(theme.breakpoints.down( 'md'));
@@ -144,7 +138,6 @@ export const TicketDetails = () => {
 
           <Grid item xs={6} md={6}>
             <Table
-              //sx={{ minWidth: 580, marginLeft: "4px", marginTop: "1px" }}
               sx={{
                 ml: 1,
                 width: "100%",
@@ -329,8 +322,6 @@ export const TicketDetails = () => {
                 }}
               >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  {/* <img src={Pdf} alt="pdf" style={styles.media}  /> */}
-                  {/* <CardContent sx={{ flex: "1 0 auto" }}> */}
                   <Typography
                     component="div"
                     variant="h5"
@@ -361,7 +352,6 @@ export const TicketDetails = () => {
                   >
                     1.23MB .18/03/22
                   </Typography>
-                  {/* </CardContent> */}
                 </Box>
               </Card>
             </Grid>

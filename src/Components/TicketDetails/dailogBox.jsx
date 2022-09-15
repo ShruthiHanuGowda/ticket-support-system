@@ -13,7 +13,12 @@ import AddIcon from "@mui/icons-material/Add";
 import Typography from "@mui/material/Typography";
 import { blue } from "@mui/material/colors";
 import axios from "axios";
-import { DialogActions, DialogContent, DialogContentText, TextField } from "@mui/material";
+import {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  TextField,
+} from "@mui/material";
 
 const emails = ["Open", "In Progress", "Hold", "Close"];
 
@@ -27,8 +32,8 @@ const department = [
 ];
 export default function SimpleDialog(props) {
   const [input, setInput] = React.useState({});
-  const [updateAssigneeName,setUpdateAssigneeName]=React.useState(null)
-  const { onClose, selectedValue, open, id ,flag} = props;
+  const [updateAssigneeName, setUpdateAssigneeName] = React.useState(null);
+  const { onClose, selectedValue, open, id, flag } = props;
   React.useEffect(() => {
     const fetchUserData = async () => {
       return await axios
@@ -46,86 +51,87 @@ export default function SimpleDialog(props) {
     onClose(selectedValue);
   };
 
-
-  if(props.flag==='status'){
+  if (props.flag === "status") {
     const handleListItemClick = async (value) => {
-        await axios.put(`/ticket/Update-ticket/${id}`, {
-          name: String(input.name),
-          department: String(input.department),
-          fileupload: String(input.fileupload),
-          issuetype: String(input.issuetype),
-          message: String(input.message),
-          status: String(value),
-        });
-        console.log(value);
-        onClose(false);
-      };
+      await axios.put(`/ticket/Update-ticket/${id}`, {
+        name: String(input.name),
+        department: String(input.department),
+        fileupload: String(input.fileupload),
+        issuetype: String(input.issuetype),
+        message: String(input.message),
+        status: String(value),
+      });
+      console.log(value);
+      onClose(false);
+    };
     return (
-        <Dialog onClose={handleClose} open={open}>
-          <DialogTitle sx={{ backgroundColor: "yellow" }}>
-            Update Status
-          </DialogTitle>
-          <List sx={{ pt: 0 }}>
-            {emails.map((email) => (
-              <ListItem
-                button
-                onClick={() => handleListItemClick(email)}
-                key={email}
-              >
-                <ListItemText sx={{ textAlign: "center" }} primary={email} />
-              </ListItem>
-            ))}
-          </List>
-        </Dialog>
-      );
-  }else if(props.flag==='transfer'){
+      <Dialog onClose={handleClose} open={open}>
+        <DialogTitle sx={{ backgroundColor: "yellow" }}>
+          Update Status
+        </DialogTitle>
+        <List sx={{ pt: 0 }}>
+          {emails.map((email) => (
+            <ListItem
+              button
+              onClick={() => handleListItemClick(email)}
+              key={email}
+            >
+              <ListItemText sx={{ textAlign: "center" }} primary={email} />
+            </ListItem>
+          ))}
+        </List>
+      </Dialog>
+    );
+  } else if (props.flag === "transfer") {
     const handleListItemClick = async (value) => {
-        await axios.put(`/ticket/Update-ticket/${id}`, {
-          name: String(input.name),
-          department: String(value),
-          fileupload: String(input.fileupload),
-          issuetype: String(input.issuetype),
-          message: String(input.message),
-          status: String(input.status),
-        });
-        console.log(value);
-        onClose(false);
-      };
+      await axios.put(`/ticket/Update-ticket/${id}`, {
+        name: String(input.name),
+        department: String(value),
+        fileupload: String(input.fileupload),
+        issuetype: String(input.issuetype),
+        message: String(input.message),
+        status: String(input.status),
+      });
+      console.log(value);
+      onClose(false);
+    };
     return (
-        <Dialog onClose={handleClose} open={open}>
-          <DialogTitle sx={{ backgroundColor: "yellow" }}>
-            Update Transfer
-          </DialogTitle>
-          <List sx={{ pt: 0 }}>
-            {department.map((email) => (
-              <ListItem
-                button
-                onClick={() => handleListItemClick(email)}
-                key={email}
-              >
-                <ListItemText sx={{ textAlign: "center" }} primary={email} />
-              </ListItem>
-            ))}
-          </List>
-        </Dialog>
-      );
-  }else if(props.flag==='assignee'){
+      <Dialog onClose={handleClose} open={open}>
+        <DialogTitle sx={{ backgroundColor: "yellow" }}>
+          Update Transfer
+        </DialogTitle>
+        <List sx={{ pt: 0 }}>
+          {department.map((email) => (
+            <ListItem
+              button
+              onClick={() => handleListItemClick(email)}
+              key={email}
+            >
+              <ListItemText sx={{ textAlign: "center" }} primary={email} />
+            </ListItem>
+          ))}
+        </List>
+      </Dialog>
+    );
+  } else if (props.flag === "assignee") {
     const handleListItemClickName = async (value) => {
-        await axios.put(`/ticket/Update-ticket/${id}`, {
-          name: String(value),
-          department: String(input.department),
-          fileupload: String(input.fileupload),
-          issuetype: String(input.issuetype),
-          message: String(input.message),
-          status: String(input.status),
-        });
-        console.log(value);
-        onClose(false);
-      };
+      await axios.put(`/ticket/Update-ticket/${id}`, {
+        name: String(value),
+        department: String(input.department),
+        fileupload: String(input.fileupload),
+        issuetype: String(input.issuetype),
+        message: String(input.message),
+        status: String(input.status),
+      });
+      console.log(value);
+      onClose(false);
+    };
     return (
-        <Dialog onClose={handleClose} open={open}>
-              <DialogTitle sx={{ backgroundColor: "yellow" }}>Update Assignee</DialogTitle>
-        <DialogContent>         
+      <Dialog onClose={handleClose} open={open}>
+        <DialogTitle sx={{ backgroundColor: "yellow" }}>
+          Update Assignee
+        </DialogTitle>
+        <DialogContent>
           <TextField
             autoFocus
             margin="dense"
@@ -134,22 +140,25 @@ export default function SimpleDialog(props) {
             type="text"
             fullWidth
             variant="standard"
-            onChange={(e)=>setUpdateAssigneeName(e.target.value)}
+            onChange={(e) => setUpdateAssigneeName(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-        <Button type="submit" onClick={(e) => handleListItemClickName(updateAssigneeName)}>Update</Button>
+          <Button
+            type="submit"
+            onClick={(e) => handleListItemClickName(updateAssigneeName)}
+          >
+            Update
+          </Button>
           {/* <Button onClick={handleClose}>Cancel</Button> */}
-      
         </DialogActions>
-          {/* <DialogTitle >
+        {/* <DialogTitle >
             
           </DialogTitle>
           <TextField type={'text'}  placeholder="Update Assignee Name"  onClick={(e) => handleListItemClick(e.target.value)} /> */}
-        </Dialog>
-      );
+      </Dialog>
+    );
   }
-
 }
 
 SimpleDialog.propTypes = {

@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({storage});
+const upload = multer({ storage });
 
 // router.use()
 /* GET home page. */
@@ -43,29 +43,21 @@ router.get("/getImageUrl/:id", ticketController.getImageById);
 router.put("/ticket/Update-ticket/:id", ticketController.UpdateTicket);
 router.get("/getUser/:role?", checkUserAuth, userController.getAllUserData);
 //router.get("/viewTicket/:id" , ticketController.getTicketByID)
-router.post("/upload",upload.any(),async function (req, res, next) {
-  console.log('body received',req.files[0])
-  // const file = req.body.fileData
-   console.log('upload api called')
-  let tempArr=[];
-//   req.files.forEach((element)=>{
-// let response=uploadFiles(element);s`
-// console.warn("responce------------------------",response);
-// temp.push({imageID:response.public_id,imageName:response?.original_filename});
-//   });
-// console.log('ressss::::',req.body.fileData)
+router.post("/upload", upload.any(), async function (req, res, next) {
+  console.log("body received", req.files[0]);
 
+  console.log("upload api called");
+  let tempArr = [];
 
+  for (let i of req.files) {
+    let response = await uploadFiles(i);
+    console.log("data : ", response);
+    tempArr.push({ imageID: response.public_id, imageName: i.originalname });
+  }
 
-for(let i of req.files)
-{
-  // console.log('value of i is::::',i);
-  let response=await uploadFiles(i);
-  console.log('data : ',response)
-  tempArr.push({imageID:response.public_id,imageName:i.originalname})
-}
-
-  res.status(200).json({message:"file upload successfully!!!",data:tempArr});
+  res
+    .status(200)
+    .json({ message: "file upload successfully!!!", data: tempArr });
 });
 
 router.post("/login", async (req, res) => {

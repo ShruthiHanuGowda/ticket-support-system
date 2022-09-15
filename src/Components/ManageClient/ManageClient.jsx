@@ -20,9 +20,8 @@ import { styled } from "@mui/material/styles";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import SearchBar from "../Common/SearchBar";
-
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -38,24 +37,23 @@ const rows = [
   createData("#2312145", "Sales", "John Doe", "Sales Executive", "Open"),
 ];
 
-export const ManageClient = ({ loggedin,isClient }) => {
+export const ManageClient = ({ loggedin, isClient }) => {
   const navigate = useNavigate();
   const [data, setData] = React.useState(rows);
 
   React.useEffect(() => {
-  console.log("hiii bharat")
+    console.log("hiii bharat");
   }, []);
 
-
   // ------for openAction in table Row---
-  const [anchorEl, setAnchorEl] = React.useState(null);;
-  const open = Boolean(anchorEl);;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);;
-  };;
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => {
-    setAnchorEl(null);;
-  };;
+    setAnchorEl(null);
+  };
   const statusColors = {
     Open: "#0B9611",
     Hold: "#E05D5D",
@@ -71,7 +69,7 @@ export const ManageClient = ({ loggedin,isClient }) => {
           </Typography>
         </Grid>
         <Grid item xm={10} md={6} lg={6}>
-        <SearchBar rows={rows} setData={setData}/>   
+          <SearchBar rows={rows} setData={setData} />
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button
@@ -80,12 +78,12 @@ export const ManageClient = ({ loggedin,isClient }) => {
             to="../manage-client/create-client"
             sx={{
               backgroundColor: "blue",
-              '&:hover': {
-                color:"white"
+              "&:hover": {
+                color: "white",
               },
             }}
           >
-             <AddCircleOutlineIcon style={{ color: "white" }} />
+            <AddCircleOutlineIcon style={{ color: "white" }} />
             &nbsp;Add New User
           </Button>
         </Grid>
@@ -128,11 +126,11 @@ export const ManageClient = ({ loggedin,isClient }) => {
             <TableRow></TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row,index) => (
+            {data.map((row, index) => (
               <TableRow
                 className="tableRow"
                 key={row._id}
-                style={{ background: '#F4FBFF' }}
+                style={{ background: "#F4FBFF" }}
               >
                 <TableCell component="th" align="center" scope="row">
                   {row.name}
@@ -166,4 +164,3 @@ export const ManageClient = ({ loggedin,isClient }) => {
     </Box>
   );
 };
-

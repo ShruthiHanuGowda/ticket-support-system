@@ -7,7 +7,9 @@ export const LayoutPage = () => {
   const [open, setOpen] = React.useState(false);
   console.log(open);
   useEffect(() => {}, [open]);
-  const [isLoggedin, setIsLoggedin] = useState(sessionStorage.getItem("token") ? true : false);
+  const [isLoggedin, setIsLoggedin] = useState(
+    sessionStorage.getItem("token") ? true : false
+  );
 
   return (
     <>

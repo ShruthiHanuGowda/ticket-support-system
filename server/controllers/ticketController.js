@@ -7,7 +7,7 @@ const userDataService = require("../services/userDataService");
 const express = require("express");
 const { ticketModel } = require("../models/ticketSchema");
 const { default: axios } = require("axios");
-const {getImgUrl} =require('../services/cloudinary')
+const { getImgUrl } = require("../services/cloudinary");
 //const multer = require("multer");
 const app = express.Router();
 
@@ -42,13 +42,13 @@ const getAllTIcketData = async (req, res) => {
 //   const id = req.params.id;
 // }
 
-const getImageById=async(req,res,next)=>{
+const getImageById = async (req, res, next) => {
   const id = req.params.id;
-  console.log('id is ::::::::',id);
+  console.log("id is ::::::::", id);
   const data = await getImgUrl(id);
-  console.log('loggggg',data);
-  res.status(200).json({data});
-}
+  console.log("loggggg", data);
+  res.status(200).json({ data });
+};
 const getTIcketById = async (req, res, next) => {
   const id = req.params.id;
   console.log(id, "hii");
@@ -67,7 +67,7 @@ const getTIcketById = async (req, res, next) => {
 
 const addTicket = async (req, res) => {
   // console.log("body reqyest  data===== " , req.body)
-  const { name, department, fileupload, issuetype, message, status} = req.body;
+  const { name, department, fileupload, issuetype, message, status } = req.body;
   // console.log(ticketExist, "ticketExist");
 
   try {
@@ -79,9 +79,9 @@ const addTicket = async (req, res) => {
       issuetype,
       message,
       status,
-      createdAt:new Date().toISOString(),
-      updatedAt:'',
-      solvedAt:''
+      createdAt: new Date().toISOString(),
+      updatedAt: "",
+      solvedAt: "",
     });
     await ticket.save();
 
@@ -97,7 +97,7 @@ const addTicket = async (req, res) => {
 const UpdateTicket = async (req, res) => {
   const _id = req.params.id;
   let data = req.body;
-  data.updatedAt=new Date().toISOString();
+  data.updatedAt = new Date().toISOString();
   console.log("hiaddyyastt=000000=====", data);
   try {
     if (_id) {
@@ -114,6 +114,4 @@ exports.getAllTIcketData = getAllTIcketData;
 exports.addTicket = addTicket;
 exports.getTIcketById = getTIcketById;
 exports.UpdateTicket = UpdateTicket;
-exports.getImageById=getImageById;
-// //   module.exports = addTicket;
-// module.exports=app;
+exports.getImageById = getImageById;
