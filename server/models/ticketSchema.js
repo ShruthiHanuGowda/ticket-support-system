@@ -8,9 +8,7 @@ const ticketSchema = mongoose.Schema({
   department: {
     type: String,
   },
-  fileupload: {
-    type: String,
-  },
+  fileupload: [{ imageID: { type: String }, imageName: { type: String } }],
   issuetype: {
     type: String,
   },
@@ -20,7 +18,9 @@ const ticketSchema = mongoose.Schema({
   status: {
     type: String,
   },
-  
+  createdAt: { type: String },
+  updatedAt: { type: String },
+  solvedAt: { type: String },
 });
 
 module.exports.ticketModel = mongoose.model("ticket", ticketSchema, "ticket");

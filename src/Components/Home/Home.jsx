@@ -60,7 +60,7 @@ export const Home = () => {
   const navigate = useNavigate();
   //----------------for CheckBox Functionlity
   const [options, setOptions] = useState([
-    { label: "All"},
+    { label: "All" },
     { label: "Open" },
     { label: "Close" },
     { label: "Hold" },
@@ -294,14 +294,13 @@ export const Home = () => {
                       onClick={handleClose}
                       component={Link}
                       to={`/ticket-details/${SingleData?._id}`}
-
                     >
                       Views <RemoveRedEyeIcon fontSize="14px" />
                     </MenuItem>
                     <MenuItem
                       onClick={handleClose}
                       component={Link}
-                     to={`/ticket-details/${SingleData?._id}`}
+                      to={`/ticket-details/${SingleData?._id}`}
                     >
                       Edit
                       <EditIcon fontSize="14px" />

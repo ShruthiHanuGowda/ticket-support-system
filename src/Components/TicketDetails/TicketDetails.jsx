@@ -2,10 +2,12 @@ import React from "react";
 import {
   Box,
   Grid,
+  IconButton,
   Table,
   TableCell,
   TableRow,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 
@@ -21,16 +23,18 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
-import DailogBoxModel from "../TicketDetails/dailogBox" 
+import DailogBoxModel from "../TicketDetails/dailogBox";
 
 export const TicketDetails = () => {
   const [data, setData] = useState({});
   const [edit, setedit] = useState(false);
   const [statusOpen, setStatusOpen] = React.useState(false);
 
+  const [flagValue, setFlagValue] = useState(null);
+  console.log(flagValue);
+
   const handleStatusClose = (value) => {
     setStatusOpen(false);
-   
   };
   const id = useParams().id;
   console.log(data);
@@ -43,19 +47,30 @@ export const TicketDetails = () => {
     fecthTicketDetail();
   }, []);
 
-const handleOpenDialogBox = () =>{
-  console.log("hiiii")
-  setedit(true)
-  setStatusOpen(true)
-  // return(
-  //   <DailogBoxModel  seteOpen={true}/>
-  // )
-}
+  const handleOpenDialogBox = (flag) => {
+    setFlagValue(flag.flag);
+    setedit(true);
+    setStatusOpen(true);
+    // return(
+    //   <DailogBoxModel  seteOpen={true}/>
+    // )
+  };
 
-
-
+  // const handleDialogBox = () => {
+  //   console.log("hiiii");
+  //   setAssignee(true);
+  //   setStatusOpen(true);
+  //   // return(
+  //   //   <DailogBoxModel  seteOpen={true}/>
+  //   // )
+  // };
 
   // const theme = useTheme();
+  const getImageURL = (imageIdArg) => {
+    axios.get(`/getImageUrl/${imageIdArg}`).then((res)=>{
+      console.log('image link received :::',res)
+    }).catch((err)=>{console.log('error',err)})
+  };
   const theme = useTheme();
   // const matches = useMediaQuery(theme.breakpoints.down( 'md'));
   const styles = {
@@ -65,12 +80,8 @@ const handleOpenDialogBox = () =>{
       // paddingTop: '56.25%',// 16:9,
       //marginTop:'8'
     },
-
-
-    
   };
   return (
-   
     <Box
       component="form"
       noValidate
@@ -83,9 +94,16 @@ const handleOpenDialogBox = () =>{
         },
       }}
     >
-        {edit?<DailogBoxModel   open={statusOpen}
-        onClose={setStatusOpen}
-        id={id}/>:""}
+      {edit ? (
+        <DailogBoxModel
+          open={statusOpen}
+          onClose={setStatusOpen}
+          id={id}
+          flag={flagValue}
+        />
+      ) : (
+        ""
+      )}
       <Typography
         paragraph
         sx={{
@@ -181,8 +199,7 @@ const handleOpenDialogBox = () =>{
                   />{" "}
                   {data.status}{" "}
                   <CreateOutlinedIcon
-                  
-                  onClick={handleOpenDialogBox}
+                    onClick={(e) => handleOpenDialogBox({ flag: "status" })}
                     sx={{ color: "black", fontSize: "15px" }}
                   />
                 </TableCell>
@@ -226,18 +243,29 @@ const handleOpenDialogBox = () =>{
                   textalign="left"
                 >
                   Assignee:
-                  <CompareArrowsIcon
-                    sx={{
-                      color: "black",
-                      fontSize: "15px",
-                      marginLeft: "100px",
-                    }}
-                    onClick={handleOpenDialogBox}
-
-                  />
-                  <CreateOutlinedIcon
-                    sx={{ color: "black", fontSize: "15px" }}
-                  />
+                  <Tooltip title="Action" sx={{ marginLeft: "50px" }}>
+                    <IconButton>
+                      <CompareArrowsIcon
+                        onClick={(e) =>
+                          handleOpenDialogBox({ flag: "transfer" })
+                        }
+                        sx={{
+                          color: "black",
+                          fontSize: "15px",
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Action">
+                    <IconButton>
+                      <CreateOutlinedIcon
+                        onClick={(e) =>
+                          handleOpenDialogBox({ flag: "assignee" })
+                        }
+                        sx={{ color: "black", fontSize: "15px" }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -296,38 +324,6 @@ const handleOpenDialogBox = () =>{
                   display: "flex",
                   ml: 2,
                   width: 360,
-                  background: "#F4FBFF",
-                }}
-              >
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography
-                    component="div"
-                    variant="h5"
-                    sx={{ ml: 2, color: "black" }}
-                  >
-                    <img src={Pdf} alt="pdf" style={styles.media} />
-                    {data.fileupload}
-                    attachment_2345.pdf <SaveAltIcon sx={{ ml: 3 }} />
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="text.secondary"
-                    component="div"
-                    sx={{ ml: 9 }}
-                  >
-                    1.23MB .18/03/22
-                  </Typography>
-                  {/* </CardContent> */}
-                </Box>
-              </Card>
-            </Grid>
-
-            <Grid item xs={8} px={4}>
-              <Card
-                sx={{
-                  display: "flex",
-                  ml: 2,
-                  width: 360,
                   spacing: 3,
                   background: "#F4FBFF",
                 }}
@@ -341,7 +337,21 @@ const handleOpenDialogBox = () =>{
                     sx={{ ml: 2, color: "black" }}
                   >
                     <img src={Pdf} alt="pdf" style={styles.media} />
-                    attachment_2345.pdf <SaveAltIcon sx={{ ml: 3 }} />
+                    {data &&
+                      data.fileupload &&
+                      data.fileupload[0] &&
+                      data.fileupload[0].imageName}
+                    <SaveAltIcon
+                      sx={{ ml: 9 }}
+                      onClick={() => {
+                        getImageURL(
+                          data &&
+                            data.fileupload &&
+                            data.fileupload[0] &&
+                            data.fileupload[0].imageID
+                        );
+                      }}
+                    />
                   </Typography>
                   <Typography
                     variant="subtitle1"
@@ -399,7 +409,7 @@ const handleOpenDialogBox = () =>{
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  03/27/2022 , 11.20 AM
+                  {data.createdAt}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -415,7 +425,7 @@ const handleOpenDialogBox = () =>{
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  03/28/2022 , 01.50 PM
+                  {data.updatedAt}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -431,7 +441,7 @@ const handleOpenDialogBox = () =>{
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  03/31/2022 , 04.34 PM
+                  {data.solvedAt}
                 </TableCell>
               </TableRow>
             </Table>

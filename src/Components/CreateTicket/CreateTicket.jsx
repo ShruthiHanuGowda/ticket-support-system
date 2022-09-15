@@ -32,6 +32,7 @@ import { useEffect } from "react";
 
 export const CreateTicket = () => {
   const theme = useTheme();
+  const [imageArr,setImageArr]=useState([]);
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
 
@@ -55,23 +56,37 @@ export const CreateTicket = () => {
       ...prevState,
       [e.target.name]: e.target.value,
     }));
-    const File = e.target.files;
-    console.log("Event===== ", e.target.files);
   };
-
+  const uploadFile = async (e) => {
+    e.preventDefault();
+    const formData =await e.target.files;
+   
+    await axios
+      .post("/upload",formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      .then(({data}) => {
+        console.log("res::::", data);
+        setImageArr([...data.data])
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(input);
     await axios.post("http://localhost:8000/ticket", {
       name: String(input.name),
       department: String(input.department),
-      fileupload: String(input.fileupload),
+      fileupload: imageArr,
       issuetype: String(input.issuetype),
       message: String(input.message),
-      status: String("open"),
+      status: String("Open"),
+    
     });
   };
-  console.log("Ticket Add Successfully!!");
+  // console.log("Ticket Add Successfully!!");
   return (
     (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
     (
@@ -143,15 +158,16 @@ export const CreateTicket = () => {
 
             <Grid item md={6} xs={12}>
               <InputLabel>
-                File Upload<span style={{ color: "red" }}>*</span>
+                File Upload {imageArr.length}<span style={{ color: "red" }}>*</span>
               </InputLabel>
 
               <TextField
                 type="file"
+                multiple
                 placeholder="Browser Files"
                 name="fileupload"
                 value={input.fileupload}
-                onChange={handleChange}
+                onChange={uploadFile}
                 sx={{
                   background: "#F4FBFF",
                   width: "100%",
