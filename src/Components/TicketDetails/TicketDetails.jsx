@@ -24,6 +24,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import DailogBoxModel from "../TicketDetails/dailogBox";
+import Chip from "@mui/material/Chip";
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+
+const ListItem = styled("li")(({ theme }) => ({
+  margin: theme.spacing(0.5),
+}));
 
 export const TicketDetails = () => {
   const [data, setData] = useState({});
@@ -31,9 +38,7 @@ export const TicketDetails = () => {
   const [statusOpen, setStatusOpen] = React.useState(false);
   const [flagValue, setFlagValue] = useState(null);
 
-  const handleStatusClose = (value) => {
-    setStatusOpen(false);
-  };
+   
   const id = useParams().id;
 
   useEffect(() => {
@@ -236,29 +241,21 @@ export const TicketDetails = () => {
                   textalign="left"
                 >
                   Assignee:
-                  <Tooltip title="Action" sx={{ marginLeft: "50px" }}>
-                    <IconButton>
-                      <CompareArrowsIcon
-                        onClick={(e) =>
-                          handleOpenDialogBox({ flag: "transfer" })
-                        }
-                        sx={{
-                          color: "black",
-                          fontSize: "15px",
-                        }}
-                      />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Action">
-                    <IconButton>
-                      <CreateOutlinedIcon
-                        onClick={(e) =>
-                          handleOpenDialogBox({ flag: "assignee" })
-                        }
-                        sx={{ color: "black", fontSize: "15px" }}
-                      />
-                    </IconButton>
-                  </Tooltip>
+                  <IconButton>
+                    <CompareArrowsIcon
+                      onClick={(e) => handleOpenDialogBox({ flag: "transfer" })}
+                      sx={{
+                        color: "black",
+                        fontSize: "15px",
+                      }}
+                    />
+                  </IconButton>
+                  <IconButton>
+                    <CreateOutlinedIcon
+                      onClick={(e) => handleOpenDialogBox({ flag: "assignee" })}
+                      sx={{ color: "black", fontSize: "15px" }}
+                    />
+                  </IconButton>
                 </TableCell>
               </TableRow>
               <TableRow>

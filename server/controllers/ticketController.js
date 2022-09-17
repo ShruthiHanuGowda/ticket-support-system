@@ -7,7 +7,7 @@ const userDataService = require("../services/userDataService");
 const express = require("express");
 const { ticketModel } = require("../models/ticketSchema");
 const { default: axios } = require("axios");
-const { getImgUrl } = require("../services/cloudinary");
+const { getImgUrl ,deleteFile} = require("../services/cloudinary");
 //const multer = require("multer");
 const app = express.Router();
 
@@ -65,14 +65,58 @@ const getTIcketById = async (req, res, next) => {
   return res.status(200).json({ ticket });
 };
 
+
+
+
+// @@@@@@@@@@@@@@@@@@@@@@ ticketId @@@@@@@@@@@@@@@@@@@@
+const ticketId = async (req , res) =>{
+
+ticketModel.findOneAndUpdate(
+  {id:"autoval"},
+  {"$inc":{"seq":1}},
+  {new:true},(err,cd)=>{
+
+    console.log("ticket value" , cd)
+
+    if(cd==null)
+    {      const newval =new ticketModel({id:"autoval" , seq:1})
+      newval.save()
+
+    }
+  }
+)
+
+
+
+
+
+    const data= new ticketModel({
+      ticketId:req.body.ticketId,
+      name:  req.body.name,
+      department: req.body.department,
+      fileupload:req.body.fileupload,
+      issuetype:req.body.issuetype,
+      message:req.body.message,
+      status:req.body.status,
+      createdAt: { type: String },
+      updatedAt: { type: String },
+      solvedAt: { type: String },
+    })
+    data.save()
+    res.send("Add id!!!!")
+
+}
+
+
 const addTicket = async (req, res) => {
   // console.log("body reqyest  data===== " , req.body)
-  const { name, department, fileupload, issuetype, message, status } = req.body;
+  const { ticketId, name, department, fileupload, issuetype, message, status } = req.body;
   // console.log(ticketExist, "ticketExist");
 
   try {
     let ticket;
     ticket = new ticketModel({
+      ticketId,
       name,
       department,
       fileupload,
@@ -110,8 +154,16 @@ const UpdateTicket = async (req, res) => {
     ErrorResponse(res, "something went wrong " + ex.message);
   }
 };
+const DeleteAttechment =async (req,res)=>{
+  const id = req.params.id;
+  console.log('id here received:::::::::::',id)
+  const data=await deleteFile(id);
+  res.status(200).json({data});
+}
 exports.getAllTIcketData = getAllTIcketData;
 exports.addTicket = addTicket;
 exports.getTIcketById = getTIcketById;
 exports.UpdateTicket = UpdateTicket;
 exports.getImageById = getImageById;
+exports.DeleteAttechment=DeleteAttechment;
+exports.ticketId=ticketId;

@@ -9,7 +9,7 @@ const path = require("path");
 const checkUserAuth = require("../middlewares/tokenMiddlewares");
 
 const multer = require("multer");
-const { uploadFiles } = require("../services/cloudinary");
+const { uploadFiles ,deleteFile} = require("../services/cloudinary");
 
 router.use(express.static(__dirname));
 const storage = multer.diskStorage({
@@ -42,7 +42,10 @@ router.get("/getSingleTicket/:id", ticketController.getTIcketById);
 router.get("/getImageUrl/:id", ticketController.getImageById);
 router.put("/ticket/Update-ticket/:id", ticketController.UpdateTicket);
 router.get("/getUser/:role?", checkUserAuth, userController.getAllUserData);
+router.post("/ticketid", ticketController.ticketId);
 //router.get("/viewTicket/:id" , ticketController.getTicketByID)
+
+router.get("/deleteImageIncloudy/:id", ticketController.DeleteAttechment);
 router.post("/upload", upload.any(), async function (req, res, next) {
   console.log("body received", req.files[0]);
 

@@ -23,8 +23,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
+import { styled } from "@mui/material/styles";
+import Chip from "@mui/material/Chip";
+import Paper from "@mui/material/Paper";
 
-//   import Radio from '@mui/material/Radio';
+const ListItem = styled("li")(({ theme }) => ({
+  margin: theme.spacing(0.5),
+}));
+
 //   import RadioGroup from '@mui/material/RadioGroup';
 //   import FormControlLabel from '@mui/material/FormControlLabel';
 // import FormControl from '@mui/material/FormControl';
@@ -33,8 +39,11 @@ import { useEffect } from "react";
 export const CreateTicket = () => {
   const theme = useTheme();
   const [imageArr, setImageArr] = useState([]);
+  console.log(imageArr)
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
+
+  
 
   const [input, setInput] = useState({
     name: "",
@@ -48,7 +57,8 @@ export const CreateTicket = () => {
     const userdata = JSON.parse(sessionStorage.getItem("userData"));
     console.log(userdata);
     setInput(userdata);
-  }, []);
+
+  }, [imageArr]);
   //   console.log(input)
 
   const handleChange = (e) => {
@@ -57,6 +67,7 @@ export const CreateTicket = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
   const uploadFile = async (e) => {
     e.preventDefault();
     const formData = await e.target.files;
@@ -85,6 +96,31 @@ export const CreateTicket = () => {
       status: String("Open"),
     });
   };
+  // const [chipData, setChipData] = React.useState([
+  //   { key: 0, label: "Angular" },
+  //   { key: 1, label: "jQuery" },
+  //   { key: 2, label: "Polymer" },
+  // ]);
+
+  // const handleDelete = (chipToDelete) => () => {
+  //   setChipData((chips) =>
+  //     chips.filter((chip) => chip.key !== chipToDelete.key)
+  //   );
+  // };
+  const handlerDeleteAttechmentChip =async (id)=>{
+    console.log('id in console ::::::::::',id)
+    await axios
+      .get(`/deleteImageIncloudy/${id}`)
+      .then(({ data }) => {
+        console.log("res::::", data);
+         setImageArr((chips) =>
+         chips.filter((chip) => chip.imageID !== id));
+        // setImageArr([...data.data]);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }
   // console.log("Ticket Add Successfully!!");
   return (
     (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
@@ -110,12 +146,13 @@ export const CreateTicket = () => {
                 Full Name<span style={{ color: "red" }}>*</span>
               </InputLabel>
               <TextField
+     
                 name="name"
                 value={input.name}
                 placeholder="Name"
-                //  onChange={handleChange}
                 onChange={(e) => setInput(e.target.value)}
                 sx={{
+                  
                   background: "#F4FBFF",
                   width: "100%",
                   [theme.breakpoints.up("md")]: {
@@ -163,7 +200,8 @@ export const CreateTicket = () => {
 
               <TextField
                 type="file"
-                multiple
+                // multiple
+                // accept="image/*"
                 placeholder="Browser Files"
                 name="fileupload"
                 value={input.fileupload}
@@ -176,7 +214,17 @@ export const CreateTicket = () => {
                     width: "491px  !important",
                   },
                 }}
-                InputProps={{
+                inputProps={{
+                  multiple: true ,
+                  accept:["application/pdf","image/*"],
+                  // endAdornment: (
+                  //       <InputAdornment position="start">
+                  //         <FolderOpenIcon type="file" />
+                  //       </InputAdornment>
+                  //     ),
+                }}
+                InputProps={{ 
+                 
                   endAdornment: (
                     <InputAdornment position="start">
                       <FolderOpenIcon type="file" />
@@ -184,8 +232,41 @@ export const CreateTicket = () => {
                   ),
                 }}
               />
-            </Grid>
+              <Paper
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                  listStyle: "none",
+                  p: 0.5,
+                  m: 1,
+                  ml: 0,
+                  width: "77%",
+                  boxShadow: "none"
+                }}
+                component="ul"
+              >
+                {imageArr.map((data) => {
+                  let icon;
 
+                  return (
+                    <ListItem key={data.imageID}>
+                      <Chip
+                      
+                      sx={{backgroundColor:"#7DBA00", color:"#0E2D7B"  }}
+                        label={data.imageName}
+                        onDelete={()=>handlerDeleteAttechmentChip(data.imageID)
+                          // data.label === "React"
+                          //   ? undefined
+                          //   : handleDelete(data)
+                        }
+                      />
+                    </ListItem>
+                  );
+                })}
+              </Paper>
+            </Grid>
+ 
             <Grid item md={6} xs={12}>
               <InputLabel htmlFor="grouped-select">
                 Issue Type <span style={{ color: "red" }}>*</span>

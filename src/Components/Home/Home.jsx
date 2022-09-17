@@ -260,11 +260,13 @@ export const Home = () => {
                   {row.status}
                 </TableCell>
                 <TableCell align="center">
-                  <Tooltip title="Action">
+             
+             
                     <IconButton onClick={(e) => handleClick(e, row)}>
                       <MoreVertIcon sx={{ color: "#777777" }} />
                     </IconButton>
-                  </Tooltip>
+                
+                
                   <Menu
                     id="basic-menu"
                     sx={{
