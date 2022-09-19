@@ -26,7 +26,7 @@ import { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
-import toast, { Toaster } from "react-hot-toast";
+
 
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
@@ -121,10 +121,8 @@ export const CreateTicket = () => {
   };
   // console.log("Ticket Add Successfully!!");
   return (
-    <>
     (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
     (
-      <Toaster />
       <Box
         noValidate
         autoComplete="off"
@@ -351,6 +349,5 @@ export const CreateTicket = () => {
         </Form>
       </Box>
     )
-    </>
   );
 };
