@@ -320,9 +320,17 @@ export const CreateEndUser = () => {
                   onChange={onchageTextFilid}
                   type="text"
                   required
+                  InputProps={{ disableUnderline: true }}
+                  variant="standard"
                   sx={{
+                    // border: "none",
+                    marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
+                    height: 50,
+                    justifyContent: "center",
+                    paddingLeft: "15px",
+                    borderRadius: "5px",
                     [theme.breakpoints.up("md")]: {
                       width: "491px  !important",
                     },
@@ -340,9 +348,17 @@ export const CreateEndUser = () => {
                   type="email"
                   required
                   onChange={onchageTextFilid}
+                  InputProps={{ disableUnderline: true }}
+                  variant="standard"
                   sx={{
+                    // border: "none",
+                    marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
+                    height: 50,
+                    justifyContent: "center",
+                    paddingLeft: "15px",
+                    borderRadius: "5px",
                     [theme.breakpoints.up("md")]: {
                       width: "491px  !important",
                     },
@@ -361,9 +377,17 @@ export const CreateEndUser = () => {
                   id="grouped-select"
                   label="Grouping"
                   placeholder="Select Position"
+                  InputProps={{ disableUnderline: true }}
+                  variant="standard"
                   sx={{
+                    // border: "none",
+                    marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
+                    height: 50,
+                    justifyContent: "center",
+                    paddingLeft: "15px",
+                    borderRadius: "5px",
                     [theme.breakpoints.up("md")]: {
                       width: "491px  !important",
                     },
@@ -392,11 +416,19 @@ export const CreateEndUser = () => {
                   onChange={onchageTextFilid}
                   id="grouped-select"
                   label="Grouping"
+                  InputProps={{ disableUnderline: true }}
+                  variant="standard"
                   sx={{
+                    // border: "none",
+                    marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
+                    height: 50,
+                    justifyContent: "center",
+                    paddingLeft: "15px",
+                    borderRadius: "5px",
                     [theme.breakpoints.up("md")]: {
-                      width: "491px ",
+                      width: "491px  !important",
                     },
                   }}
                 >
