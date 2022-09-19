@@ -26,6 +26,7 @@ import { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
+import toast, { Toaster } from "react-hot-toast";
 
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
@@ -39,11 +40,9 @@ const ListItem = styled("li")(({ theme }) => ({
 export const CreateTicket = () => {
   const theme = useTheme();
   const [imageArr, setImageArr] = useState([]);
-  console.log(imageArr)
+  console.log(imageArr);
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
-
-  
 
   const [input, setInput] = useState({
     name: "",
@@ -57,13 +56,13 @@ export const CreateTicket = () => {
     const userdata = JSON.parse(sessionStorage.getItem("userData"));
     console.log(userdata);
     setInput(userdata);
-
   }, [imageArr]);
   //   console.log(input)
 
   const handleChange = (e) => {
     setInput((prevState) => ({
       ...prevState,
+
       [e.target.name]: e.target.value,
     }));
   };
@@ -107,24 +106,25 @@ export const CreateTicket = () => {
   //     chips.filter((chip) => chip.key !== chipToDelete.key)
   //   );
   // };
-  const handlerDeleteAttechmentChip =async (id)=>{
-    console.log('id in console ::::::::::',id)
+  const handlerDeleteAttechmentChip = async (id) => {
+    console.log("id in console ::::::::::", id);
     await axios
       .get(`/deleteImageIncloudy/${id}`)
       .then(({ data }) => {
         console.log("res::::", data);
-         setImageArr((chips) =>
-         chips.filter((chip) => chip.imageID !== id));
+        setImageArr((chips) => chips.filter((chip) => chip.imageID !== id));
         // setImageArr([...data.data]);
       })
       .catch((err) => {
         console.log("error", err);
       });
-  }
+  };
   // console.log("Ticket Add Successfully!!");
   return (
+    <>
     (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
     (
+      <Toaster />
       <Box
         noValidate
         autoComplete="off"
@@ -140,19 +140,21 @@ export const CreateTicket = () => {
           Create Ticket
         </Typography>
         <Form enctype="multipart/form-data" onSubmit={handleSubmit}>
-          <Grid container justify="center" spacing={4}>
-            <Grid item md={6} xs={12}>
-              <InputLabel spacing={2}>
+          <Grid container justify="center" spacing={6}>
+            <Grid item md={6} xs={12} >
+              <InputLabel  >
                 Full Name<span style={{ color: "red" }}>*</span>
-              </InputLabel>
-              <TextField
-     
+              </InputLabel >
+              <TextField 
+            
+                inputProps={{ readOnly: true }}
                 name="name"
                 value={input.name}
                 placeholder="Name"
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) =>
+                  setInput(e.target.value) ? e.preventDefault() : ""
+                }
                 sx={{
-                  
                   background: "#F4FBFF",
                   width: "100%",
                   [theme.breakpoints.up("md")]: {
@@ -215,16 +217,15 @@ export const CreateTicket = () => {
                   },
                 }}
                 inputProps={{
-                  multiple: true ,
-                  accept:["application/pdf","image/*"],
+                  multiple: true,
+                  accept: ["application/pdf", "image/*"],
                   // endAdornment: (
                   //       <InputAdornment position="start">
                   //         <FolderOpenIcon type="file" />
                   //       </InputAdornment>
                   //     ),
                 }}
-                InputProps={{ 
-                 
+                InputProps={{
                   endAdornment: (
                     <InputAdornment position="start">
                       <FolderOpenIcon type="file" />
@@ -242,7 +243,7 @@ export const CreateTicket = () => {
                   m: 1,
                   ml: 0,
                   width: "77%",
-                  boxShadow: "none"
+                  boxShadow: "none",
                 }}
                 component="ul"
               >
@@ -252,10 +253,10 @@ export const CreateTicket = () => {
                   return (
                     <ListItem key={data.imageID}>
                       <Chip
-                      
-                      sx={{backgroundColor:"#7DBA00", color:"#0E2D7B"  }}
+                        sx={{ backgroundColor: "#7DBA00", color: "#0E2D7B" }}
                         label={data.imageName}
-                        onDelete={()=>handlerDeleteAttechmentChip(data.imageID)
+                        onDelete={
+                          () => handlerDeleteAttechmentChip(data.imageID)
                           // data.label === "React"
                           //   ? undefined
                           //   : handleDelete(data)
@@ -266,7 +267,7 @@ export const CreateTicket = () => {
                 })}
               </Paper>
             </Grid>
- 
+
             <Grid item md={6} xs={12}>
               <InputLabel htmlFor="grouped-select">
                 Issue Type <span style={{ color: "red" }}>*</span>
@@ -287,6 +288,8 @@ export const CreateTicket = () => {
                   },
                 }}
               >
+                {console.log("hiiiiiiiiiiiiiiiii", input.issuetype === "")}
+
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
@@ -348,5 +351,6 @@ export const CreateTicket = () => {
         </Form>
       </Box>
     )
+    </>
   );
 };

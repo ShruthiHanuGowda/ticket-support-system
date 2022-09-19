@@ -68,16 +68,17 @@ const getTIcketById = async (req, res, next) => {
 
 
 
-// @@@@@@@@@@@@@@@@@@@@@@ ticketId @@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@ ticketId @@@@@@@@@@@@@@@@@@@@ //
 const ticketId = async (req , res) =>{
 
 ticketModel.findOneAndUpdate(
+  
   {id:"autoval"},
   {"$inc":{"seq":1}},
   {new:true},(err,cd)=>{
 
     console.log("ticket value" , cd)
-
+            
     if(cd==null)
     {      const newval =new ticketModel({id:"autoval" , seq:1})
       newval.save()

@@ -7,8 +7,6 @@ import {
   FormGroup,
   Grid,
   IconButton,
-  InputAdornment,
-  InputBase,
   Menu,
   MenuItem,
   Table,
@@ -18,14 +16,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 // import { makeStyles } from '@material-ui/core/styles';
 
 import { styled } from "@mui/material/styles";
-import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import FilterAltOffSharpIcon from "@mui/icons-material/FilterAltOffSharp";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -72,20 +68,7 @@ export const Home = () => {
   useEffect(() => {
     fecthUserData([]);
   }, []);
-  // const fecthUserData = async (filterValue) => {
-  //   console.log('filterValue received :', filterValue)
-  //   const { data } = await axios.post(`/getDataByFilter`, {
-  //     headers: {
-  //       Authorization: `Bearer ${sessionStorage.getItem("token")}`
-  //     },
-  //     flags: filterValue
-  //   });
-  //   console.log('data from api', data.data)
-  //   setData(data.data);
-
-  //   // .then((res)=> console.log(res.data.data));
-  // };
-
+  
   const fecthUserData = async () => {
     const getTicketData = await axios.get("/getTicket");
     console.log(getTicketData);
@@ -248,7 +231,7 @@ export const Home = () => {
                 <TableCell align="center">{row.department}</TableCell>
                 <TableCell align="center">{row.name}</TableCell>
                 {/* <TableCell align="center">{row.issuetype}</TableCell> */}
-                <TableCell align="center">{row.issuetype}</TableCell>
+                <TableCell align="center">{row?.issuetype}</TableCell>
                 <TableCell
                   align="center"
                   sx={{
