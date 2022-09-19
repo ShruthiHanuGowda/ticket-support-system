@@ -10,21 +10,16 @@ const { default: axios } = require("axios");
 const { Navigate } = require("react-router-dom");
 const app = express.Router();
 const bcrypt = require("bcrypt");
-
 app.get("/", async (req, res) => {
   const data = await userModel.find();
-
   return successResponseWithData(res, "users array", data);
 });
-
 const getAllUserData = async (req, res, next) => {
   const Role = req.params.role;
-
   console.log("getAllUserData", Role);
   // if (typeof Role == undefined) return res.send({ message: 'no option selected' })
   const data = await userModel.find({ role: Role });
   console.warn(data);
-
   return successResponseWithData(res, "users array", data);
 };
 const getUserByStatus = async (req, res) => {
@@ -118,14 +113,12 @@ const getUserById = async (req, res, next) => {
   }
   return res.status(200).json({ user });
 };
-
 const UpdateUser = async (req, res) => {
   const _id = req.params.id;
   try {
     if (_id) {
       const data = req.body;
       await userDataService.updateUser(data, _id);
-
       return res.status(200).json({ message: "user updated " });
       // return successResponseWithData(res, 'user updated', user_resp)
     } else return successResponse(res, "sorry user couldnt be updated");
@@ -154,7 +147,6 @@ const addUser = async (req, res) => {
       password: hashPassword,
     });
     await user.save();
-
     if (!user) {
       return res.status(500).json({ message: "unable to add" });
     }
@@ -163,7 +155,6 @@ const addUser = async (req, res) => {
     console.log(err, "eorrr");
   }
 };
-
 const deleteUser = async (req, res, next) => {
   const id = req.params.deleteId;
   console.log(id);
@@ -191,34 +182,29 @@ const deleteUser = async (req, res, next) => {
 //         ErrorResponse(res, 'something went wrong '+ex.message);
 //     }
 // });
-
 app.put("/:id", async (req, res) => {
   const _id = req.params.id;
   try {
     if (_id) {
       const data = req.body;
       const user_resp = await userDataService.updateUser(data, _id);
-
       return successResponseWithData(res, "user updated", user_resp);
     } else return successResponse(res, "sorry user couldnt be updated");
   } catch (ex) {
     ErrorResponse(res, "something went wrong " + ex.message);
   }
 });
-
 app.delete("/:id", async (req, res) => {
   const _id = req.params.id;
   try {
     if (_id) {
       const user_resp = await userDataService.deleteUser(_id);
-
       return successResponseWithData(res, "user deleted", user_resp);
     } else return successResponse(res, "sorry user couldnt be deleted");
   } catch (ex) {
     ErrorResponse(res, "something went wrong " + ex.message);
   }
 });
-
 exports.addUser = addUser;
 exports.getAllUserData = getAllUserData;
 exports.deleteUser = deleteUser;

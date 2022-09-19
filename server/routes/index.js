@@ -7,10 +7,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const checkUserAuth = require("../middlewares/tokenMiddlewares");
-
 const multer = require("multer");
-const { uploadFiles ,deleteFile} = require("../services/cloudinary");
-
+const { uploadFiles, deleteFile } = require("../services/cloudinary");
 router.use(express.static(__dirname));
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -19,16 +17,13 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     // console.log("filename", file);
-
     cb(
       null,
       new Date().toISOString().replace(/:/g, "-") + "-" + file.originalname
     );
   },
 });
-
 const upload = multer({ storage });
-
 // router.use()
 /* GET home page. */
 router.get("/", (req, res) => res.send("Hello World"));
@@ -46,21 +41,17 @@ router.post("/ticketid", ticketController.ticketId);
 router.get("/deleteImageIncloudy/:id", ticketController.DeleteAttechment);
 router.post("/upload", upload.any(), async function (req, res, next) {
   console.log("body received", req.files[0]);
-
   console.log("upload api called");
   let tempArr = [];
-
   for (let i of req.files) {
     let response = await uploadFiles(i);
     console.log("data : ", response);
     tempArr.push({ imageID: response.public_id, imageName: i.originalname });
   }
-
   res
     .status(200)
     .json({ message: "file upload successfully!!!", data: tempArr });
 });
-
 router.post("/login", async (req, res) => {
   const email = req.body.userName;
   const password = req.body.password;
@@ -78,7 +69,6 @@ router.post("/login", async (req, res) => {
             process.env.JWT_SECRET_KEY,
             { expiresIn: "6h" }
           );
-
           return res
             .status(200)
             .json({ message: "login sucess", token, userLoginData });
@@ -91,11 +81,9 @@ router.post("/login", async (req, res) => {
         return res.status(404).json({ message: "not register" });
       }
     });
-
   if (!userLoginData) {
     return res.status(400).json({ message: "Credentials does not match" });
   }
 });
-
 router.delete("/user/:deleteId", userController.deleteUser);
 module.exports = router;

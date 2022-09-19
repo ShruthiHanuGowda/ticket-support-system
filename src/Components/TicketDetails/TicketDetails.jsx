@@ -10,7 +10,6 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-
 import Divider from "@mui/material/Divider";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import { useTheme } from "@mui/material/styles";
@@ -27,24 +26,19 @@ import DailogBoxModel from "../TicketDetails/dailogBox";
 import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
-
 export const TicketDetails = () => {
   const [data, setData] = useState({});
   const [edit, setedit] = useState(false);
   const [statusOpen, setStatusOpen] = React.useState(false);
   const [flagValue, setFlagValue] = useState(null);
-
   const id = useParams().id;
-
   useEffect(() => {
     console.count();
     fecthTicketDetail();
   }, []);
-
   const fecthTicketDetail = async () => {
     await axios.get(`/getSingleTicket/${id}`).then((res) => {
       setData(res.data.ticket);
@@ -52,16 +46,13 @@ export const TicketDetails = () => {
   };
   const handleOpenDialogBox = (flag) => {
     console.log("=--------", flag.flag);
-
     setedit(true);
     setStatusOpen(true);
     setFlagValue(flag.flag);
-
     // return(
     //   <DailogBoxModel  seteOpen={true}/>
     // )
   };
-
   const getImageURL = (imageIdArg) => {
     axios
       .get(`/getImageUrl/${imageIdArg}`)
@@ -122,7 +113,6 @@ export const TicketDetails = () => {
       <Typography variant="h6" sx={{ ml: 1, fontSize: 25, fontweight: 600 }}>
         Ticket ID: #{data._id}
       </Typography>
-
       <Grid container spacing={6} justify="space-between">
         <Grid item xs={6} md={6}>
           <Grid container alignItems={"center "}>
@@ -146,7 +136,6 @@ export const TicketDetails = () => {
               <Divider></Divider>
             </Grid>
           </Grid>
-
           <Grid item xs={6} md={6}>
             <Table
               sx={{
@@ -214,7 +203,6 @@ export const TicketDetails = () => {
             </Table>
           </Grid>
         </Grid>
-
         <Grid item xs={9} md={6}>
           <Grid container alignItems={"center"}>
             <Grid item xs={1} md={1}>
@@ -237,7 +225,6 @@ export const TicketDetails = () => {
               <Divider></Divider>
             </Grid>
           </Grid>
-
           <Grid item xs={6} md={6}>
             <Table
               sx={{ minWidth: 1, marginLeft: "5px", marginTop: "1px" }}
@@ -318,47 +305,45 @@ export const TicketDetails = () => {
           </Grid>
           <Grid container spacing={1} xs={8} md={6}>
             <Grid item xs={8} px={4}>
-              {data && data.fileupload && data.fileupload.map((fileData)=>
-                <Card
-                sx={{
-                  display: "flex",
-                  ml: 2,
-                  mt:1,
-                  width: 360,
-                  spacing: 3,
-                  background: "#F4FBFF",
-                }}
-              >
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography
-                    component="div"
-                    variant="h5"
-                    sx={{ ml: 2, color: "black" }}
+              {data &&
+                data.fileupload &&
+                data.fileupload.map((fileData) => (
+                  <Card
+                    sx={{
+                      display: "flex",
+                      ml: 2,
+                      mt: 1,
+                      width: 360,
+                      spacing: 3,
+                      background: "#F4FBFF",
+                    }}
                   >
-                    <img src={Pdf} alt="pdf" style={styles.media} />
-                    {fileData &&
-                      fileData.imageName}
-                    <SaveAltIcon
-                      sx={{ ml: 2 }}
-                      onClick={() => {
-                        getImageURL(
-                          fileData && fileData.imageID
-                        );
-                      }}
-                    />
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="text.secondary"
-                    component="div"
-                    sx={{ ml: 9 }}
-                  >
-                    1.23MB .18/03/22
-                  </Typography>
-                </Box>
-              </Card>
-             )}
-              
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
+                      <Typography
+                        component="div"
+                        variant="h5"
+                        sx={{ ml: 2, color: "black" }}
+                      >
+                        <img src={Pdf} alt="pdf" style={styles.media} />
+                        {fileData && fileData.imageName}
+                        <SaveAltIcon
+                          sx={{ ml: 2 }}
+                          onClick={() => {
+                            getImageURL(fileData && fileData.imageID);
+                          }}
+                        />
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="text.secondary"
+                        component="div"
+                        sx={{ ml: 9 }}
+                      >
+                        1.23MB .18/03/22
+                      </Typography>
+                    </Box>
+                  </Card>
+                ))}
             </Grid>
           </Grid>
         </Grid>

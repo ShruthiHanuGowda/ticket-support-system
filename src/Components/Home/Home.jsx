@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 // import { makeStyles } from '@material-ui/core/styles';
-
 import { styled } from "@mui/material/styles";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import FilterAltOffSharpIcon from "@mui/icons-material/FilterAltOffSharp";
@@ -32,16 +31,13 @@ import { useNavigate, Link, Navigate } from "react-router-dom";
 import SearchBar from "../Common/SearchBar";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
 const CheckboxFiled = styled(FormControlLabel)({
   marginRight: "30px",
   color: "#777777",
 });
-
 function createData(srno, department, name, position, status) {
   return { srno, department, name, position, status };
 }
-
 const rows = [
   createData("1", "Sales", "John Doe", "Sales Executive", "Open"),
   createData("#2", "Sales", "bharat Doe", "Sales Executive", "Hold"),
@@ -51,7 +47,6 @@ const rows = [
   createData("#24345", "Sales", "John Doe", "Sales Executive", "Open"),
   createData("#23545", "Sales", "John Doe", "Sales Executive", "Open"),
 ];
-
 export const Home = () => {
   const navigate = useNavigate();
   //----------------for CheckBox Functionlity
@@ -68,7 +63,6 @@ export const Home = () => {
   useEffect(() => {
     fecthUserData([]);
   }, []);
-  
   const fecthUserData = async () => {
     const getTicketData = await axios.get("/getTicket");
     console.log(getTicketData);
@@ -85,7 +79,6 @@ export const Home = () => {
       // console.log('exists')
     } else {
       console.log("not exists");
-
       // setSelectedOptions((prevState) => [...prevState, filterValue]);
       selectedOptions.push(filterValue);
     }
@@ -95,7 +88,6 @@ export const Home = () => {
   // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [SingleData, setSingleData] = React.useState(null);
-
   const open = Boolean(anchorEl);
   console.log(anchorEl);
   const handleClick = (e, row) => {
@@ -243,13 +235,9 @@ export const Home = () => {
                   {row.status}
                 </TableCell>
                 <TableCell align="center">
-             
-             
-                    <IconButton onClick={(e) => handleClick(e, row)}>
-                      <MoreVertIcon sx={{ color: "#777777" }} />
-                    </IconButton>
-                
-                
+                  <IconButton onClick={(e) => handleClick(e, row)}>
+                    <MoreVertIcon sx={{ color: "#777777" }} />
+                  </IconButton>
                   <Menu
                     id="basic-menu"
                     sx={{

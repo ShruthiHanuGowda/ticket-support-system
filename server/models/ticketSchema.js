@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 //const ObjectId = mongoose.Schema.Types.ObjectId;
-
 const ticketSchema = mongoose.Schema({
   ticketId: {
     type: Number,
@@ -25,5 +24,4 @@ const ticketSchema = mongoose.Schema({
   updatedAt: { type: String },
   solvedAt: { type: String },
 });
-
 module.exports.ticketModel = mongoose.model("ticket", ticketSchema, "ticket");

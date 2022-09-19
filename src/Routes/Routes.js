@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Routes as Switch, Route } from "react-router-dom";
-
 import { Header } from "../Components/Common/Header/Header";
 // import { Footer } from "../Components/Common/Footer/Footer"
 import { Home } from "../Components/Home/Home";
@@ -13,7 +12,6 @@ import { CreateEndUser } from "../Components/CreateEndUser/CreateEndUser";
 import { TicketDetails } from "../Components/TicketDetails/TicketDetails";
 import { CreateTicket } from "../Components/CreateTicket/CreateTicket";
 import RequireAuth from "../Components/Common/RequireAuth";
-
 export const Router = () => {
   const [loginUserData, setloginUserData] = useState({});
   const [isLoggedin, setIsLoggedin] = useState(
@@ -22,11 +20,9 @@ export const Router = () => {
   useEffect(() => {
     getRole();
   }, []);
-
   const getRole = () => {
     setloginUserData(sessionStorage.getItem("loginUserData"));
   };
-
   // const [isclient , setIsClient] =useState(sessionStorage.getItem('role')=='client'?true:false)
   // if(sessionStorage.getItem('loginUserData')){
   return (
@@ -37,7 +33,6 @@ export const Router = () => {
   <Route path="/create-ticket" exact element={<CreateTicket />} />
   <Route path="/client-dashboard" exact element={<Home loggedin={isLoggedin} />} />
 </Switch> */}
-
       {/* <Switch>
         <Route path="/" exact element={<Login />}/>
          <Route path="/" exact element={<Header setIsLoggedin={setIsLoggedin} />}>
@@ -50,11 +45,7 @@ export const Router = () => {
           <Route path="/create-enduser/:id" exact element={<CreateEndUser />}/> 
           <Route path="/create-ticket" exact element={<CreateTicket loggedin={isLoggedin}/>} />
         </Route>     
-
-       
-
       </Switch> */}
-
       <Switch>
         {/* public routes */}
         <Route path="/" exact element={<Login />} />
@@ -117,7 +108,6 @@ export const Router = () => {
           </Route>
         </Route>
       </Switch>
-
       {/*----------------------- for comment */}
       {/* {
         loginUSerData.role==='admin' ?
@@ -131,17 +121,12 @@ export const Router = () => {
           <Route path="/manage-user/create-enduser" exact element={<CreateEndUser />}/>
           <Route path="/create-enduser/:id" exact element={<CreateEndUser />}/> 
           <Route path="/create-ticket" exact element={<CreateTicket loggedin={isLoggedin}/>} />
-         
-
         </Route>
         </Switch>
       : loginUSerData.role==='user' ?
       <Switch>
         <Route path="/"  exact element={<Header setIsLoggedin={setIsLoggedin} />}>
-        
               <Route path="/" exact element={<CreateTicket loggedin={isLoggedin}/>} />
-             
-
         </Route>
         </Switch>
       :loginUSerData.role==='client' ?
@@ -149,7 +134,6 @@ export const Router = () => {
       <Route path="/" exact element={<Header setIsLoggedin={setIsLoggedin} />}>
         <Route path="/" exact element={<Home loggedin={isLoggedin} />} />
         <Route path="/ticket-details" exact element={<TicketDetails />} />
-
       </Route>
       </Switch>
       : 
@@ -157,12 +141,10 @@ export const Router = () => {
       <Route path="/login" exact element={<Login setIsLoggedin={setIsLoggedin}  />}/>
       </Switch>
       } */}
-
       {/* <Footer /> */}
     </>
     // )}else{
     //   return (
-
     //     <Switch>
     //     <Route path="/" exact element={<Login setIsLoggedin={setIsLoggedin}  />}/>
     //     </Switch>

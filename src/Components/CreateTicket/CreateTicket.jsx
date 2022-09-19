@@ -26,24 +26,19 @@ import { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
-
-
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
-
 //   import RadioGroup from '@mui/material/RadioGroup';
 //   import FormControlLabel from '@mui/material/FormControlLabel';
 // import FormControl from '@mui/material/FormControl';
 // import FormLabel from '@mui/material/FormLabel';
-
 export const CreateTicket = () => {
   const theme = useTheme();
   const [imageArr, setImageArr] = useState([]);
   console.log(imageArr);
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
-
   const [input, setInput] = useState({
     name: "",
     department: [],
@@ -51,26 +46,21 @@ export const CreateTicket = () => {
     issuetype: "",
     message: "",
   });
-
   useEffect(() => {
     const userdata = JSON.parse(sessionStorage.getItem("userData"));
     console.log(userdata);
     setInput(userdata);
   }, [imageArr]);
   //   console.log(input)
-
   const handleChange = (e) => {
     setInput((prevState) => ({
       ...prevState,
-
       [e.target.name]: e.target.value,
     }));
   };
-
   const uploadFile = async (e) => {
     e.preventDefault();
     const formData = await e.target.files;
-
     await axios
       .post("/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -85,7 +75,7 @@ export const CreateTicket = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("basdkakdhakdhkad====",input);
+    console.log("basdkakdhakdhkad====", input);
     await axios.post("http://localhost:8000/ticket", {
       name: String(input.name),
       department: String(input.department),
@@ -100,7 +90,6 @@ export const CreateTicket = () => {
   //   { key: 1, label: "jQuery" },
   //   { key: 2, label: "Polymer" },
   // ]);
-
   // const handleDelete = (chipToDelete) => () => {
   //   setChipData((chips) =>
   //     chips.filter((chip) => chip.key !== chipToDelete.key)
@@ -139,12 +128,11 @@ export const CreateTicket = () => {
         </Typography>
         <Form enctype="multipart/form-data" onSubmit={handleSubmit}>
           <Grid container justify="center" spacing={6}>
-            <Grid item md={6} xs={12} >
-              <InputLabel  >
+            <Grid item md={6} xs={12}>
+              <InputLabel>
                 Full Name<span style={{ color: "red" }}>*</span>
-              </InputLabel >
-              <TextField 
-            
+              </InputLabel>
+              <TextField
                 inputProps={{ readOnly: true }}
                 name="name"
                 value={input.name}
@@ -161,7 +149,6 @@ export const CreateTicket = () => {
                 }}
               />
             </Grid>
-
             <Grid item md={6} xs={12}>
               <InputLabel>
                 Department <span style={{ color: "red" }}>*</span>
@@ -191,13 +178,11 @@ export const CreateTicket = () => {
                 <MenuItem value={"HR Senior"}>senior</MenuItem>
               </Select>
             </Grid>
-
             <Grid item md={6} xs={12}>
               <InputLabel>
                 File Upload {imageArr.length}
                 <span style={{ color: "red" }}>*</span>
               </InputLabel>
-
               <TextField
                 type="file"
                 // multiple
@@ -217,7 +202,6 @@ export const CreateTicket = () => {
                 inputProps={{
                   multiple: true,
                   accept: ["application/pdf", "image/*"],
-                  
                 }}
                 InputProps={{
                   endAdornment: (
@@ -243,15 +227,13 @@ export const CreateTicket = () => {
               >
                 {imageArr.map((data) => {
                   let icon;
-
                   return (
                     <ListItem key={data.imageID}>
                       <Chip
                         sx={{ backgroundColor: "#F4FBFF", color: "#0E2D7B" }}
                         label={data.imageName}
-                        onDelete={
-                          () => handlerDeleteAttechmentChip(data.imageID)
-                          
+                        onDelete={() =>
+                          handlerDeleteAttechmentChip(data.imageID)
                         }
                       />
                     </ListItem>
@@ -259,7 +241,6 @@ export const CreateTicket = () => {
                 })}
               </Paper>
             </Grid>
-
             <Grid item md={6} xs={12}>
               <InputLabel htmlFor="grouped-select">
                 Issue Type <span style={{ color: "red" }}>*</span>
@@ -274,14 +255,12 @@ export const CreateTicket = () => {
                 sx={{
                   background: "#F4FBFF",
                   width: "100%",
-
                   [theme.breakpoints.up("md")]: {
                     width: "491px ",
                   },
                 }}
               >
                 {console.log("hiiiiiiiiiiiiiiiii", input.issuetype === "")}
-
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
@@ -293,12 +272,10 @@ export const CreateTicket = () => {
                 <MenuItem value={"HR Senior"}>senior</MenuItem>
               </Select>
             </Grid>
-
             <Grid item md={6} xs={12}>
               <InputLabel>
                 Message <span style={{ color: "red" }}>*</span>
               </InputLabel>
-
               <TextareaAutosize
                 name="message"
                 value={input.message}
@@ -313,10 +290,8 @@ export const CreateTicket = () => {
                 }}
               />
             </Grid>
-
             <Grid item md={6} xs={12} padding={1}></Grid>
           </Grid>
-
           <Grid container>
             <Button
               variant="contained"

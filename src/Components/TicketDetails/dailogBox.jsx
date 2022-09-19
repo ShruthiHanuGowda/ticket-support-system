@@ -7,14 +7,8 @@ import ListItemText from "@mui/material/ListItemText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import axios from "axios";
-import {
-  DialogActions,
-  DialogContent,
-  TextField,
-} from "@mui/material";
-
+import { DialogActions, DialogContent, TextField } from "@mui/material";
 const emails = ["Open", "In Progress", "Hold", "Close"];
-
 const department = [
   "Sales",
   "Senior",
@@ -26,14 +20,11 @@ const department = [
 export default function SimpleDialog(props) {
   const [input, setInput] = React.useState({});
   const [updateAssigneeName, setUpdateAssigneeName] = React.useState(null);
-  const { onClose, selectedValue, open, id, flag ,onstatusChange} = props;
-  
-
+  const { onClose, selectedValue, open, id, flag, onstatusChange } = props;
   console.log(props.flag);
   const handleClose = () => {
     onClose(selectedValue);
   };
-
   if (props.flag === "status") {
     const handleListItemClick = async (value) => {
       await axios.put(`/ticket/Update-ticket/${id}`, {
@@ -45,9 +36,8 @@ export default function SimpleDialog(props) {
         status: String(value),
       });
       console.log(value);
-      onstatusChange()
+      onstatusChange();
       onClose(false);
-
     };
     return (
       <Dialog onClose={handleClose} open={open}>
@@ -73,7 +63,7 @@ export default function SimpleDialog(props) {
         // name: String(input.name),
         // department: String(value),
         // fileupload: String(input.fileupload),
-         issuetype: String(value),
+        issuetype: String(value),
         // message: String(input.message),
         // status: String(input.status),
       });
@@ -109,7 +99,7 @@ export default function SimpleDialog(props) {
         // status: String(input.status),
       });
       console.log(value);
-      onstatusChange()
+      onstatusChange();
       onClose(false);
     };
     return (
@@ -139,32 +129,26 @@ export default function SimpleDialog(props) {
           {/* <Button onClick={handleClose}>Cancel</Button> */}
         </DialogActions>
         {/* <DialogTitle >
-            
           </DialogTitle>
           <TextField type={'text'}  placeholder="Update Assignee Name"  onClick={(e) => handleListItemClick(e.target.value)} /> */}
       </Dialog>
     );
   }
 }
-
 SimpleDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
 };
-
 // function SimpleDialogDemo() {
 //   const [open, setOpen] = React.useState(false);
 //   const [selectedValue, setSelectedValue] = React.useState(emails[1]);
-
 //   const handleClickOpen = () => {
 //     setOpen(true);
 //   };
-
 //   const handleClose = (value) => {
 //     setOpen(false);
 //     setSelectedValue(value);
 //   };
-
 //   return (
 //     <div>
 //       <Typography variant="subtitle1" component="div">
