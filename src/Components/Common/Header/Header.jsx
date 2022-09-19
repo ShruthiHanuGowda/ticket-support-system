@@ -36,7 +36,7 @@ import {
   Button,
   InputBase,
   Menu,
-  MenuItem, 
+  MenuItem,
   Tooltip,
 } from "@mui/material";
 
@@ -199,17 +199,17 @@ export const Header = ({ setIsLoggedin }) => {
     {
       name: "Dashboard",
       path: "/dashboard",
-      icon:DashboardOutlinedIcon,
+      icon: DashboardOutlinedIcon,
       access: ["admin"],
     },
     {
       name: "Dashboard",
       path: "/client-dashboard",
-      icon:DashboardOutlinedIcon,
+      icon: DashboardOutlinedIcon,
       access: ["client"],
     },
-    { name: "Manage Client", path: "/manage-client" , icon:MailIcon, access: ["admin"],},
-    { name: "Manage User", path: "/manage-user",icon:PeopleAltOutlinedIcon,  access: ["admin"], },
+    { name: "Manage Client", path: "/manage-client", icon: MailIcon, access: ["admin"], },
+    { name: "Manage User", path: "/manage-user", icon: PeopleAltOutlinedIcon, access: ["admin"], },
   ];
   React.useEffect(() => {
     if (isBigScreen !== prevBigScreen && isBigScreen !== open) {
@@ -321,29 +321,29 @@ export const Header = ({ setIsLoggedin }) => {
         <List>
           {Routes.map((text, index) => (
             <ListItem key={text.name} disablePadding sx={{ display: "block" }}>
-            {userLoginData.role == text.access? 
-              <ListItemButton
-              component={Link}
-              to={text.path}
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {< text.icon/>}
-             
-              </ListItemIcon>
-              <ListItemText component={Link} primary={text.name} to={text.path} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>: ''  
-          }
+              {userLoginData.role == text.access ?
+                <ListItemButton
+                  component={Link}
+                  to={text.path}
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {< text.icon />}
+
+                  </ListItemIcon>
+                  <ListItemText component={Link} primary={text.name} to={text.path} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton> : ''
+              }
             </ListItem>
           ))}
         </List>
@@ -367,7 +367,11 @@ export const Header = ({ setIsLoggedin }) => {
                 >
                   {index % 2 === 0 ? <PermIdentityOutlinedIcon /> : <LogoutIcon color="error" onClick={logout} />}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText onClick={() => {
+                  if (text == "Logout") {
+                    logout()
+                  }
+                }} primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           ))}

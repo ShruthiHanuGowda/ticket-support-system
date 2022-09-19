@@ -14,7 +14,7 @@ router.post("/user", userController.addUser);
 router.get("/user/:id", userController.getUserById);
 router.put("/user/:id", userController.UpdateUser);
 router.post("/getDataByFilter", ticketController.getTicketByStatus);
-
+router.get('/search/:searchText', ticketController.searchUser);
 router.post("/ticket", ticketController.addTicket);
 router.get("/getTicket", ticketController.getAllTIcketData);
 router.get("/getUser/:role?", checkUserAuth, userController.getAllUserData);

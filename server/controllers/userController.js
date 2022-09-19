@@ -6,7 +6,8 @@ const { default: axios } = require("axios");
 const { Navigate } = require("react-router-dom");
 const app = express.Router();
 const bcrypt = require("bcrypt");
-const EmailSend = require("../services/emailSend")
+const EmailSend = require("../services/emailSend");
+const { ticketModel } = require("../models/ticketSchema");
 
 app.get("/", async (req, res) => {
   const data = await userModel.find();
@@ -16,10 +17,13 @@ app.get("/", async (req, res) => {
 
 const getAllUserData = async (req, res, next) => {
   const Role = req.params.role;
-
+  console.log(req.headers);
+  const { searchstring } = req.headers;
+  console.log("searchS----------------", searchstring)
+  const regex = new RegExp(searchstring, "i");
   // console.log("getAllUserData", Role);
   // if (typeof Role == undefined) return res.send({ message: 'no option selected' })
-  const data = await userModel.find({ role: Role });
+  const data = await userModel.find({ $and: [{ role: Role }, { $or: [{ name: regex }, { department: regex }] }] });
   // console.warn(data);
 
   return successResponseWithData(res, "users array", data);
@@ -33,7 +37,7 @@ const getUserByStatus = async (req, res) => {
     await userModel
       .find({})
       .then((result) => {
-        return res.status(200).json({ message: 'data fetched succesfully', data: result });
+        return res.status(200).json({ message: "data fetched succesfully", data: result });
       })
       .catch((err) => {
         return res.status(500).json({ mesage: "something went wrong", description: err });
@@ -47,37 +51,35 @@ const getUserByStatus = async (req, res) => {
         // console.log(i)
         switch (parseInt(i)) {
           case 1:
-            flagArray.push('user')
+            flagArray.push("user");
             break;
           case 2:
-            flagArray.push('admin')
+            flagArray.push("admin");
             break;
           case 3:
-            flagArray.push('client')
+            flagArray.push("client");
             break;
           case 4:
-            flagArray.push('demo')
+            flagArray.push("demo");
             break;
           default:
             break;
-
         }
       }
       console.log(flagArray);
       await userModel
         .find({ role: { $in: flagArray } })
         .then((result) => {
-          return res.status(200).json({ message: 'data fetched succesfully', data: result });
+          return res.status(200).json({ message: "data fetched succesfully", data: result });
         })
         .catch((err) => {
           return res.status(500).json({ mesage: "something went wrong", description: err });
         });
-    }
-    else {
+    } else {
       await userModel
         .find({})
         .then((result) => {
-          return res.status(200).json({ message: 'data fetched succesfully', data: result });
+          return res.status(200).json({ message: "data fetched succesfully", data: result });
         })
         .catch((err) => {
           return res.status(500).json({ mesage: "something went wrong", description: err });
@@ -116,9 +118,9 @@ const UpdateUser = async (req, res) => {
   }
 };
 const addUser = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const { name, email, department, position, role, password } = req.body;
-  console.log(name, email, password)
+  console.log(name, email, password);
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
   console.log(hashPassword);
@@ -143,7 +145,7 @@ const addUser = async (req, res) => {
       return res.status(500).json({ message: "unable to add" });
     }
     // <EmailSend email={user.email} />
-    console.log("haysdyy---------------------", name, email, password)
+    console.log("haysdyy---------------------", name, email, password);
     // await EmailSend.sendMail(name, email, password)
     sendMailNodemailer(name, email, password);
     return res.status(201).json({ user, message: "User Add Susscesfully" });
@@ -152,9 +154,9 @@ const addUser = async (req, res) => {
   }
 };
 const sendMailNodemailer = async (name, email, password) => {
-  console.log("in sendMAil Gufn====", email, password, name)
-  await EmailSend.sendMail(name, email, password)
-}
+  console.log("in sendMAil Gufn====", email, password, name);
+  await EmailSend.sendMail(name, email, password);
+};
 const deleteUser = async (req, res, next) => {
   const id = req.params.deleteId;
   console.log(id);
@@ -216,4 +218,5 @@ exports.deleteUser = deleteUser;
 exports.getUserById = getUserById;
 exports.UpdateUser = UpdateUser;
 exports.getUserByStatus = getUserByStatus;
+
 //   module.exports = app;

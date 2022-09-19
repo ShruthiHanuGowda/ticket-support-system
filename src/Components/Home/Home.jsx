@@ -15,6 +15,7 @@ import { useNavigate, Link } from "react-router-dom";
 import SearchBar from "../Common/SearchBar";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { NotFoundImage } from "../Common/NotFoundImage";
 
 const CheckboxFiled = styled(FormControlLabel)({
   marginRight: "30px",
@@ -25,8 +26,7 @@ function createData(srno, department, name, position, status) {
   return { srno, department, name, position, status };
 }
 
-const rows = [createData("1", "Sales", "John Doe", "Sales Executive", "Open"), createData("#2", "Sales", "bharat Doe", "Sales Executive", "Hold"), createData("#22345", "Sales", "rahul Doe", "Sales Executive", "Progress"), createData("#23145", "Sales", "John Doe", "Sales Executive", "Closed"), createData("#1435", "Sales", "John Doe", "Sales Executive", "Open"), createData("#24345", "Sales", "John Doe", "Sales Executive", "Open"), createData("#23545", "Sales", "John Doe", "Sales Executive", "Open")];
-
+let serText = ''
 export const Home = () => {
   const navigate = useNavigate();
   //----------------for CheckBox Functionlity
@@ -37,28 +37,32 @@ export const Home = () => {
     { label: "Hold", id: 3 },
     { label: "In Progress", id: 4 },
   ]);
+
   let [selectedOptions, setSelectedOptions] = useState([]);
-  const [data, setData] = React.useState(rows);
+  let [data, setData] = React.useState([]);
   //  console.log(data);
-  useEffect(() => { fecthUserData([]) }, [])
-  const fecthUserData = async (filterValue) => {
-    console.log('filterValue received :', filterValue)
+  useEffect(() => {
+    fecthTicketData(serText);
+  }, []);
+  const fecthTicketData = async (searchStr) => {
+    // data = [];
+    // console.log("filterValue received :", filterValue);
     const { data } = await axios.post(`/getDataByFilter`, {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
-      flags: filterValue
+      flags: selectedOptions,
+      searchString: searchStr
     });
-    console.log('data from api', data.data)
-    console.log(data.message)
+    console.log("data from api", data.data);
+    console.log(data.message);
     setData(data.data);
-
 
     // .then((res)=> console.log(res.data.data));
   };
   //--------------------------------------------------------------------
   const onCheckBoxFillter = (filterValue) => {
-    console.log(filterValue)
+    console.log(filterValue);
     if (selectedOptions.includes(filterValue)) {
       const indexx = selectedOptions.indexOf(filterValue);
       if (indexx > -1) {
@@ -72,7 +76,7 @@ export const Home = () => {
       selectedOptions.push(filterValue);
     }
     console.log("selectedOptions", selectedOptions);
-    fecthUserData(selectedOptions);
+    fecthTicketData(serText);
   };
   // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -83,10 +87,25 @@ export const Home = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  //--------api call for searching user using search bar---------
+  const handleSearch = async (searchText) => {
+    await axios
+      .get(`/search/${searchText}`)
+      .then((res) => {
+        data = []
+        console.log('response received', res.data.result)
+        setData([...res.data.result]);
+      })
+      .catch((err) => {
+        console.log("errror", err);
+      });
+    console.log("ASDFG", searchText);
+  };
+
   const statusColors = {
     Open: "#0B9611",
     Hold: "#E05D5D",
-    'In Progress': "#FFB344",
+    "In Progress": "#FFB344",
     Close: "#777777",
   };
   return (
@@ -99,7 +118,18 @@ export const Home = () => {
           </Typography>
         </Grid>
         <Grid item xm={10} md={6} lg={6}>
-          <SearchBar rows={rows} setData={setData} />
+          <SearchBar
+            onClick={(seach) => {
+              serText = seach;
+              // handleSearch(serText);
+              fecthTicketData(serText);
+            }}
+            clearSearch={(setSearched) => {
+              serText = '';
+              setSearched('')
+              fecthTicketData(serText)
+            }}
+          />
         </Grid>
         <Grid item xm={12} sm={12} md={3} lg={3} textAlign="right">
           <Button
@@ -141,109 +171,113 @@ export const Home = () => {
       </Grid>
       <Divider sx={{ marginBottom: "0px", marginTop: "20px" }} />
       <TableContainer>
-        <Table
-          sx={{
-            minWidth: 650,
-            borderCollapse: "separate",
-            borderSpacing: "0px 10px",
-            [`& .${tableCellClasses.root}`]: {
-              borderBottom: "none",
-              padding: "6px",
-            },
-          }}
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell className="th" align="center">
-                TICKET #
-              </TableCell>
-              <TableCell className="th" align="center">
-                DEPARTMENT
-              </TableCell>
-              <TableCell className="th" align="center">
-                ASSIGNEE NAME
-              </TableCell>
-              <TableCell className="th" align="center">
-                ASSIGNEE DEPARTMENT
-              </TableCell>
-              <TableCell className="th" align="center">
-                STATUS
-              </TableCell>
-              <TableCell className="th" align="center">
-                ACTION
-              </TableCell>
-            </TableRow>
-            <TableRow></TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row, index) => (
-              <TableRow className="tableRow" key={index} style={{ background: "#F4FBFF" }}>
-                <TableCell component="th" align="center" scope="row">
-                  {index + 1001}
+        {data && data.length != 0 ?
+          <Table
+            sx={{
+              minWidth: 650,
+              borderCollapse: "separate",
+              borderSpacing: "0px 10px",
+              [`& .${tableCellClasses.root}`]: {
+                borderBottom: "none",
+                padding: "6px",
+              },
+            }}
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell className="th" align="center">
+                  TICKET #
                 </TableCell>
-                <TableCell align="center">{row.department}</TableCell>
-                <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{row.department}</TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    color: statusColors[row.status] ?? "black",
-                    fontWeight: "600",
-                    fontSize: "16px",
-                  }}
-                >
-                  {row.status}
+                <TableCell className="th" align="center">
+                  DEPARTMENT
                 </TableCell>
-
-                <TableCell align="center">
-                  <Tooltip title="Action">
-                    <IconButton onClick={handleClick}>
-                      <MoreVertIcon sx={{ color: "#777777" }} />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Menu
-                    id="basic-menu"
-                    sx={{
-                      "& .MuiPaper-root": {
-                        backgroundColor: "#C0D2E9",
-                        boxShadow: "none",
-                        width: "100px",
-                      },
-                      "& .MuiList-root": {
-                        padding: "0",
-                      },
-                      "& .MuiMenuItem-root": {
-                        padding: "5px 10px ",
-                        fontSize: "13px",
-                        justifyContent: "space-between",
-                      },
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose} component={Link} to="/ticket-details">
-                      Views <RemoveRedEyeIcon fontSize="14px" />
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      Edit
-                      <EditIcon fontSize="14px" />
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      Transfer
-                      <CompareArrowsIcon fontSize="14px" />
-                    </MenuItem>
-                  </Menu>
+                <TableCell className="th" align="center">
+                  ASSIGNEE NAME
+                </TableCell>
+                <TableCell className="th" align="center">
+                  ASSIGNEE DEPARTMENT
+                </TableCell>
+                <TableCell className="th" align="center">
+                  STATUS
+                </TableCell>
+                <TableCell className="th" align="center">
+                  ACTION
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+              <TableRow></TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map((row, index) => (
+                <TableRow className="tableRow" key={index} style={{ background: "#F4FBFF" }}>
+                  <TableCell component="th" align="center" scope="row">
+                    {index + 1001}
+                  </TableCell>
+                  <TableCell align="center">{row.department}</TableCell>
+                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell align="center">{row.department}</TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      color: statusColors[row.status] ?? "black",
+                      fontWeight: "600",
+                      fontSize: "16px",
+                    }}
+                  >
+                    {row.status}
+                  </TableCell>
+
+                  <TableCell align="center">
+                    <Tooltip title="Action">
+                      <IconButton onClick={handleClick}>
+                        <MoreVertIcon sx={{ color: "#777777" }} />
+                      </IconButton>
+                    </Tooltip>
+
+                    <Menu
+                      id="basic-menu"
+                      sx={{
+                        "& .MuiPaper-root": {
+                          backgroundColor: "#C0D2E9",
+                          boxShadow: "none",
+                          width: "100px",
+                        },
+                        "& .MuiList-root": {
+                          padding: "0",
+                        },
+                        "& .MuiMenuItem-root": {
+                          padding: "5px 10px ",
+                          fontSize: "13px",
+                          justifyContent: "space-between",
+                        },
+                      }}
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                      }}
+                    >
+                      <MenuItem onClick={handleClose} component={Link} to="/ticket-details">
+                        Views <RemoveRedEyeIcon fontSize="14px" />
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>
+                        Edit
+                        <EditIcon fontSize="14px" />
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>
+                        Transfer
+                        <CompareArrowsIcon fontSize="14px" />
+                      </MenuItem>
+                    </Menu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+
+          </Table>
+          : <div style={{ textAlign: 'center', alignItems: 'center', justifyContent: 'center', }}><NotFoundImage /></div>}
       </TableContainer>
+
     </Box>
   );
 };

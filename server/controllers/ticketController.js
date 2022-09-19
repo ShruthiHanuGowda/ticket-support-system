@@ -84,22 +84,25 @@ const addTicket = async (req, res) => {
 };
 const getTicketByStatus = async (req, res) => {
   const data = req.body?.flags;
-  console.log("=================00000000======", data);
+  const searchString = req.body?.searchString;
+
+  console.log("=================00000000======", searchString);
   // const status=new userModel();
-  console.log("data received", data);
+  // console.log("data received", data);
+  console.log("no data", searchString);
+  const regex = new RegExp(searchString, "i");
   if (data && data.length === 0) {
-    console.log("no data");
     await ticketModel
-      .find({})
+      .find({ $or: [{ name: regex }, { department: regex }] })
       .then((result) => {
         return res.status(200).json({ message: "data fetched succesfully", data: result });
       })
       .catch((err) => {
         return res.status(500).json({ mesage: "something went wrong", description: err });
       });
-    // return res.status(400).json({ mesage: 'no flags passed' })
   } else {
     console.log("flags passed", data);
+    console.log("string passed", searchString);
     if (data.includes(1) || data.includes(2) || data.includes(3) || data.includes(4)) {
       const flagArray = [];
       for (let i of data) {
@@ -107,7 +110,7 @@ const getTicketByStatus = async (req, res) => {
         switch (parseInt(i)) {
           case 1:
             flagArray.push("Open");
-            console.log(">::::::", flagArray)
+            // console.log(">::::::", flagArray)
             break;
           case 2:
             flagArray.push("Close");
@@ -124,9 +127,9 @@ const getTicketByStatus = async (req, res) => {
       }
       console.log("mknnjjkk", flagArray);
       await ticketModel
-        .find({ status: { $in: flagArray } })
+        .find({ $and: [{ status: { $in: flagArray } }, { $or: [{ name: regex }, { department: regex }] }] })
         .then((result) => {
-          console.log("result----", result)
+          // console.log("result----", result)
           return res.status(200).json({ message: "data fetcheds succesfully", data: result });
         })
         .catch((err) => {
@@ -144,8 +147,20 @@ const getTicketByStatus = async (req, res) => {
     }
   }
 };
+const searchUser = async (req, res) => {
+  const { searchText } = req.params;
+  console.log("searchText::::::::", searchText);
+  const regex = new RegExp(searchText, "i");
+  await ticketModel
+    .find({ $or: [{ name: regex }, { department: regex }] })
+    .then((resp) => {
+      res.status(200).json({ result: resp });
+    })
+    .catch((err) => console.log("errr", err));
+};
 exports.getAllTIcketData = getAllTIcketData;
 exports.addTicket = addTicket;
+exports.searchUser = searchUser;
 exports.getTicketByStatus = getTicketByStatus;
 // //   module.exports = addTicket;
 // module.exports=app;
