@@ -13,6 +13,7 @@
     "accesscontrol": "^2.2.1",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
+    "date-and-time": "^2.4.1",
     "express-fileupload": "^1.4.0",
     "file-saver": "^2.0.5",
     "js-file-download": "^0.4.12",

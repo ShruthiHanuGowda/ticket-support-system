@@ -11,17 +11,15 @@ const multer = require("multer");
 const { uploadFiles, deleteFile } = require("../services/cloudinary");
 router.use(express.static(__dirname));
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // console.log("destination", file);
-    cb(null, path.join(__dirname, "../../src/Assets/UploadDocument//"));
-  },
-  filename: (req, file, cb) => {
-    // console.log("filename", file);
-    cb(
-      null,
-      new Date().toISOString().replace(/:/g, "-") + "-" + file.originalname
-    );
-  },
+  // destination: (req, file, cb) => {
+  //   cb(null, path.join(__dirname, "../../src/Assets/UploadDocument//"));
+  // },
+  // filename: (req, file, cb) => {
+  //   cb(
+  //     null,
+  //     new Date().toISOString().replace(/:/g, "-") + "-" + file.originalname
+  //   );
+  // },
 });
 const upload = multer({ storage });
 // router.use()
