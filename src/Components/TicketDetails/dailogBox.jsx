@@ -26,18 +26,18 @@ const department = [
 export default function SimpleDialog(props) {
   const [input, setInput] = React.useState({});
   const [updateAssigneeName, setUpdateAssigneeName] = React.useState(null);
-  const { onClose, selectedValue, open, id, flag } = props;
-  React.useEffect(() => {
-    const fetchUserData = async () => {
-      return await axios
-        .get(`/getSingleTicket/${id}`)
-        .then((res) => res.data)
-        .then((data) => {
-          setInput(data.ticket);
-        });
-    };
-    fetchUserData();
-  }, []);
+  const { onClose, selectedValue, open, id, flag ,onstatusChange} = props;
+  // React.useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     return await axios
+  //       .get(`/getSingleTicket/${id}`)
+  //       .then((res) => res.data)
+  //       .then((data) => {
+  //         setInput(data.ticket);
+  //       });
+  //   };
+  //    fetchUserData();
+  // }, []);
 
   console.log(props.flag);
   const handleClose = () => {
@@ -47,15 +47,17 @@ export default function SimpleDialog(props) {
   if (props.flag === "status") {
     const handleListItemClick = async (value) => {
       await axios.put(`/ticket/Update-ticket/${id}`, {
-        name: String(input.name),
-        department: String(input.department),
-        fileupload: String(input.fileupload),
-        issuetype: String(input.issuetype),
-        message: String(input.message),
+        // name: String(input.name),
+        // department: String(input.department),
+        // fileupload: String(input.fileupload),
+        // issuetype: String(input.issuetype),
+        // message: String(input.message),
         status: String(value),
       });
       console.log(value);
+      onstatusChange()
       onClose(false);
+
     };
     return (
       <Dialog onClose={handleClose} open={open}>
@@ -78,12 +80,12 @@ export default function SimpleDialog(props) {
   } else if (props.flag === "transfer") {
     const handleListItemClick = async (value) => {
       await axios.put(`/ticket/Update-ticket/${id}`, {
-        name: String(input.name),
-        department: String(value),
-        fileupload: String(input.fileupload),
-        issuetype: String(input.issuetype),
-        message: String(input.message),
-        status: String(input.status),
+        // name: String(input.name),
+        // department: String(value),
+        // fileupload: String(input.fileupload),
+        // issuetype: String(input.issuetype),
+        // message: String(input.message),
+        // status: String(input.status),
       });
       console.log(value);
       onClose(false);
@@ -110,11 +112,11 @@ export default function SimpleDialog(props) {
     const handleListItemClickName = async (value) => {
       await axios.put(`/ticket/Update-ticket/${id}`, {
         name: String(value),
-        department: String(input.department),
-        fileupload: String(input.fileupload),
-        issuetype: String(input.issuetype),
-        message: String(input.message),
-        status: String(input.status),
+        // department: String(input.department),
+        // fileupload: String(input.fileupload),
+        // issuetype: String(input.issuetype),
+        // message: String(input.message),
+        // status: String(input.status),
       });
       console.log(value);
       onClose(false);

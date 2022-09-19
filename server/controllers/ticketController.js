@@ -65,9 +65,6 @@ const getTIcketById = async (req, res, next) => {
   return res.status(200).json({ ticket });
 };
 
-
-
-
 // @@@@@@@@@@@@@@@@@@@@@@ ticketId @@@@@@@@@@@@@@@@@@@@ //
 const ticketId = async (req , res) =>{
 

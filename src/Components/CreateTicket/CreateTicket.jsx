@@ -85,7 +85,7 @@ export const CreateTicket = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(input);
+    console.log("basdkakdhakdhkad====",input);
     await axios.post("http://localhost:8000/ticket", {
       name: String(input.name),
       department: String(input.department),
@@ -217,11 +217,7 @@ export const CreateTicket = () => {
                 inputProps={{
                   multiple: true,
                   accept: ["application/pdf", "image/*"],
-                  // endAdornment: (
-                  //       <InputAdornment position="start">
-                  //         <FolderOpenIcon type="file" />
-                  //       </InputAdornment>
-                  //     ),
+                  
                 }}
                 InputProps={{
                   endAdornment: (
@@ -255,9 +251,7 @@ export const CreateTicket = () => {
                         label={data.imageName}
                         onDelete={
                           () => handlerDeleteAttechmentChip(data.imageID)
-                          // data.label === "React"
-                          //   ? undefined
-                          //   : handleDelete(data)
+                          
                         }
                       />
                     </ListItem>

@@ -38,22 +38,25 @@ export const TicketDetails = () => {
   const [statusOpen, setStatusOpen] = React.useState(false);
   const [flagValue, setFlagValue] = useState(null);
 
-   
   const id = useParams().id;
 
   useEffect(() => {
-    const fecthTicketDetail = async () => {
-      await axios.get(`/getSingleTicket/${id}`).then((res) => {
-        setData(res.data.ticket);
-      });
-    };
+    console.count();
     fecthTicketDetail();
   }, []);
 
+  const fecthTicketDetail = async () => {
+    await axios.get(`/getSingleTicket/${id}`).then((res) => {
+      setData(res.data.ticket);
+    });
+  };
   const handleOpenDialogBox = (flag) => {
-    setFlagValue(flag.flag);
+    console.log("=--------", flag.flag);
+
     setedit(true);
     setStatusOpen(true);
+    setFlagValue(flag.flag);
+
     // return(
     //   <DailogBoxModel  seteOpen={true}/>
     // )
@@ -95,6 +98,9 @@ export const TicketDetails = () => {
     >
       {edit ? (
         <DailogBoxModel
+          onstatusChange={() => {
+            fecthTicketDetail();
+          }}
           open={statusOpen}
           onClose={setStatusOpen}
           id={id}
@@ -197,7 +203,10 @@ export const TicketDetails = () => {
                   />{" "}
                   {data.status}{" "}
                   <CreateOutlinedIcon
-                    onClick={(e) => handleOpenDialogBox({ flag: "status" })}
+                    onClick={(e) => {
+                      console.log("button Click status");
+                      handleOpenDialogBox({ flag: "status" });
+                    }}
                     sx={{ color: "black", fontSize: "15px" }}
                   />
                 </TableCell>
@@ -309,10 +318,12 @@ export const TicketDetails = () => {
           </Grid>
           <Grid container spacing={1} xs={8} md={6}>
             <Grid item xs={8} px={4}>
-              <Card
+              {data && data.fileupload && data.fileupload.map((fileData)=>
+                <Card
                 sx={{
                   display: "flex",
                   ml: 2,
+                  mt:2,
                   width: 360,
                   spacing: 3,
                   background: "#F4FBFF",
@@ -325,18 +336,13 @@ export const TicketDetails = () => {
                     sx={{ ml: 2, color: "black" }}
                   >
                     <img src={Pdf} alt="pdf" style={styles.media} />
-                    {data &&
-                      data.fileupload &&
-                      data.fileupload[0] &&
-                      data.fileupload[0].imageName}
+                    {fileData &&
+                      fileData.imageName}
                     <SaveAltIcon
                       sx={{ ml: 9 }}
                       onClick={() => {
                         getImageURL(
-                          data &&
-                            data.fileupload &&
-                            data.fileupload[0] &&
-                            data.fileupload[0].imageID
+                          fileData && fileData.imageID
                         );
                       }}
                     />
@@ -351,6 +357,8 @@ export const TicketDetails = () => {
                   </Typography>
                 </Box>
               </Card>
+             )}
+              
             </Grid>
           </Grid>
         </Grid>
