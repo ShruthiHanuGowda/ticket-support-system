@@ -323,7 +323,7 @@ export const TicketDetails = () => {
                 sx={{
                   display: "flex",
                   ml: 2,
-                  mt:2,
+                  mt:1,
                   width: 360,
                   spacing: 3,
                   background: "#F4FBFF",
@@ -339,7 +339,7 @@ export const TicketDetails = () => {
                     {fileData &&
                       fileData.imageName}
                     <SaveAltIcon
-                      sx={{ ml: 9 }}
+                      sx={{ ml: 2 }}
                       onClick={() => {
                         getImageURL(
                           fileData && fileData.imageID

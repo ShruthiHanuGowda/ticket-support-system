@@ -27,17 +27,7 @@ export default function SimpleDialog(props) {
   const [input, setInput] = React.useState({});
   const [updateAssigneeName, setUpdateAssigneeName] = React.useState(null);
   const { onClose, selectedValue, open, id, flag ,onstatusChange} = props;
-  // React.useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     return await axios
-  //       .get(`/getSingleTicket/${id}`)
-  //       .then((res) => res.data)
-  //       .then((data) => {
-  //         setInput(data.ticket);
-  //       });
-  //   };
-  //    fetchUserData();
-  // }, []);
+  
 
   console.log(props.flag);
   const handleClose = () => {
@@ -83,7 +73,7 @@ export default function SimpleDialog(props) {
         // name: String(input.name),
         // department: String(value),
         // fileupload: String(input.fileupload),
-        // issuetype: String(input.issuetype),
+         issuetype: String(value),
         // message: String(input.message),
         // status: String(input.status),
       });
@@ -119,6 +109,7 @@ export default function SimpleDialog(props) {
         // status: String(input.status),
       });
       console.log(value);
+      onstatusChange()
       onClose(false);
     };
     return (

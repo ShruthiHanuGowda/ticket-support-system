@@ -247,7 +247,7 @@ export const CreateTicket = () => {
                   return (
                     <ListItem key={data.imageID}>
                       <Chip
-                        sx={{ backgroundColor: "#7DBA00", color: "#0E2D7B" }}
+                        sx={{ backgroundColor: "#F4FBFF", color: "#0E2D7B" }}
                         label={data.imageName}
                         onDelete={
                           () => handlerDeleteAttechmentChip(data.imageID)
