@@ -13,7 +13,7 @@ export const CreateEndUser = () => {
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
   const [singleUser, setSingleUser] = useState({});
-  console.log(singleUser);
+
   const [input, setInput] = useState({
     name: "",
     email: "",
@@ -66,9 +66,7 @@ export const CreateEndUser = () => {
     let a = generatePassword();;
     console.log(a);
     sendData(a);;
-    // sendData(a).then((a) => {
-    //
-    // });
+  
   };
   // ----------------for Update User Data
   const _id = useParams().id;

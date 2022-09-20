@@ -7,7 +7,7 @@ function App() {
   // console.log(process.env.REACT_APP_BASE_URL)
   axios.defaults.baseURL = window.origin.includes("localhost")
     ? "http://localhost:8000"
-    : "http://3.231.202.28:8000/";
+    : "http://34.229.19.138:8000/";
 
   // axios.defaults.baseURL=process.env.REACT_APP_BASE_URL
   return (

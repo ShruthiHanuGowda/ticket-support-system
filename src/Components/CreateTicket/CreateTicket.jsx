@@ -26,6 +26,7 @@ import { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
+import toast, { Toaster } from 'react-hot-toast';
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
@@ -76,6 +77,7 @@ export const CreateTicket = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(input);
+    // await axios.get("/create-ticket-id").then((res) => console.log(res))
     await axios.post("/ticket", {
       name: String(input.name),
       department: String(input.department),
@@ -85,16 +87,7 @@ export const CreateTicket = () => {
       status: String("Open"),
     });
   };
-  // const [chipData, setChipData] = React.useState([
-  //   { key: 0, label: "Angular" },
-  //   { key: 1, label: "jQuery" },
-  //   { key: 2, label: "Polymer" },
-  // ]);
-  // const handleDelete = (chipToDelete) => () => {
-  //   setChipData((chips) =>
-  //     chips.filter((chip) => chip.key !== chipToDelete.key)
-  //   );
-  // };
+
   const handlerDeleteAttechmentChip = async (id) => {
     console.log("id in console ::::::::::", id);
     await axios
@@ -112,6 +105,7 @@ export const CreateTicket = () => {
   return (
     (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
     (
+
       <Box
         noValidate
         autoComplete="off"
@@ -123,6 +117,7 @@ export const CreateTicket = () => {
           },
         }}
       >
+
         <Typography variant="h5" sx={{ my: 4 }}>
           Create Ticket
         </Typography>

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 //const ObjectId = mongoose.Schema.Types.ObjectId;
 const ticketSchema = mongoose.Schema({
   ticketId: {
-    type: Number,
+    type: String,
   },
   name: {
     type: String,

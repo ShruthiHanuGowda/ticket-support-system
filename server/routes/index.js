@@ -31,13 +31,15 @@ router.put("/user/:id", userController.UpdateUser);
 router.post("/getDataByFilter", ticketController.getTicketByStatus);
 router.get('/search/:searchText', ticketController.searchUser);
 router.post("/ticket", ticketController.addTicket);
-router.get("/getTicket/", ticketController.getAllTIcketData);
+
 router.get("/getSingleTicket/:id", ticketController.getTIcketById);
 router.get("/getImageUrl/:id", ticketController.getImageById);
 router.put("/ticket/Update-ticket/:id", ticketController.UpdateTicket);
 router.get("/getUser/:role?", checkUserAuth, userController.getAllUserData);
 router.post("/ticketid", ticketController.ticketId);
 router.get("/deleteImageIncloudy/:id", ticketController.DeleteAttechment);
+
+
 // ******for Upload Ticket File*************
 router.post("/upload", upload.any(), async function (req, res, next) {
   console.log("body received", req.files[0]);

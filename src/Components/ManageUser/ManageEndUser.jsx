@@ -53,19 +53,19 @@ export const ManageUser = ({ loggedin }) => {
   React.useEffect(() => {
     //---- for Toster
     console.count("useEffect called");
-    if (location.state) {
+    console.log('location::', location.state)
+    if (location && location.state != null) {
 
       console.log('location::', location)
-      console.log(location.state);
+      console.log(location.state.message);
       toast.success(location.state.message);
-      location.state = null;
+      location = null;
     }
     fecthUserData(serText);
   }, []);
 
   const fecthUserData = async (serText) => {
     const Role = 'user'
-    console.log(serText)
     const userData = await axios.get(`/getUser/${Role}`, {
       headers: { "Authorization": `Bearer ${sessionStorage.getItem('token')}`, 'searchString': serText }
     });

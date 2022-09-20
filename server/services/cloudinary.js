@@ -14,7 +14,6 @@ const uploadFiles = async (file) => {
           reject(new Error("Serror error."));
         } else {
           resolve(result);
-          console.log("---------------------------------file Upload", result);
         }
       }
     );

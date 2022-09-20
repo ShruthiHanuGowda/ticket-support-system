@@ -38,12 +38,13 @@ export const TicketDetails = () => {
   const [flagValue, setFlagValue] = useState(null);
   const id = useParams().id;
   useEffect(() => {
-    console.count();
+
     fecthTicketDetail();
   }, []);
   const fecthTicketDetail = async () => {
     await axios.get(`/getSingleTicket/${id}`).then((res) => {
       setData(res.data.ticket);
+      console.log("filwdata//////////////", res.data.ticket);
     });
   };
   const handleOpenDialogBox = (flag) => {
@@ -113,12 +114,12 @@ export const TicketDetails = () => {
         Ticket Details
       </Typography>
       <Typography variant="h6" sx={{ ml: 1, fontSize: 25, fontweight: 600 }}>
-        Ticket ID: #{data._id}
+        Ticket ID: #{data.ticketId}
       </Typography>
       <Grid container spacing={6} justify="space-between">
         <Grid item xs={6} md={6}>
           <Grid container alignItems={"center "}>
-            <Grid item xs={2}>
+            <Grid item xs={5} >
               <Toolbar>
                 <Typography
                   variant="paragraph"
@@ -134,7 +135,7 @@ export const TicketDetails = () => {
                 </Typography>
               </Toolbar>
             </Grid>
-            <Grid item xs={9} md={9} sx={{ m: 0, p: 0, mt: 0, mr: "auto" }}>
+            <Grid item xs={7} md={9} sx={{ m: 0, p: 0, mt: 0, mr: "auto" }}>
               <Divider></Divider>
             </Grid>
           </Grid>
@@ -305,57 +306,16 @@ export const TicketDetails = () => {
               <Divider></Divider>
             </Grid>
           </Grid>
-          <Grid container spacing={1} xs={7} md={8}>
+          <Grid container spacing={1} >
             <Grid item px={4}>
               {data &&
                 data.fileupload &&
                 data.fileupload.map((fileData) => (
-                  // <Card
-                  //   sx={{
-                  //     display: "flex",
-                  //     ml: 2,
-                  //     mt: 1,
-
-                  //     spacing: 3,
-                  //     background: "#F4FBFF",
-                  //   }}
-                  // >
-
-                  //   <Grid container flex='1' >
-                  //     <Grid item>
-                  //       <img src={Pdf} alt="pdf" style={styles.media} />
-                  //     </Grid>
-                  //     <Grid item>
-                  //       <Typography
-                  //         component="div"
-                  //         sx={{ ml: 2, color: "black" }}
-                  //       >
-
-                  //         {fileData && fileData.imageName}
-                  //         <SaveAltIcon
-                  //           sx={{ ml: 2 }}
-                  //           onClick={() => {
-                  //             getImageURL(fileData && fileData.imageID);
-                  //           }}
-                  //         />
-                  //       </Typography>
-                  //       <Typography
-                  //         variant="subtitle1"
-                  //         color="text.secondary"
-                  //         component="div"
-                  //         sx={{ ml: 9 }}
-                  //       >
-                  //         1.23MB .18/03/22
-                  //       </Typography>
-                  //     </Grid>
-
-                  //   </Grid>
-
-                  // </Card>
-                  <Card sx={{ margin: '10px', alignItems: 'center', display: 'flex', background: "#F4FBFF", height: '100px', overflow: 'hidden' }} >
+                  console.log(fileData),
+                  < Card sx={{ margin: '10px', alignItems: 'center', display: 'flex', background: "#F4FBFF", height: '80px', overflow: 'hidden' }} >
                     < CardMedia
                       component="img"
-                      sx={{ width: 100 }}
+                      sx={{ width: 80, padding: '8px' }}
                       src={Pdf}
                     />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>

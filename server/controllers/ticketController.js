@@ -2,6 +2,7 @@ const { successResponse, successResponseWithData, ErrorResponse } = require("../
 const userDataService = require("../services/userDataService");
 const express = require("express");
 const { ticketModel } = require("../models/ticketSchema");
+const { TicketCounter } = require("../models/ticketCounter")
 const { default: axios } = require("axios");
 const { getImgUrl, deleteFile } = require("../services/cloudinary");
 //const multer = require("multer");
@@ -10,14 +11,10 @@ app.get("/", async (req, res) => {
   const data = await ticketModel.find();
   return successResponseWithData(res, "users array", data);
 });
-const getAllTIcketData = async (req, res) => {
-  console.log("bharat kar");
-  const data = await ticketModel.find();
-  return res.status(200).json({ data });
-};
-// const getTIcketById = async(req , res) =>{
-//   const id = req.params.id;
-// }
+
+
+
+
 const getImageById = async (req, res, next) => {
   const id = req.params.id;
   console.log("id is ::::::::", id);
@@ -25,6 +22,8 @@ const getImageById = async (req, res, next) => {
   console.log("loggggg", data);
   res.status(200).json({ data });
 };
+
+
 const getTIcketById = async (req, res, next) => {
   const id = req.params.id;
   console.log(id, "hii");
@@ -40,6 +39,7 @@ const getTIcketById = async (req, res, next) => {
   }
   return res.status(200).json({ ticket });
 };
+
 // @@@@@@@@@@@@@@@@@@@@@@ ticketId @@@@@@@@@@@@@@@@@@@@ //
 const ticketId = async (req, res) => {
   ticketModel.findOneAndUpdate(
@@ -69,15 +69,22 @@ const ticketId = async (req, res) => {
   data.save();
   res.send("Add id!!!!");
 };
+
+
+
 const addTicket = async (req, res) => {
-  // console.log("body reqyest  data===== " , req.body)
+  const count = await ticketModel.findOne().sort({ ticketId: -1 })
+  let ticketNumber = 1001
+  if (count && count.ticketId) {
+    ticketNumber = parseInt(count.ticketId) + 1
+  }
   const { ticketId, name, department, fileupload, issuetype, message, status } =
     req.body;
   // console.log(ticketExist, "ticketExist");
   try {
     let ticket;
     ticket = new ticketModel({
-      ticketId,
+      ticketId: ticketNumber,
       name,
       department,
       fileupload,
@@ -98,17 +105,14 @@ const addTicket = async (req, res) => {
   }
 };
 const getTicketByStatus = async (req, res) => {
+
   const data = req.body?.flags;
   const searchString = req.body?.searchString;
-
-  console.log("=================00000000======", searchString);
-  // const status=new userModel();
-  // console.log("data received", data);
   console.log("no data", searchString);
   const regex = new RegExp(searchString, "i");
   if (data && data.length === 0) {
     await ticketModel
-      .find({ $or: [{ name: regex }, { department: regex }] })
+      .find({ $or: [{ ticketId: regex }, { name: regex }, { department: regex }] })
       .then((result) => {
         return res.status(200).json({ message: "data fetched succesfully", data: result });
       })
@@ -142,7 +146,7 @@ const getTicketByStatus = async (req, res) => {
       }
       console.log("mknnjjkk", flagArray);
       await ticketModel
-        .find({ $and: [{ status: { $in: flagArray } }, { $or: [{ name: regex }, { department: regex }] }] })
+        .find({ $and: [{ status: { $in: flagArray } }, { $or: [{ name: regex }, { department: regex }, { ticketId: regex }] }] })
         .then((result) => {
           // console.log("result----", result)
           return res.status(200).json({ message: "data fetcheds succesfully", data: result });
@@ -167,7 +171,7 @@ const searchUser = async (req, res) => {
   console.log("searchText::::::::", searchText);
   const regex = new RegExp(searchText, "i");
   await ticketModel
-    .find({ $or: [{ name: regex }, { department: regex }] })
+    .find({ $or: [{ name: regex }, { department: regex }, { ticketId: regex }] })
     .then((resp) => {
       res.status(200).json({ result: resp });
     })
@@ -194,7 +198,7 @@ const DeleteAttechment = async (req, res) => {
   const data = await deleteFile(id);
   res.status(200).json({ data });
 };
-exports.getAllTIcketData = getAllTIcketData;
+
 exports.addTicket = addTicket;
 exports.getTIcketById = getTIcketById;
 exports.UpdateTicket = UpdateTicket;

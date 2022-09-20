@@ -81,7 +81,6 @@ export const Home = () => {
   // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [SingleData, setSingleData] = React.useState(null);
-  console.log(SingleData)
   const open = Boolean(anchorEl);
   const handleClick = (event, row) => {
     console.log(row)
@@ -211,10 +210,10 @@ export const Home = () => {
               <TableRow></TableRow>
             </TableHead>
             <TableBody>
-              {data.map((row, index) => (
-                <TableRow className="tableRow" key={index} style={{ background: "#F4FBFF" }}>
+              {data.map((row) => (
+                <TableRow className="tableRow" key={row.ticketId} style={{ background: "#F4FBFF" }}>
                   <TableCell component="th" align="center" scope="row">
-                    {index + 1001}
+                    {row.ticketId}
                   </TableCell>
                   <TableCell align="center">{row.department}</TableCell>
                   <TableCell align="center">{row.name}</TableCell>
