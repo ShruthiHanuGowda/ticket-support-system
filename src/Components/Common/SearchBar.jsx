@@ -89,7 +89,7 @@ const SearchBar = ({ onClick, clearSearch }) => {
     let searchValueData = searched
     // console.log(searchValueData)
   }
- 
+
   return (
     <Search sx={{ '& .MuiInputBase-root': { width: '100%' } }}>
       <SearchIconWrapper>

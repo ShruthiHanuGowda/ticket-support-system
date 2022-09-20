@@ -1,5 +1,19 @@
 import * as React from "react";
-import { Button, Divider, Grid, IconButton, InputBase, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Grid,
+  IconButton,
+  InputBase,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 // import { makeStyles } from '@material-ui/core/styles';
@@ -38,7 +52,7 @@ export const ManageUser = ({ loggedin }) => {
 
   React.useEffect(() => {
     //---- for Toster
-    console.count('useEffect called');
+    console.count("useEffect called");
     if (location.state) {
 
       console.log('location::', location)

@@ -9,27 +9,27 @@ export default class App extends Component {
     products: productsList,
     categories: {
       first: false,
-      second: false
-    }
+      second: false,
+    },
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { name } = e.target;
 
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return {
         categories: {
           ...prevState.categories,
-          [name]: !prevState.categories[name]
-        }
+          [name]: !prevState.categories[name],
+        },
       };
     });
   };
 
   render() {
     const checkedProducts = Object.entries(this.state.categories)
-      .filter(category => category[1])
-      .map(category => category[0]);
+      .filter((category) => category[1])
+      .map((category) => category[0]);
     const filteredProducts = this.state.products.filter(({ category }) =>
       checkedProducts.includes(category)
     );

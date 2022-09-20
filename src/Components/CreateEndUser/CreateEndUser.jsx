@@ -33,9 +33,9 @@ export const CreateEndUser = () => {
       charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
       retVal = "";
     for (var i = 0, n = charset.length; i < length; ++i) {
-      retVal += charset.charAt(Math.floor(Math.random() * n));
+      retVal += charset.charAt(Math.floor(Math.random() * n));;
     }
-    return retVal;
+    return retVal;;
   }
   const sendData = async (temPass) => {
     await axios
@@ -58,14 +58,14 @@ export const CreateEndUser = () => {
         })
       )
       .catch(function (error) {
-        toast.error(error.response?.data?.message);
-      });
-  };
+        toast.error(error.response?.data?.message);;
+      });;
+  };;
   const handleSubmit = (e) => {
-    e.preventDefault();
-    let a = generatePassword();
+    e.preventDefault();;
+    let a = generatePassword();;
     console.log(a);
-    sendData(a);
+    sendData(a);;
     // sendData(a).then((a) => {
     //
     // });
@@ -87,7 +87,7 @@ export const CreateEndUser = () => {
     console.log(fetchUserData);
   }, [_id]);
   const handleUpdate = (e) => {
-    e.preventDefault();
+    e.preventDefault();;
     updateRequest()
       .then((res) => {
         navigate("/manage-user", {
@@ -286,7 +286,7 @@ export const CreateEndUser = () => {
           </Form>
         </Box>
       )
-    );
+    );;
   } else {
     return (
       (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
@@ -463,6 +463,7 @@ export const CreateEndUser = () => {
           </Form>
         </Box>
       )
-    );
+    );;
   }
 };
+;

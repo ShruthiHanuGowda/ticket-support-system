@@ -22,47 +22,93 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-//   import Radio from '@mui/material/Radio';
+import { useEffect } from "react";
+import { styled } from "@mui/material/styles";
+import Chip from "@mui/material/Chip";
+import Paper from "@mui/material/Paper";
+const ListItem = styled("li")(({ theme }) => ({
+  margin: theme.spacing(0.5),
+}));
 //   import RadioGroup from '@mui/material/RadioGroup';
 //   import FormControlLabel from '@mui/material/FormControlLabel';
 // import FormControl from '@mui/material/FormControl';
 // import FormLabel from '@mui/material/FormLabel';
-
 export const CreateTicket = () => {
   const theme = useTheme();
+  const [imageArr, setImageArr] = useState([]);
+  console.log(imageArr);
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
-
   const [input, setInput] = useState({
     name: "",
-    department: "",
+    department: [],
     fileupload: "",
     issuetype: "",
     message: "",
   });
-  console.log(input);
+  useEffect(() => {
+    const userdata = JSON.parse(sessionStorage.getItem("userData"));
+    console.log(userdata);
+    setInput(userdata);
+  }, [imageArr]);
+  //   console.log(input)
   const handleChange = (e) => {
     setInput((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
-    const File = e.target.files;
-    console.log("Event===== ", e.target.files);
   };
-
+  const uploadFile = async (e) => {
+    e.preventDefault();
+    const formData = await e.target.files;
+    await axios
+      .post("/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then(({ data }) => {
+        console.log("res::::", data);
+        setImageArr([...data.data]);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(input);
     await axios.post("/ticket", {
       name: String(input.name),
       department: String(input.department),
-      fileupload: String(input.fileupload),
+      fileupload: imageArr,
       issuetype: String(input.issuetype),
       message: String(input.message),
+      status: String("Open"),
     });
   };
-  console.log("Ticket Add Successfully!!");
+  // const [chipData, setChipData] = React.useState([
+  //   { key: 0, label: "Angular" },
+  //   { key: 1, label: "jQuery" },
+  //   { key: 2, label: "Polymer" },
+  // ]);
+  // const handleDelete = (chipToDelete) => () => {
+  //   setChipData((chips) =>
+  //     chips.filter((chip) => chip.key !== chipToDelete.key)
+  //   );
+  // };
+  const handlerDeleteAttechmentChip = async (id) => {
+    console.log("id in console ::::::::::", id);
+    await axios
+      .get(`/deleteImageIncloudy/${id}`)
+      .then(({ data }) => {
+        console.log("res::::", data);
+        setImageArr((chips) => chips.filter((chip) => chip.imageID !== id));
+        // setImageArr([...data.data]);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+  // console.log("Ticket Add Successfully!!");
   return (
     (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
     (
@@ -80,17 +126,20 @@ export const CreateTicket = () => {
         <Typography variant="h5" sx={{ my: 4 }}>
           Create Ticket
         </Typography>
-        <Form onSubmit={handleSubmit}>
-          <Grid container justify="center" spacing={4}>
+        <Form enctype="multipart/form-data" onSubmit={handleSubmit}>
+          <Grid container justify="center" spacing={6}>
             <Grid item md={6} xs={12}>
-              <InputLabel spacing={2}>
+              <InputLabel>
                 Full Name<span style={{ color: "red" }}>*</span>
               </InputLabel>
               <TextField
+                inputProps={{ readOnly: true }}
                 name="name"
                 value={input.name}
                 placeholder="Name"
-                onChange={handleChange}
+                onChange={(e) =>
+                  setInput(e.target.value) ? e.preventDefault() : ""
+                }
                 sx={{
                   background: "#F4FBFF",
                   width: "100%",
@@ -100,14 +149,11 @@ export const CreateTicket = () => {
                 }}
               />
             </Grid>
-
             <Grid item md={6} xs={12}>
               <InputLabel>
                 Department <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <Select
-                defaultValue=""
-                id="grouped-select"
                 label="Grouping"
                 // placeholder="Select Position"
                 name="department"
@@ -132,18 +178,19 @@ export const CreateTicket = () => {
                 <MenuItem value={"HR Senior"}>senior</MenuItem>
               </Select>
             </Grid>
-
             <Grid item md={6} xs={12}>
               <InputLabel>
-                File Upload<span style={{ color: "red" }}>*</span>
+                File Upload {imageArr.length}
+                <span style={{ color: "red" }}>*</span>
               </InputLabel>
-
               <TextField
                 type="file"
+                // multiple
+                // accept="image/*"
                 placeholder="Browser Files"
                 name="fileupload"
                 value={input.fileupload}
-                onChange={handleChange}
+                onChange={uploadFile}
                 sx={{
                   background: "#F4FBFF",
                   width: "100%",
@@ -151,6 +198,10 @@ export const CreateTicket = () => {
                   [theme.breakpoints.up("md")]: {
                     width: "491px  !important",
                   },
+                }}
+                inputProps={{
+                  multiple: true,
+                  accept: ["application/pdf", "image/*"],
                 }}
                 InputProps={{
                   endAdornment: (
@@ -160,8 +211,36 @@ export const CreateTicket = () => {
                   ),
                 }}
               />
+              <Paper
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                  listStyle: "none",
+                  p: 0.5,
+                  m: 1,
+                  ml: 0,
+                  width: "77%",
+                  boxShadow: "none",
+                }}
+                component="ul"
+              >
+                {imageArr.map((data) => {
+                  let icon;
+                  return (
+                    <ListItem key={data.imageID}>
+                      <Chip
+                        sx={{ backgroundColor: "#F4FBFF", color: "#0E2D7B" }}
+                        label={data.imageName}
+                        onDelete={() =>
+                          handlerDeleteAttechmentChip(data.imageID)
+                        }
+                      />
+                    </ListItem>
+                  );
+                })}
+              </Paper>
             </Grid>
-
             <Grid item md={6} xs={12}>
               <InputLabel htmlFor="grouped-select">
                 Issue Type <span style={{ color: "red" }}>*</span>
@@ -176,12 +255,12 @@ export const CreateTicket = () => {
                 sx={{
                   background: "#F4FBFF",
                   width: "100%",
-
                   [theme.breakpoints.up("md")]: {
                     width: "491px ",
                   },
                 }}
               >
+                {console.log("hiiiiiiiiiiiiiiiii", input.issuetype === "")}
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
@@ -193,12 +272,10 @@ export const CreateTicket = () => {
                 <MenuItem value={"HR Senior"}>senior</MenuItem>
               </Select>
             </Grid>
-
             <Grid item md={6} xs={12}>
               <InputLabel>
                 Message <span style={{ color: "red" }}>*</span>
               </InputLabel>
-
               <TextareaAutosize
                 name="message"
                 value={input.message}
@@ -213,10 +290,8 @@ export const CreateTicket = () => {
                 }}
               />
             </Grid>
-
             <Grid item md={6} xs={12} padding={1}></Grid>
           </Grid>
-
           <Grid container>
             <Button
               variant="contained"

@@ -1,6 +1,17 @@
 import * as React from "react";
-import { Box } from '@mui/system';
-import {  CssBaseline, IconButton, Toolbar, Tooltip, Avatar, InputBase, Menu, MenuItem, Typography, Button } from '@mui/material';
+import { Box } from "@mui/system";
+import {
+  CssBaseline,
+  IconButton,
+  Toolbar,
+  Tooltip,
+  Avatar,
+  InputBase,
+  Menu,
+  MenuItem,
+  Typography,
+  Button,
+} from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 // import Search from '@mui/icons-material/Search';
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
@@ -13,7 +24,6 @@ import { styled, useTheme } from "@mui/material/styles";
 import Kl from "../../../Assets/Images/KL.png";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
-
 
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
@@ -83,11 +93,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-
 //----------------------------------------------
-const AppBarPage = ({setOpen,open}) => {
+const AppBarPage = ({ setOpen, open }) => {
   const settings = ["Profile", "Account", "Dashboard", "Logout"];
-  console.log(open)
+  console.log(open);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -95,22 +104,30 @@ const AppBarPage = ({setOpen,open}) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-   // -------for Avatar -------
- const [anchorElUser, setAnchorElUser] = React.useState(null);
+  // -------for Avatar -------
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
- const handleOpenUserMenu = (event) => {
-   setAnchorElUser(event.currentTarget);
- };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
- const handleCloseUserMenu = () => {
-   setAnchorElUser(null);
- };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
   return (
     <Box sx={{ display: "-webkit-Box" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ paddingLeft: "10px", background: "#F4FBFF" }}>
+      <AppBar
+        position="fixed"
+        open={open}
+        sx={{ paddingLeft: "10px", background: "#F4FBFF" }}
+      >
         <Toolbar style={{ paddingLeft: "0px" }}>
-          <img style={{ ...(open && { display: "none" }) }} src={Kl} alt="logo" />
+          <img
+            style={{ ...(open && { display: "none" }) }}
+            src={Kl}
+            alt="logo"
+          />
           <IconButton
             aria-label="open drawer"
             onClick={handleDrawerOpen}
@@ -128,9 +145,12 @@ const AppBarPage = ({setOpen,open}) => {
             <Button sx={{ color: "#777777" }}>
               <Search>
                 <SearchIconWrapper>
-                  <SearchIcon/>
+                  <SearchIcon />
                 </SearchIconWrapper>
-                <StyledInputBase placeholder="Search..." inputProps={{ "aria-label": "search" }} />
+                <StyledInputBase
+                  placeholder="Search..."
+                  inputProps={{ "aria-label": "search" }}
+                />
               </Search>
             </Button>
           </Box>
@@ -138,7 +158,7 @@ const AppBarPage = ({setOpen,open}) => {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar />
-                <ArrowDropDownIcon/>
+                <ArrowDropDownIcon />
               </IconButton>
             </Tooltip>
             <Menu
@@ -166,8 +186,8 @@ const AppBarPage = ({setOpen,open}) => {
           </Box>
         </Toolbar>
       </AppBar>
-      </Box>
-  )
-}
+    </Box>
+  );
+};
 
-export default AppBarPage
+export default AppBarPage;

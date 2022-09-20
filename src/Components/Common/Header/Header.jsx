@@ -17,20 +17,15 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import MailIcon from "@mui/icons-material/PeopleAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-
-// import Kl from "../../../Assets/Images/KL.png";
-// import { BrowserRouter, Link, Outlet, useNavigate } from "react-router-dom";
-// import { Avatar, Button, Icon, InputBase, Menu, MenuItem, Tooltip } from "@mui/material";
-
-import Kl from '../../../Assets/Images/KL.png'
-import Bharat from '../../../Assets/Images/Bharat.png'
-import { BrowserRouter, Link, Outlet, useNavigate } from 'react-router-dom'
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import Kl from "../../../Assets/Images/KL.png";
+import Bharat from "../../../Assets/Images/Bharat.png";
+import { BrowserRouter, Link, Outlet, useNavigate } from "react-router-dom";
 import {
   Avatar,
   Button,
@@ -63,7 +58,7 @@ const closedMixin = (theme) => ({
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-});;
+});
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -161,7 +156,7 @@ const Search = styled("div")(({ theme }) => ({
   menuPaper: {
     backgroundColor: "lightblue",
   },
-}));;
+}));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -199,13 +194,13 @@ export const Header = ({ setIsLoggedin }) => {
     {
       name: "Dashboard",
       path: "/dashboard",
-      icon: DashboardOutlinedIcon,
+      icon:  DashboardOutlinedIcon,
       access: ["admin"],
     },
     {
       name: "Dashboard",
       path: "/client-dashboard",
-      icon: DashboardOutlinedIcon,
+      icon:  DashboardOutlinedIcon,
       access: ["client"],
     },
     { name: "Manage Client", path: "/manage-client", icon: MailIcon, access: ["admin"], },
@@ -245,9 +240,17 @@ export const Header = ({ setIsLoggedin }) => {
   return (
     <Box sx={{ display: "-webkit-Box" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ paddingLeft: "10px", background: "#F4FBFF" }}>
+      <AppBar
+        position="fixed"
+        open={open}
+        sx={{ paddingLeft: "10px", background: "#F4FBFF" }}
+      >
         <Toolbar style={{ paddingLeft: "0px" }}>
-          <img style={{ ...(open && { display: "none" }) }} src={Kl} alt="logo" />
+          <img
+            style={{ ...(open && { display: "none" }) }}
+            src={Kl}
+            alt="logo"
+          />
           <IconButton
             aria-label="open drawer"
             onClick={handleDrawerOpen}
@@ -267,7 +270,10 @@ export const Header = ({ setIsLoggedin }) => {
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
-                <StyledInputBase placeholder="Search..." inputProps={{ "aria-label": "search" }} />
+                <StyledInputBase
+                  placeholder="Search..."
+                  inputProps={{ "aria-label": "search" }}
+                />
               </Search>
             </Button>
           </Box>
@@ -315,7 +321,13 @@ export const Header = ({ setIsLoggedin }) => {
           <Typography>
             <img src={Kadellogo} alt="logo" />
           </Typography>
-          <IconButton onClick={handleDrawerClose}>{theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "rtl" ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
+          </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
@@ -365,7 +377,11 @@ export const Header = ({ setIsLoggedin }) => {
                     justifyContent: "center",
                   }}
                 >
-                  {index % 2 === 0 ? <PermIdentityOutlinedIcon /> : <LogoutIcon color="error" onClick={logout} />}
+                  {index % 2 === 0 ? (
+                    <PermIdentityOutlinedIcon />
+                  ) : (
+                    <LogoutIcon color="error" onClick={logout} />
+                  )}
                 </ListItemIcon>
                 <ListItemText onClick={() => {
                   if (text == "Logout") {

@@ -1,38 +1,80 @@
 import React from "react";
 import {
-    Box,
-    Grid,
-    Table,
-    //TextField,
-    TableCell,
-    TableRow,
-    Toolbar,
-    Typography,
-  } from "@mui/material";
-
+  Box,
+  CardContent,
+  CardMedia,
+  Grid,
+  IconButton,
+  Table,
+  TableCell,
+  TableRow,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import { useTheme } from '@mui/material/styles';
-  //import useMediaQuery from '@mui/material/useMediaQuery';
-  
-  //import { useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import Card from "@mui/material/Card";
-import Pdf from "../../Assets/Images/Pdf.png"
-  
+import Pdf from "../../Assets/Images/Pdf.png";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import DailogBoxModel from "../TicketDetails/dailogBox";
+import Chip from "@mui/material/Chip";
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+const ListItem = styled("li")(({ theme }) => ({
+  margin: theme.spacing(0.5),
+}));
 export const TicketDetails = () => {
-    // const theme = useTheme();
-     const theme = useTheme();
-   // const matches = useMediaQuery(theme.breakpoints.down( 'md'));
-    const styles = {
-      media: {
-        height: 40,
-        width:30,
-       // paddingTop: '56.25%',// 16:9,
-        //marginTop:'8'
-      }
+  const [data, setData] = useState({});
+  const [edit, setedit] = useState(false);
+  const [statusOpen, setStatusOpen] = React.useState(false);
+  const [flagValue, setFlagValue] = useState(null);
+  const id = useParams().id;
+  useEffect(() => {
+    console.count();
+    fecthTicketDetail();
+  }, []);
+  const fecthTicketDetail = async () => {
+    await axios.get(`/getSingleTicket/${id}`).then((res) => {
+      setData(res.data.ticket);
+    });
+  };
+  const handleOpenDialogBox = (flag) => {
+    console.log("=--------", flag.flag);
+    setedit(true);
+    setStatusOpen(true);
+    setFlagValue(flag.flag);
+    // return(
+    //   <DailogBoxModel  seteOpen={true}/>
+    // )
+  };
+  const getImageURL = (imageIdArg) => {
+    axios
+      .get(`/getImageUrl/${imageIdArg}`)
+      .then(({ data }) => {
+        console.log("image link received :::", data.data);
+        window.open(data.data, "_blank");
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+  const theme = useTheme();
+  // const matches = useMediaQuery(theme.breakpoints.down( 'md'));
+  const styles = {
+    media: {
+      height: 40,
+      width: 30,
+      // paddingTop: '56.25%',// 16:9,
+      //marginTop:'8'
+    },
   };
   return (
     <Box
@@ -47,6 +89,19 @@ export const TicketDetails = () => {
         },
       }}
     >
+      {edit ? (
+        <DailogBoxModel
+          onstatusChange={() => {
+            fecthTicketDetail();
+          }}
+          open={statusOpen}
+          onClose={setStatusOpen}
+          id={id}
+          flag={flagValue}
+        />
+      ) : (
+        ""
+      )}
       <Typography
         paragraph
         sx={{
@@ -58,9 +113,8 @@ export const TicketDetails = () => {
         Ticket Details
       </Typography>
       <Typography variant="h6" sx={{ ml: 1, fontSize: 25, fontweight: 600 }}>
-        Ticket ID: #2345
+        Ticket ID: #{data._id}
       </Typography>
-
       <Grid container spacing={6} justify="space-between">
         <Grid item xs={6} md={6}>
           <Grid container alignItems={"center "}>
@@ -84,10 +138,8 @@ export const TicketDetails = () => {
               <Divider></Divider>
             </Grid>
           </Grid>
-
           <Grid item xs={6} md={6}>
             <Table
-              //sx={{ minWidth: 580, marginLeft: "4px", marginTop: "1px" }}
               sx={{
                 ml: 1,
                 width: "100%",
@@ -109,7 +161,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ m: 0, color: "#3B3B3B", border: "none" }}
                 >
-                  Lorem ipsum
+                  {data.department}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -140,8 +192,12 @@ export const TicketDetails = () => {
                   <FiberManualRecordIcon
                     sx={{ color: "green", fontSize: "8px" }}
                   />{" "}
-                  Open{" "}
+                  {data.status}{" "}
                   <CreateOutlinedIcon
+                    onClick={(e) => {
+                      console.log("button Click status");
+                      handleOpenDialogBox({ flag: "status" });
+                    }}
                     sx={{ color: "black", fontSize: "15px" }}
                   />
                 </TableCell>
@@ -149,7 +205,6 @@ export const TicketDetails = () => {
             </Table>
           </Grid>
         </Grid>
-
         <Grid item xs={9} md={6}>
           <Grid container alignItems={"center"}>
             <Grid item xs={1} md={1}>
@@ -172,7 +227,6 @@ export const TicketDetails = () => {
               <Divider></Divider>
             </Grid>
           </Grid>
-
           <Grid item xs={6} md={6}>
             <Table
               sx={{ minWidth: 1, marginLeft: "5px", marginTop: "1px" }}
@@ -185,16 +239,21 @@ export const TicketDetails = () => {
                   textalign="left"
                 >
                   Assignee:
-                  <CompareArrowsIcon
-                    sx={{
-                      color: "black",
-                      fontSize: "15px",
-                      marginLeft: "100px",
-                    }}
-                  />
-                  <CreateOutlinedIcon
-                    sx={{ color: "black", fontSize: "15px" }}
-                  />
+                  <IconButton>
+                    <CompareArrowsIcon
+                      onClick={(e) => handleOpenDialogBox({ flag: "transfer" })}
+                      sx={{
+                        color: "black",
+                        fontSize: "15px",
+                      }}
+                    />
+                  </IconButton>
+                  <IconButton>
+                    <CreateOutlinedIcon
+                      onClick={(e) => handleOpenDialogBox({ flag: "assignee" })}
+                      sx={{ color: "black", fontSize: "15px" }}
+                    />
+                  </IconButton>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -202,7 +261,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  Lorem ipsum
+                  {data.name}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -218,7 +277,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  Medium
+                  {data.name}
                 </TableCell>
               </TableRow>
             </Table>
@@ -246,73 +305,83 @@ export const TicketDetails = () => {
               <Divider></Divider>
             </Grid>
           </Grid>
-          <Grid container spacing={1} xs={8} md={6}>
-            <Grid item xs={8} px={4}>
-              <Card
-                sx={{
-                  display: "flex",
-                  ml: 2,
-                  width: 360,
+          <Grid container spacing={1} xs={7} md={8}>
+            <Grid item px={4}>
+              {data &&
+                data.fileupload &&
+                data.fileupload.map((fileData) => (
+                  // <Card
+                  //   sx={{
+                  //     display: "flex",
+                  //     ml: 2,
+                  //     mt: 1,
 
-                  background: "#F4FBFF",
-                }}
-              >
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  {/* <img src={Pdf} alt="pdf" style={styles.media}  /> */}
-                  {/* <CardContent sx={{ flex: "1 0 auto" }}> */}
-                  <Typography
-                    component="div"
-                    variant="h5"
-                    sx={{ ml: 2, color: "black" }}
-                  >
-                    <img src={Pdf} alt="pdf" style={styles.media} />
-                    attachment_2345.pdf <SaveAltIcon sx={{ ml: 3 }} />
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="text.secondary"
-                    component="div"
-                    sx={{ ml: 9 }}
-                  >
-                    1.23MB .18/03/22
-                  </Typography>
-                  {/* </CardContent> */}
-                </Box>
-              </Card>
-            </Grid>
+                  //     spacing: 3,
+                  //     background: "#F4FBFF",
+                  //   }}
+                  // >
 
-            <Grid item xs={8} px={4}>
-              <Card
-                sx={{
-                  display: "flex",
-                  ml: 2,
-                  width: 360,
-                  spacing: 3,
-                  background: "#F4FBFF",
-                }}
-              >
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  {/* <img src={Pdf} alt="pdf" style={styles.media}  /> */}
-                  {/* <CardContent sx={{ flex: "1 0 auto" }}> */}
-                  <Typography
-                    component="div"
-                    variant="h5"
-                    sx={{ ml: 2, color: "black" }}
-                  >
-                    <img src={Pdf} alt="pdf" style={styles.media} />
-                    attachment_2345.pdf <SaveAltIcon sx={{ ml: 3 }} />
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="text.secondary"
-                    component="div"
-                    sx={{ ml: 9 }}
-                  >
-                    1.23MB .18/03/22
-                  </Typography>
-                  {/* </CardContent> */}
-                </Box>
-              </Card>
+                  //   <Grid container flex='1' >
+                  //     <Grid item>
+                  //       <img src={Pdf} alt="pdf" style={styles.media} />
+                  //     </Grid>
+                  //     <Grid item>
+                  //       <Typography
+                  //         component="div"
+                  //         sx={{ ml: 2, color: "black" }}
+                  //       >
+
+                  //         {fileData && fileData.imageName}
+                  //         <SaveAltIcon
+                  //           sx={{ ml: 2 }}
+                  //           onClick={() => {
+                  //             getImageURL(fileData && fileData.imageID);
+                  //           }}
+                  //         />
+                  //       </Typography>
+                  //       <Typography
+                  //         variant="subtitle1"
+                  //         color="text.secondary"
+                  //         component="div"
+                  //         sx={{ ml: 9 }}
+                  //       >
+                  //         1.23MB .18/03/22
+                  //       </Typography>
+                  //     </Grid>
+
+                  //   </Grid>
+
+                  // </Card>
+                  <Card sx={{ margin: '10px', alignItems: 'center', display: 'flex', background: "#F4FBFF", height: '100px', overflow: 'hidden' }} >
+                    < CardMedia
+                      component="img"
+                      sx={{ width: 100 }}
+                      src={Pdf}
+                    />
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                      <CardContent sx={{ flex: '1 0 auto' }}>
+                        <Typography component="div" >
+                          {fileData && fileData.imageName}
+                        </Typography>
+                        <Typography variant="subtitle1" color="text.secondary" component="div">
+                          Mac Miller
+                        </Typography>
+                      </CardContent>
+                      <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+
+                      </Box>
+                    </Box>
+                    <CardMedia sx={{ textAlign: 'center', marginRight: '10px', verticalAlign: 'center' }}>
+                      <SaveAltIcon
+                        sx={{ ml: 2 }}
+                        onClick={() => {
+                          getImageURL(fileData && fileData.imageID);
+                        }}
+                      />
+                    </CardMedia>
+                  </Card>
+
+                ))}
             </Grid>
           </Grid>
         </Grid>
@@ -358,7 +427,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  03/27/2022 , 11.20 AM
+                  {data.createdAt}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -374,7 +443,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  03/28/2022 , 01.50 PM
+                  {data.updatedAt}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -390,13 +459,13 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  03/31/2022 , 04.34 PM
+                  {data.solvedAt}
                 </TableCell>
               </TableRow>
             </Table>
           </Grid>
         </Grid>
       </Grid>
-    </Box>
+    </Box >
   );
 };

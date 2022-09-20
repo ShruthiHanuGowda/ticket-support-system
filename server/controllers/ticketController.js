@@ -3,53 +3,11 @@ const userDataService = require("../services/userDataService");
 const express = require("express");
 const { ticketModel } = require("../models/ticketSchema");
 const { default: axios } = require("axios");
-
-// const fileUpload = require("express-fileupload");
+const { getImgUrl, deleteFile } = require("../services/cloudinary");
+//const multer = require("multer");
 const app = express.Router();
-// app.get("/", (req, res) => {
-//     res.send("up and running")
-//    });
-
-// app.post('/', async (req, res) => {
-//     try {
-//         if(!req.files) {
-//             res.send({
-//                 status: false,
-//                 message: 'No file uploaded'
-//             });
-//         } else {
-//             let data = [];
-
-//             //loop all files
-//             _.forEach(_.keysIn(req.files.fileupload), (key) => {
-//                 let photo = req.files.fileupload[key];
-
-//                 //move photo to uploads directory
-//                 photo.mv('../../src/Assets/Images' );
-
-//                 //push file details
-//                 data.push({
-//                     name: photo.name,
-//                     mimetype: photo.mimetype,
-//                     size: photo.size
-//                 });
-//             });
-
-//             //return response
-//             res.send({
-//                 status: true,
-//                 message: 'Files are uploaded',
-//                 data: data
-//             });
-//         }
-//     } catch (err) {
-//         res.status(500).send(err);
-//     }
-// });
 app.get("/", async (req, res) => {
-  console.log("nidhi pgl he====", req);
   const data = await ticketModel.find();
-
   return successResponseWithData(res, "users array", data);
 });
 const getAllTIcketData = async (req, res) => {
@@ -57,23 +15,80 @@ const getAllTIcketData = async (req, res) => {
   const data = await ticketModel.find();
   return res.status(200).json({ data });
 };
-
+// const getTIcketById = async(req , res) =>{
+//   const id = req.params.id;
+// }
+const getImageById = async (req, res, next) => {
+  const id = req.params.id;
+  console.log("id is ::::::::", id);
+  const data = await getImgUrl(id);
+  console.log("loggggg", data);
+  res.status(200).json({ data });
+};
+const getTIcketById = async (req, res, next) => {
+  const id = req.params.id;
+  console.log(id, "hii");
+  let ticket;
+  try {
+    console.log(id);
+    ticket = await ticketModel.findById(id);
+  } catch (err) {
+    console.log(err);
+  }
+  if (!ticket) {
+    return res.status(404).json({ message: "No Product Id Found" });
+  }
+  return res.status(200).json({ ticket });
+};
+// @@@@@@@@@@@@@@@@@@@@@@ ticketId @@@@@@@@@@@@@@@@@@@@ //
+const ticketId = async (req, res) => {
+  ticketModel.findOneAndUpdate(
+    { id: "autoval" },
+    { $inc: { seq: 1 } },
+    { new: true },
+    (err, cd) => {
+      console.log("ticket value", cd);
+      if (cd == null) {
+        const newval = new ticketModel({ id: "autoval", seq: 1 });
+        newval.save();
+      }
+    }
+  );
+  const data = new ticketModel({
+    ticketId: req.body.ticketId,
+    name: req.body.name,
+    department: req.body.department,
+    fileupload: req.body.fileupload,
+    issuetype: req.body.issuetype,
+    message: req.body.message,
+    status: req.body.status,
+    createdAt: { type: String },
+    updatedAt: { type: String },
+    solvedAt: { type: String },
+  });
+  data.save();
+  res.send("Add id!!!!");
+};
 const addTicket = async (req, res) => {
   // console.log("body reqyest  data===== " , req.body)
-  const { name, department, fileupload, issuetype, message } = req.body;
+  const { ticketId, name, department, fileupload, issuetype, message, status } =
+    req.body;
   // console.log(ticketExist, "ticketExist");
-
   try {
     let ticket;
     ticket = new ticketModel({
+      ticketId,
       name,
       department,
       fileupload,
       issuetype,
       message,
+      status,
+      createdAt: new Date().toISOString(),
+      updatedAt: "",
+      solvedAt: "",
     });
     await ticket.save();
-
     if (!ticket) {
       return res.status(500).json({ message: "unable to add" });
     }
@@ -158,9 +173,33 @@ const searchUser = async (req, res) => {
     })
     .catch((err) => console.log("errr", err));
 };
+const UpdateTicket = async (req, res) => {
+  const _id = req.params.id;
+  let data = req.body;
+  data.updatedAt = new Date().toISOString();
+  console.log("hiaddyyastt=000000=====", data);
+  try {
+    if (_id) {
+      await ticketModel.updateOne({ _id: _id }, { $set: data });
+      return res.status(200).json({ message: "user updated " });
+      // return successResponseWithData(res, 'user updated', user_resp)
+    } else return successResponse(res, "sorry user couldnt be updated");
+  } catch (ex) {
+    ErrorResponse(res, "something went wrong " + ex.message);
+  }
+};
+const DeleteAttechment = async (req, res) => {
+  const id = req.params.id;
+  console.log("id here received:::::::::::", id);
+  const data = await deleteFile(id);
+  res.status(200).json({ data });
+};
 exports.getAllTIcketData = getAllTIcketData;
 exports.addTicket = addTicket;
+exports.getTIcketById = getTIcketById;
+exports.UpdateTicket = UpdateTicket;
+exports.getImageById = getImageById;
+exports.DeleteAttechment = DeleteAttechment;
+exports.ticketId = ticketId;
 exports.searchUser = searchUser;
 exports.getTicketByStatus = getTicketByStatus;
-// //   module.exports = addTicket;
-// module.exports=app;

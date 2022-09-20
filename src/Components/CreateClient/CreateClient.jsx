@@ -280,11 +280,11 @@ export const CreateClient = () => {
                     control={<Checkbox defaultChecked onClick={checkBoxClientAccess} value="view"/>}
                     label="View"
                   />
-                  <FormControlLabel                
+                  <FormControlLabel
                     control={<Checkbox  onClick={checkBoxClientAccess}  value="edit"/>}
                     label="Edit"
                   />
-                  <FormControlLabel                
+                  <FormControlLabel
                   control={<Checkbox  onClick={checkBoxClientAccess}  value="transfer"/>}
                   label="Transfer"
                 />
@@ -446,11 +446,11 @@ export const CreateClient = () => {
                   control={<Checkbox defaultChecked onClick={checkBoxClientAccess} value="view"/>}
                   label="View"
                 />
-                <FormControlLabel                
+                <FormControlLabel
                   control={<Checkbox  onClick={checkBoxClientAccess}  value="edit"/>}
                   label="Edit"
                 />
-                <FormControlLabel                
+                <FormControlLabel
                 control={<Checkbox  onClick={checkBoxClientAccess}  value="transfer"/>}
                 label="Transfer"
               />
@@ -486,4 +486,3 @@ export const CreateClient = () => {
 
 
 }
-

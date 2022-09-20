@@ -1,4 +1,8 @@
-const { successResponse, successResponseWithData, ErrorResponse } = require("../helpers/apiResponse");
+const {
+  successResponse,
+  successResponseWithData,
+  ErrorResponse,
+} = require("../helpers/apiResponse");
 const userDataService = require("../services/userDataService");
 const express = require("express");
 const { userModel } = require("../models/userSchema");
@@ -11,10 +15,8 @@ const { ticketModel } = require("../models/ticketSchema");
 
 app.get("/", async (req, res) => {
   const data = await userModel.find();
-
   return successResponseWithData(res, "users array", data);
 });
-
 const getAllUserData = async (req, res, next) => {
   const Role = req.params.role;
   console.log(req.headers);
@@ -73,7 +75,9 @@ const getUserByStatus = async (req, res) => {
           return res.status(200).json({ message: "data fetched succesfully", data: result });
         })
         .catch((err) => {
-          return res.status(500).json({ mesage: "something went wrong", description: err });
+          return res
+            .status(500)
+            .json({ mesage: "something went wrong", description: err });
         });
     } else {
       await userModel
@@ -82,7 +86,9 @@ const getUserByStatus = async (req, res) => {
           return res.status(200).json({ message: "data fetched succesfully", data: result });
         })
         .catch((err) => {
-          return res.status(500).json({ mesage: "something went wrong", description: err });
+          return res
+            .status(500)
+            .json({ mesage: "something went wrong", description: err });
         });
     }
   }
@@ -198,20 +204,17 @@ app.put("/:id", async (req, res) => {
     ErrorResponse(res, "something went wrong " + ex.message);
   }
 });
-
 app.delete("/:id", async (req, res) => {
   const _id = req.params.id;
   try {
     if (_id) {
       const user_resp = await userDataService.deleteUser(_id);
-
       return successResponseWithData(res, "user deleted", user_resp);
     } else return successResponse(res, "sorry user couldnt be deleted");
   } catch (ex) {
     ErrorResponse(res, "something went wrong " + ex.message);
   }
 });
-
 exports.addUser = addUser;
 exports.getAllUserData = getAllUserData;
 exports.deleteUser = deleteUser;

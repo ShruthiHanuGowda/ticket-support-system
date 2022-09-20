@@ -46,7 +46,7 @@ export const Home = () => {
   }, []);
   const fecthTicketData = async (searchStr) => {
     // data = [];
-    // console.log("filterValue received :", filterValue);
+    console.log("filterValue received :", searchStr);
     const { data } = await axios.post(`/getDataByFilter`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -80,9 +80,13 @@ export const Home = () => {
   };
   // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [SingleData, setSingleData] = React.useState(null);
+  console.log(SingleData)
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = (event, row) => {
+    console.log(row)
     setAnchorEl(event.currentTarget);
+    setSingleData(row);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -228,7 +232,7 @@ export const Home = () => {
 
                   <TableCell align="center">
                     <Tooltip title="Action">
-                      <IconButton onClick={handleClick}>
+                      <IconButton onClick={(e) => handleClick(e, row)}>
                         <MoreVertIcon sx={{ color: "#777777" }} />
                       </IconButton>
                     </Tooltip>
@@ -252,15 +256,18 @@ export const Home = () => {
                       }}
                       anchorEl={anchorEl}
                       open={open}
+                      SingleData={SingleData}
                       onClose={handleClose}
                       MenuListProps={{
                         "aria-labelledby": "basic-button",
                       }}
                     >
-                      <MenuItem onClick={handleClose} component={Link} to="/ticket-details">
+                      <MenuItem onClick={handleClose} component={Link}
+                        to={`/ticket-details/${SingleData?._id}`}>
                         Views <RemoveRedEyeIcon fontSize="14px" />
                       </MenuItem>
-                      <MenuItem onClick={handleClose}>
+                      <MenuItem onClick={handleClose} component={Link}
+                        to={`/ticket-details/${SingleData?._id}`}>
                         Edit
                         <EditIcon fontSize="14px" />
                       </MenuItem>
