@@ -3,19 +3,24 @@ const mongoose = require("mongoose");
 const ticketSchema = mongoose.Schema({
   ticketId: {
     type: String,
+
   },
   name: {
     type: String,
+    required: true,
   },
   department: {
     type: String,
+    required: true,
   },
   fileupload: [{ imageID: { type: String }, imageName: { type: String } }],
   issuetype: {
     type: String,
+    required: true,
   },
   message: {
     type: String,
+    required: true,
   },
   status: {
     type: String,

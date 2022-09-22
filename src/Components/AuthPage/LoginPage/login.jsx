@@ -8,7 +8,6 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
-
 const Component = styled(Box)`
   width: 500px;
   height: 542px;
@@ -18,18 +17,15 @@ const Component = styled(Box)`
   box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 `;
-
 const Heading = styled(Typography)`
   text-align: center;
   font-size: 25px;
   padding: 20px;
 `;
-
 const Detail = styled(Typography)`
   text-align: center;
   font-size: 30px;
 `;
-
 const Wrapper = styled(Box)`
   padding: 20px 30px;
   display: flex;
@@ -45,22 +41,17 @@ const LoginButton = styled(Button)`
   width: 120px;
   height: 25px;
   padding: 20px;
-
   margin-left: 150px;
 `;
-
 const Forgot = styled(Typography)`
   margin-left: 295px;
 `;
-
 const Fields = styled(TextField)`
   background: #fff;
 `;
-
 export const Login = ({ setIsLoggedin }) => {
   const navigate = useNavigate();
   const Location = useLocation();
-
   const [data, setData] = useState({
     userName: "",
     password: "",
@@ -87,25 +78,22 @@ export const Login = ({ setIsLoggedin }) => {
   };
   const handleClickShowPassword = () => {
     setData({
-      ...data, showPassword: !data.showPassword
-    })
+      ...data,
+      showPassword: !data.showPassword,
+    });
   };
-
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
   const onsubmit = async (e) => {
     e.preventDefault();
-
     const url = "/login";
     const res = await axios.post(url, data);
-    console.log(res)
+    console.log(res);
     const userLogin = res.data.userLoginData;
-
     const userData = JSON.stringify(userLogin);
     sessionStorage.setItem("userData", userData);
     sessionStorage.setItem("token", res.data.token);
-
     if (userLogin?.role === "admin") {
       navigate("/dashboard", { state: userLogin });
     } else if (userLogin?.role === "client") {
@@ -113,25 +101,10 @@ export const Login = ({ setIsLoggedin }) => {
     } else if (userLogin?.role === "user") {
       navigate("/create-ticket", { state: userLogin });
     } else {
-
-      navigate("/")
-      toast.error(res.data.message)
-
+      navigate("/");
+      toast.error(res.data.message);
     }
   };
-
-  // const getUser = async (request,response)=>{
-  //   let user = await User.findOne({ username: request.body.username });
-  //   if (!user) {
-  //       return response.status(400).json({ msg: 'Username does not match'});
-  //   }
-  //   try {
-  //       console.log(user);
-  //   }catch (error) {
-  //       return response.status(500).json({ msg: 'Errror while login in user'});
-  //   }
-  // }
-
   return (
     <>
       <Box>
@@ -158,12 +131,7 @@ export const Login = ({ setIsLoggedin }) => {
             value={data.password}
             endAdornment={
               <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
+                <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end">
                   {data.showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>

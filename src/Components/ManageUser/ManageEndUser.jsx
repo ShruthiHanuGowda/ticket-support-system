@@ -42,8 +42,6 @@ function createData(sr, name, position, Department) {
 const rows = [createData("1", "John Doe", "Sales Executive", "Sales"), createData("2", "John Doe", "Manager", "Sales"), createData("3", "John Doe", "Marketing", "Sales"), createData("4", "John Doe", "Sales Executive", "Sales"), createData("5", "John Doe", "Sales Executive", "Sales"), createData("6", "John Doe", "Sales Executive", "Sales"), createData("7", "John Doe", "Sales Executive", "Sales")];
 let serText = ''
 export const ManageUser = ({ loggedin }) => {
-  // console.log('loaded');
-  // ------for openAction in table Row---
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [data, setData] = React.useState([]);
   const open = Boolean(anchorEl);
@@ -72,7 +70,6 @@ export const ManageUser = ({ loggedin }) => {
     console.log(userData.data.data);
     setData(userData.data.data);
 
-    // .then((res)=> console.log(res.data.data));
   };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -87,13 +84,11 @@ export const ManageUser = ({ loggedin }) => {
     toast.success(response.data.message)
     setData([]);
     fecthUserData(serText);
-    // window.location.reload(false);
-    //navigate("#")
+
   };
 
   const editUser = (id) => {
     navigate(`/create-enduser/${id}`);
-    // await axios.post(`http://localhost:8000/user/${id}`).then((res)=>console.log(res))
   };
 
   const statusColors = {
@@ -216,44 +211,7 @@ export const ManageUser = ({ loggedin }) => {
                   </TableCell>
                 </TableRow>
               ))}
-              {/* {data.length == 0
-              ? usersData.map((row, index) => (
-                <TableRow className="tableRow" key={row._id} style={{ background: "#F4FBFF" }}>
-                  <TableCell component="th" align="center" scope="row">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell align="center" sx={{ textTransform: "capitalize" }}>
-                    {row.name}
-                  </TableCell>
 
-                  <TableCell
-                    align="center"
-                    sx={{
-                      color: statusColors[row.position] ?? "black",
-                    }}
-                  >
-                    {row.position}
-                  </TableCell>
-                  <TableCell align="center">{row.department}</TableCell>
-                  <TableCell align="center">
-                    <IconButton
-                      onClick={() => {
-                        editUser(row._id);
-                      }}
-                    >
-                      <EditOutlinedIcon sx={{ color: "#777777" }} />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        deleteUser(row._id);
-                      }}
-                    >
-                      <DeleteOutlineOutlinedIcon sx={{ color: " #E05D5D" }} />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
-              : } */}
             </TableBody>
           </Table>
           : <div style={{ textAlign: 'center', alignItems: 'center', justifyContent: 'center', }}><NotFoundImage /></div>}
