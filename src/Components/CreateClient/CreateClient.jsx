@@ -1,7 +1,6 @@
 import {
   Box,
   Grid,
-  //Input,
   InputLabel,
   ListSubheader,
   MenuItem,
@@ -16,9 +15,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
 import React from "react";
-
 export const CreateClient = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
@@ -40,42 +37,57 @@ export const CreateClient = () => {
         <Typography variant="h5" sx={{ my: 4 }}>
           Create Client
         </Typography>
-
-        <Grid container justify="center" spacing={4}>
+        <Grid container justify="center" spacing={5}>
           <Grid item md={6} xs={12}>
-            <InputLabel>
+            <InputLabel style={{ fontWeight: "bold" }}>
               Full Name <span style={{ color: "red" }}>*</span>
             </InputLabel>
             <TextField
               placeholder="Full Name"
+              type="text"
+              InputProps={{ disableUnderline: true }}
+              required
+              variant="standard"
               sx={{
+                marginTop: "10px",
                 background: "#F4FBFF",
                 width: "100%",
+                height: 50,
+                justifyContent: "center",
+                paddingLeft: "15px",
+                borderRadius: "5px",
                 [theme.breakpoints.up("md")]: {
                   width: "491px  !important",
                 },
               }}
             />
           </Grid>
-
           <Grid item md={6} xs={12}>
-            <InputLabel>
+            <InputLabel style={{ fontWeight: "bold" }}>
               Email <span style={{ color: "red" }}>*</span>
             </InputLabel>
             <TextField
               placeholder="Email"
+              type="text"
+              InputProps={{ disableUnderline: true }}
+              required
+              variant="standard"
               sx={{
+                marginTop: "10px",
                 background: "#F4FBFF",
                 width: "100%",
+                height: 50,
+                justifyContent: "center",
+                paddingLeft: "15px",
+                borderRadius: "5px",
                 [theme.breakpoints.up("md")]: {
                   width: "491px  !important",
                 },
               }}
             />
           </Grid>
-
           <Grid item md={6} xs={12}>
-            <InputLabel htmlFor="grouped-select">
+            <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold" }}>
               Position <span style={{ color: "red" }}>*</span>
             </InputLabel>
             <Select
@@ -83,11 +95,19 @@ export const CreateClient = () => {
               id="grouped-select"
               label="Grouping"
               placeholder="Select Position"
+              disableUnderline
+              variant="standard"
               sx={{
+                border: "none",
+                marginTop: "10px",
                 background: "#F4FBFF",
                 width: "100%",
+                height: 50,
+                justifyContent: "center",
+                padding: "15px",
+                borderRadius: "5px",
                 [theme.breakpoints.up("md")]: {
-                  width: "491px  ",
+                  width: "491px  !important",
                 },
               }}
             >
@@ -102,20 +122,27 @@ export const CreateClient = () => {
               <MenuItem value={4}>senior</MenuItem>
             </Select>
           </Grid>
-
           <Grid item md={6} xs={12}>
-            <InputLabel htmlFor="grouped-select">
+            <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold" }}>
               Department <span style={{ color: "red" }}>*</span>
             </InputLabel>
             <Select
               defaultValue=""
               id="grouped-select"
               label="Grouping"
+              disableUnderline
+              variant="standard"
               sx={{
+                border: "none",
+                marginTop: "10px",
                 background: "#F4FBFF",
                 width: "100%",
+                height: 50,
+                justifyContent: "center",
+                paddingX: "15px",
+                borderRadius: "5px",
                 [theme.breakpoints.up("md")]: {
-                  width: "491px ",
+                  width: "491px  !important",
                 },
               }}
             >
@@ -133,13 +160,13 @@ export const CreateClient = () => {
           <Grid
             item
             md={6}
-            xs={2}
+            xs={8}
             sx={{
-              marginTop: "30px",
-              marginLeft: "18px",
+              marginTop: "20px",
+              marginLeft: "6px",
             }}
           >
-            <InputLabel>
+            <InputLabel style={{ fontWeight: "bold" }}>
               Access to Ticket <span style={{ color: "red" }}>*</span>
             </InputLabel>
             <RadioGroup

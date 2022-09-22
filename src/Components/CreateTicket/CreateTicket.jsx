@@ -1,7 +1,6 @@
 import {
   Box,
   Grid,
-  // Form,
   InputLabel,
   ListSubheader,
   MenuItem,
@@ -11,7 +10,6 @@ import {
   Link,
   TextField,
   TextareaAutosize,
-  IconButton,
 } from "@mui/material";
 import { Form } from "react-bootstrap";
 import { useTheme } from "@mui/material/styles";
@@ -20,25 +18,28 @@ import React from "react";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
-//   import RadioGroup from '@mui/material/RadioGroup';
-//   import FormControlLabel from '@mui/material/FormControlLabel';
-// import FormControl from '@mui/material/FormControl';
-// import FormLabel from '@mui/material/FormLabel';
 export const CreateTicket = () => {
   const theme = useTheme();
   const [imageArr, setImageArr] = useState([]);
   console.log(imageArr);
   const matches = useMediaQuery(theme.breakpoints.down("md"));
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
+  const [loaderOpen, setloaderOpen] = React.useState(false);
+ 
+  // @@@@@@@@@@@@@@@@@@ For loading files@@@@@@@@@@@@@@@@
+ 
+  
   const [input, setInput] = useState({
     name: "",
     department: [],
@@ -51,7 +52,6 @@ export const CreateTicket = () => {
     console.log(userdata);
     setInput(userdata);
   }, [imageArr]);
-  //   console.log(input)
   const handleChange = (e) => {
     setInput((prevState) => ({
       ...prevState,
@@ -61,6 +61,7 @@ export const CreateTicket = () => {
   const uploadFile = async (e) => {
     e.preventDefault();
     const formData = await e.target.files;
+    setloaderOpen(true);
     await axios
       .post("/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -68,9 +69,11 @@ export const CreateTicket = () => {
       .then(({ data }) => {
         console.log("res::::", data);
         setImageArr([...data.data]);
+        setloaderOpen(false);
       })
       .catch((err) => {
         console.log("error", err);
+        setloaderOpen(false);
       });
   };
   const handleSubmit = async (e) => {
@@ -85,16 +88,6 @@ export const CreateTicket = () => {
       status: String("Open"),
     });
   };
-  // const [chipData, setChipData] = React.useState([
-  //   { key: 0, label: "Angular" },
-  //   { key: 1, label: "jQuery" },
-  //   { key: 2, label: "Polymer" },
-  // ]);
-  // const handleDelete = (chipToDelete) => () => {
-  //   setChipData((chips) =>
-  //     chips.filter((chip) => chip.key !== chipToDelete.key)
-  //   );
-  // };
   const handlerDeleteAttechmentChip = async (id) => {
     console.log("id in console ::::::::::", id);
     await axios
@@ -102,13 +95,11 @@ export const CreateTicket = () => {
       .then(({ data }) => {
         console.log("res::::", data);
         setImageArr((chips) => chips.filter((chip) => chip.imageID !== id));
-        // setImageArr([...data.data]);
       })
       .catch((err) => {
         console.log("error", err);
       });
   };
-  // console.log("Ticket Add Successfully!!");
   return (
     (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
     (
@@ -129,20 +120,28 @@ export const CreateTicket = () => {
         <Form enctype="multipart/form-data" onSubmit={handleSubmit}>
           <Grid container justify="center" spacing={6}>
             <Grid item md={6} xs={12}>
-              <InputLabel>
+              <InputLabel style={{ fontWeight: "bold" }}>
                 Full Name<span style={{ color: "red" }}>*</span>
               </InputLabel>
               <TextField
-                inputProps={{ readOnly: true }}
+                InputProps={{ readOnly: true, disableUnderline: true }}
+                type="text"
                 name="name"
+                required
+                variant="standard"
                 value={input.name}
                 placeholder="Name"
                 onChange={(e) =>
                   setInput(e.target.value) ? e.preventDefault() : ""
                 }
                 sx={{
+                  marginTop: "10px",
                   background: "#F4FBFF",
                   width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingLeft: "15px",
+                  borderRadius: "5px",
                   [theme.breakpoints.up("md")]: {
                     width: "491px  !important",
                   },
@@ -150,18 +149,27 @@ export const CreateTicket = () => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <InputLabel>
+              <InputLabel style={{ fontWeight: "bold" }}>
                 Department <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <Select
                 label="Grouping"
                 // placeholder="Select Position"
                 name="department"
+                required
+                disableUnderline
+                variant="standard"
                 value={input.department}
                 onChange={handleChange}
                 sx={{
+                  border: "none",
+                  marginTop: "10px",
                   background: "#F4FBFF",
                   width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingX: "15px",
+                  borderRadius: "5px",
                   [theme.breakpoints.up("md")]: {
                     width: "491px  !important",
                   },
@@ -179,24 +187,31 @@ export const CreateTicket = () => {
               </Select>
             </Grid>
             <Grid item md={6} xs={12}>
-              <InputLabel>
+              <InputLabel style={{ fontWeight: "bold" }}>
                 File Upload {imageArr.length}
                 <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <TextField
                 type="file"
-                // multiple
-                // accept="image/*"
+                variant="standard"
                 placeholder="Browser Files"
                 name="fileupload"
                 value={input.fileupload}
                 onChange={uploadFile}
                 sx={{
+                  marginTop: "10px",
                   background: "#F4FBFF",
                   width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingX: "15px",
+                  borderRadius: "5px",
                   Border: "none",
                   [theme.breakpoints.up("md")]: {
                     width: "491px  !important",
+                  },
+                  "& .MuiInputBase-input": {
+                    height: "-0.5625em!important",
                   },
                 }}
                 inputProps={{
@@ -209,6 +224,7 @@ export const CreateTicket = () => {
                       <FolderOpenIcon type="file" />
                     </InputAdornment>
                   ),
+                  disableUnderline: true,
                 }}
               />
               <Paper
@@ -226,7 +242,7 @@ export const CreateTicket = () => {
                 component="ul"
               >
                 {imageArr.map((data) => {
-                  let icon;
+                  
                   return (
                     <ListItem key={data.imageID}>
                       <Chip
@@ -240,21 +256,41 @@ export const CreateTicket = () => {
                   );
                 })}
               </Paper>
+              <Backdrop
+                sx={{
+                  color: "#fff",
+                  zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
+                open={loaderOpen}
+              >
+                <CircularProgress color="inherit" />
+              </Backdrop>
             </Grid>
             <Grid item md={6} xs={12}>
-              <InputLabel htmlFor="grouped-select">
+              <InputLabel
+                htmlFor="grouped-select"
+                style={{ fontWeight: "bold" }}
+              >
                 Issue Type <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <Select
-                // Value="select "
                 id="grouped-select"
                 label="Grouping"
                 name="issuetype"
+                required
+                disableUnderline
+                variant="standard"
                 value={input.issuetype}
                 onChange={handleChange}
                 sx={{
+                  border: "none",
+                  marginTop: "10px",
                   background: "#F4FBFF",
                   width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  padding: "15px",
+                  borderRadius: "5px",
                   [theme.breakpoints.up("md")]: {
                     width: "491px ",
                   },
@@ -273,20 +309,28 @@ export const CreateTicket = () => {
               </Select>
             </Grid>
             <Grid item md={6} xs={12}>
-              <InputLabel>
+              <InputLabel style={{ fontWeight: "bold" }}>
                 Message <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <TextareaAutosize
                 name="message"
+                required
                 value={input.message}
                 onChange={handleChange}
-                aria-label="empty textarea"
+                aria-label="minimum height"
+                minRows={3}
                 placeholder="Enter here..."
                 style={{
+                  width: "100%",
                   background: "#F4FBFF",
-                  width: 500,
-                  height: 100,
+                  borderRadius: "5px",
                   border: "none",
+                  outline: "none",
+                  justifyContent: "center",
+                  padding: "15px",
+                  // [theme.breakpoints.up("md")]: {
+                  //        width: "490px  ",
+                  //      }
                 }}
               />
             </Grid>
