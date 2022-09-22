@@ -1,7 +1,6 @@
 import {
   Box,
   Grid,
-  // Form,
   InputLabel,
   ListSubheader,
   MenuItem,
@@ -11,7 +10,6 @@ import {
   Link,
   TextField,
   TextareaAutosize,
-  IconButton,
 } from "@mui/material";
 import { Form } from "react-bootstrap";
 import { useTheme } from "@mui/material/styles";
@@ -20,26 +18,29 @@ import React from "react";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import toast, { Toaster } from "react-hot-toast";
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
-//   import RadioGroup from '@mui/material/RadioGroup';
-//   import FormControlLabel from '@mui/material/FormControlLabel';
-// import FormControl from '@mui/material/FormControl';
-// import FormLabel from '@mui/material/FormLabel';
 export const CreateTicket = () => {
   const theme = useTheme();
   const [imageArr, setImageArr] = useState([]);
   console.log(imageArr);
   const matches = useMediaQuery(theme.breakpoints.down("md"));
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
+  const [loaderOpen, setloaderOpen] = React.useState(false);
+
+  // @@@@@@@@@@@@@@@@@@ For loading files@@@@@@@@@@@@@@@@
+
+
   const [input, setInput] = useState({
     name: "",
     department: [],
@@ -62,6 +63,7 @@ export const CreateTicket = () => {
   const uploadFile = async (e) => {
     e.preventDefault();
     const formData = await e.target.files;
+    setloaderOpen(true);
     await axios
       .post("/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -69,9 +71,11 @@ export const CreateTicket = () => {
       .then(({ data }) => {
         console.log("res::::", data);
         setImageArr([...data.data]);
+        setloaderOpen(false);
       })
       .catch((err) => {
         console.log("error", err);
+        setloaderOpen(false);
       });
   };
   const handleSubmit = async (e) => {
@@ -122,201 +126,264 @@ export const CreateTicket = () => {
   return (
     (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
     (
-      <>
-        <Toaster />
-        <Box
-          noValidate
-          autoComplete="off"
-          sx={{
-            width: "auto",
-            paddingX: "5",
-            [theme.breakpoints.down("md")]: {
-              paddingX: "1 !important",
-            },
-          }}
-        >
-          <Typography variant="h5" sx={{ my: 4 }}>
-            Create Ticket
-          </Typography>
-          <Form enctype="multipart/form-data" onSubmit={handleSubmit}>
-            <Grid container justify="center" spacing={6}>
-              <Grid item md={6} xs={12}>
-                <InputLabel>
-                  Full Name<span style={{ color: "red" }}>*</span>
-                </InputLabel>
-                <TextField
-                  required="true"
-                  inputProps={{ readOnly: true }}
-                  name="name"
-                  value={input.name}
-                  placeholder="Name"
-                  onChange={(e) => (setInput(e.target.value) ? e.preventDefault() : "")}
-                  sx={{
-                    background: "#F4FBFF",
-                    width: "100%",
-                    [theme.breakpoints.up("md")]: {
-                      width: "491px  !important",
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <InputLabel>
-                  Department <span style={{ color: "red" }}>*</span>
-                </InputLabel>
-                <Select
-                  required="true"
-                  label="Grouping"
-                  // placeholder="Select Position"
-                  name="department"
-                  value={input.department}
-                  onChange={handleChange}
-                  sx={{
-                    background: "#F4FBFF",
-                    width: "100%",
-                    [theme.breakpoints.up("md")]: {
-                      width: "491px  !important",
-                    },
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>hello</em>
-                  </MenuItem>
-                  <ListSubheader>Software Engineer</ListSubheader>
-                  <MenuItem value={"SE Tranie"}>traine</MenuItem>
-                  <MenuItem value={"Senior"}>senior</MenuItem>
-                  <ListSubheader>hr</ListSubheader>
-                  <MenuItem value={"HR Junior"}>junior</MenuItem>
-                  <MenuItem value={"HR Senior"}>senior</MenuItem>
-                </Select>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <InputLabel>
-                  File Upload {imageArr.length}
-                  <span style={{ color: "red" }}>*</span>
-                </InputLabel>
-                <TextField
-                  type="file"
-                  // multiple
-                  // accept="image/*"
-                  placeholder="Browser Files"
-                  name="fileupload"
-                  value={input.fileupload}
-                  onChange={uploadFile}
-                  sx={{
-                    background: "#F4FBFF",
-                    width: "100%",
-                    Border: "none",
-                    [theme.breakpoints.up("md")]: {
-                      width: "491px  !important",
-                    },
-                  }}
-                  inputProps={{
-                    multiple: true,
-                    accept: ["application/pdf", "image/*"],
-                  }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="start">
-                        <FolderOpenIcon type="file" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <Paper
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                    listStyle: "none",
-                    p: 0.5,
-                    m: 1,
-                    ml: 0,
-                    width: "77%",
-                    boxShadow: "none",
-                  }}
-                  component="ul"
-                >
-                  {imageArr.map((data) => {
-                    let icon;
-                    return (
-                      <ListItem key={data.imageID}>
-                        <Chip sx={{ backgroundColor: "#F4FBFF", color: "#0E2D7B" }} label={data.imageName} onDelete={() => handlerDeleteAttechmentChip(data.imageID)} />
-                      </ListItem>
-                    );
-                  })}
-                </Paper>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <InputLabel htmlFor="grouped-select">
-                  Issue Type <span style={{ color: "red" }}>*</span>
-                </InputLabel>
-                <Select
-                  // Value="select "
-                  id="grouped-select"
-                  label="Grouping"
-                  name="issuetype"
-                  value={input.issuetype}
-                  onChange={handleChange}
-                  sx={{
-                    background: "#F4FBFF",
-                    width: "100%",
-                    [theme.breakpoints.up("md")]: {
-                      width: "491px ",
-                    },
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <ListSubheader>Software Engineer</ListSubheader>
-                  <MenuItem value={"SE Traniee"}>traine</MenuItem>
-                  <MenuItem value={"Senior"}>senior</MenuItem>
-                  <ListSubheader>hr</ListSubheader>
-                  <MenuItem value={"HR Junior"}>junior</MenuItem>
-                  <MenuItem value={"HR Senior"}>senior</MenuItem>
-                </Select>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <InputLabel>
-                  Message <span style={{ color: "red" }}>*</span>
-                </InputLabel>
-                <TextareaAutosize
-                  name="message"
-                  value={input.message}
-                  onChange={handleChange}
-                  aria-label="empty textarea"
-                  placeholder="Enter here..."
-                  style={{
-                    background: "#F4FBFF",
-                    width: 500,
-                    height: 100,
-                    border: "none",
-                  }}
-                />
-              </Grid>
-              <Grid item md={6} xs={12} padding={1}></Grid>
-            </Grid>
-            <Grid container>
-              <Button
-                variant="contained"
-                type="submit"
+      <Box
+        noValidate
+        autoComplete="off"
+        sx={{
+          width: "auto",
+          paddingX: "5",
+          [theme.breakpoints.down("md")]: {
+            paddingX: "1 !important",
+          },
+        }}
+      >
+        <Typography variant="h5" sx={{ my: 4 }}>
+          Create Ticket
+        </Typography>
+        <Form enctype="multipart/form-data" onSubmit={handleSubmit}>
+          <Grid container justify="center" spacing={6}>
+            <Grid item md={6} xs={12}>
+              <InputLabel style={{ fontWeight: "bold" }}>
+                Full Name<span style={{ color: "red" }}>*</span>
+              </InputLabel>
+              <TextField
+                InputProps={{ readOnly: true, disableUnderline: true }}
+                type="text"
+                name="name"
+                required
+                variant="standard"
+                value={input.name}
+                placeholder="Name"
+                onChange={(e) =>
+                  setInput(e.target.value) ? e.preventDefault() : ""
+                }
                 sx={{
-                  background: "#044BA9",
-                  marginTop: "20px",
-                  marginRight: "11px",
-                  marginBottom: "19px",
+                  marginTop: "10px",
+                  background: "#F4FBFF",
+                  width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingLeft: "15px",
+                  borderRadius: "5px",
+                  [theme.breakpoints.up("md")]: {
+                    width: "491px  !important",
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <InputLabel style={{ fontWeight: "bold" }}>
+                Department <span style={{ color: "red" }}>*</span>
+              </InputLabel>
+              <Select
+                label="Grouping"
+                // placeholder="Select Position"
+                name="department"
+                required
+                disableUnderline
+                variant="standard"
+                value={input.department}
+                onChange={handleChange}
+                sx={{
+                  border: "none",
+                  marginTop: "10px",
+                  background: "#F4FBFF",
+                  width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingX: "15px",
+                  borderRadius: "5px",
+                  [theme.breakpoints.up("md")]: {
+                    width: "491px  !important",
+                  },
                 }}
               >
-                Create
-              </Button>
-              <Link to="#" variant="outlined" spacing={8} sx={{ marginTop: "22px", marginBottom: "15px" }}>
-                Discard
-              </Link>
+                <MenuItem value="">
+                  <em>hello</em>
+                </MenuItem>
+                <ListSubheader>Software Engineer</ListSubheader>
+                <MenuItem value={"SE Tranie"}>traine</MenuItem>
+                <MenuItem value={"Senior"}>senior</MenuItem>
+                <ListSubheader>hr</ListSubheader>
+                <MenuItem value={"HR Junior"}>junior</MenuItem>
+                <MenuItem value={"HR Senior"}>senior</MenuItem>
+              </Select>
             </Grid>
-          </Form>
-        </Box>
-      </>
+            <Grid item md={6} xs={12}>
+              <InputLabel style={{ fontWeight: "bold" }}>
+                File Upload {imageArr.length}
+                <span style={{ color: "red" }}>*</span>
+              </InputLabel>
+              <TextField
+                type="file"
+                variant="standard"
+                placeholder="Browser Files"
+                name="fileupload"
+                value={input.fileupload}
+                onChange={uploadFile}
+                sx={{
+                  marginTop: "10px",
+                  background: "#F4FBFF",
+                  width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingX: "15px",
+                  borderRadius: "5px",
+                  Border: "none",
+                  [theme.breakpoints.up("md")]: {
+                    width: "491px  !important",
+                  },
+                  "& .MuiInputBase-input": {
+                    height: "-0.5625em!important",
+                  },
+                }}
+                inputProps={{
+                  multiple: true,
+                  accept: ["application/pdf", "image/*"],
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <FolderOpenIcon type="file" />
+                    </InputAdornment>
+                  ),
+                  disableUnderline: true,
+                }}
+              />
+              <Paper
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                  listStyle: "none",
+                  p: 0.5,
+                  m: 1,
+                  ml: 0,
+                  width: "77%",
+                  boxShadow: "none",
+                }}
+                component="ul"
+              >
+                {imageArr.map((data) => {
+
+                  return (
+                    <ListItem key={data.imageID}>
+                      <Chip
+                        sx={{ backgroundColor: "#F4FBFF", color: "#0E2D7B" }}
+                        label={data.imageName}
+                        onDelete={() =>
+                          handlerDeleteAttechmentChip(data.imageID)
+                        }
+                      />
+                    </ListItem>
+                  );
+                })}
+              </Paper>
+              <Backdrop
+                sx={{
+                  color: "#fff",
+                  zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
+                open={loaderOpen}
+              >
+                <CircularProgress color="inherit" />
+              </Backdrop>
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <InputLabel
+                htmlFor="grouped-select"
+                style={{ fontWeight: "bold" }}
+              >
+                Issue Type <span style={{ color: "red" }}>*</span>
+              </InputLabel>
+              <Select
+                id="grouped-select"
+                label="Grouping"
+                name="issuetype"
+                required
+                disableUnderline
+                variant="standard"
+                value={input.issuetype}
+                onChange={handleChange}
+                sx={{
+                  border: "none",
+                  marginTop: "10px",
+                  background: "#F4FBFF",
+                  width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  padding: "15px",
+                  borderRadius: "5px",
+                  [theme.breakpoints.up("md")]: {
+                    width: "491px ",
+                  },
+                }}
+              >
+                {console.log("hiiiiiiiiiiiiiiiii", input.issuetype === "")}
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <ListSubheader>Software Engineer</ListSubheader>
+                <MenuItem value={"SE Traniee"}>traine</MenuItem>
+                <MenuItem value={"Senior"}>senior</MenuItem>
+                <ListSubheader>hr</ListSubheader>
+                <MenuItem value={"HR Junior"}>junior</MenuItem>
+                <MenuItem value={"HR Senior"}>senior</MenuItem>
+              </Select>
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <InputLabel style={{ fontWeight: "bold" }}>
+                Message <span style={{ color: "red" }}>*</span>
+              </InputLabel>
+              <TextareaAutosize
+                name="message"
+                required
+                value={input.message}
+                onChange={handleChange}
+                aria-label="minimum height"
+                minRows={3}
+                placeholder="Enter here..."
+                style={{
+                  width: "100%",
+                  background: "#F4FBFF",
+                  borderRadius: "5px",
+                  border: "none",
+                  outline: "none",
+                  justifyContent: "center",
+                  padding: "15px",
+                  // [theme.breakpoints.up("md")]: {
+                  //        width: "490px  ",
+                  //      }
+                }}
+              />
+            </Grid>
+            <Grid item md={6} xs={12} padding={1}></Grid>
+          </Grid>
+          <Grid container>
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{
+                background: "#044BA9",
+                marginTop: "20px",
+                marginRight: "11px",
+                marginBottom: "19px",
+              }}
+            >
+              Create
+            </Button>
+            <Link
+              to="#"
+              variant="outlined"
+              spacing={8}
+              sx={{ marginTop: "22px", marginBottom: "15px" }}
+            >
+              {" "}
+              Discard{" "}
+            </Link>
+          </Grid>
+        </Form>
+      </Box>
     )
   );
 };

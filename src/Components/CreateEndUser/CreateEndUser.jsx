@@ -12,8 +12,9 @@ export const CreateEndUser = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
+  // const [message , setMessage] =useState({})
   const [singleUser, setSingleUser] = useState({});
-
+  console.log(singleUser);
   const [input, setInput] = useState({
     name: "",
     email: "",
@@ -28,6 +29,7 @@ export const CreateEndUser = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
   function generatePassword() {
     var length = 8,
       charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
@@ -58,18 +60,19 @@ export const CreateEndUser = () => {
         })
       )
       .catch(function (error) {
-        toast.error(error.response?.data?.message);;
-      });;
-  };;
+        toast.error(error.response?.data?.message);
+      });
+  };
   const handleSubmit = (e) => {
-    e.preventDefault();;
-    let a = generatePassword();;
+    e.preventDefault();
+    let a = generatePassword();
     console.log(a);
     sendData(a);;
-  
+
   };
   // ----------------for Update User Data
   const _id = useParams().id;
+  console.log(_id);
   useEffect(() => {
     const fetchUserData = async () => {
       return await axios
@@ -97,6 +100,7 @@ export const CreateEndUser = () => {
         toast.error(error.response?.data?.message);
       });
   };
+
   const updateRequest = async () => {
     return await axios
       .put(`/user/${_id}`, {
@@ -109,6 +113,7 @@ export const CreateEndUser = () => {
       })
       .then((res) => res.data);
   };
+
   if (!_id) {
     return (
       (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
@@ -144,7 +149,6 @@ export const CreateEndUser = () => {
                   required
                   variant="standard"
                   sx={{
-                    // border: "none",
                     marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
@@ -165,14 +169,13 @@ export const CreateEndUser = () => {
                 <TextField
                   placeholder="Email"
                   value={input.email}
+                  InputProps={{ disableUnderline: true }}
                   name="email"
                   type="email"
                   required
                   onChange={onchageTextFilid}
-                  InputProps={{ disableUnderline: true }}
                   variant="standard"
                   sx={{
-                    // border: "none",
                     marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
@@ -186,8 +189,9 @@ export const CreateEndUser = () => {
                   }}
                 />
               </Grid>
+
               <Grid item md={6} xs={12}>
-                <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold" }}>
+                <InputLabel htmlFor="grouped-select">
                   Position <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <Select
@@ -207,7 +211,7 @@ export const CreateEndUser = () => {
                     width: "100%",
                     height: 50,
                     justifyContent: "center",
-                    paddingX: "15px",
+                    padding: "15px",
                     borderRadius: "5px",
                     [theme.breakpoints.up("md")]: {
                       width: "491px  !important",
@@ -227,6 +231,7 @@ export const CreateEndUser = () => {
                   <MenuItem value={"Intern Software Developer"}>Intern Software Developer</MenuItem>
                 </Select>
               </Grid>
+
               <Grid item md={6} xs={12}>
                 <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold" }}>
                   Department <span style={{ color: "red" }}>*</span>
@@ -284,7 +289,7 @@ export const CreateEndUser = () => {
           </Form>
         </Box>
       )
-    );;
+    );
   } else {
     return (
       (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
@@ -306,7 +311,7 @@ export const CreateEndUser = () => {
             Edit End User
           </Typography>
           <Form onSubmit={handleUpdate}>
-            <Grid container justify="center" spacing={4}>
+            <Grid container justify="center" spacing={5}>
               <Grid item md={6} xs={12}>
                 <InputLabel>
                   Full Name <span style={{ color: "red" }}>*</span>
@@ -317,8 +322,8 @@ export const CreateEndUser = () => {
                   name="name"
                   onChange={onchageTextFilid}
                   type="text"
-                  required
                   InputProps={{ disableUnderline: true }}
+                  required
                   variant="standard"
                   sx={{
                     // border: "none",
@@ -336,7 +341,7 @@ export const CreateEndUser = () => {
                 />
               </Grid>
               <Grid item md={6} xs={12}>
-                <InputLabel>
+                <InputLabel style={{ fontWeight: "bold" }}>
                   Email <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <TextField
@@ -364,7 +369,10 @@ export const CreateEndUser = () => {
                 />
               </Grid>
               <Grid item md={6} xs={12}>
-                <InputLabel htmlFor="grouped-select">
+                <InputLabel
+                  htmlFor="grouped-select"
+                  style={{ fontWeight: "bold" }}
+                >
                   Position <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <Select
@@ -375,16 +383,16 @@ export const CreateEndUser = () => {
                   id="grouped-select"
                   label="Grouping"
                   placeholder="Select Position"
-                  InputProps={{ disableUnderline: true }}
+                  disableUnderline
                   variant="standard"
                   sx={{
-                    // border: "none",
+                    border: "none",
                     marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
                     height: 50,
                     justifyContent: "center",
-                    paddingLeft: "15px",
+                    paddingX: "15px",
                     borderRadius: "5px",
                     [theme.breakpoints.up("md")]: {
                       width: "491px  !important",
@@ -405,7 +413,10 @@ export const CreateEndUser = () => {
                 </Select>
               </Grid>
               <Grid item md={6} xs={12}>
-                <InputLabel htmlFor="grouped-select">
+                <InputLabel
+                  htmlFor="grouped-select"
+                  style={{ fontWeight: "bold" }}
+                >
                   Department <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <Select
@@ -414,16 +425,16 @@ export const CreateEndUser = () => {
                   onChange={onchageTextFilid}
                   id="grouped-select"
                   label="Grouping"
-                  InputProps={{ disableUnderline: true }}
+                  disableUnderline
                   variant="standard"
                   sx={{
-                    // border: "none",
+                    border: "none",
                     marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
                     height: 50,
                     justifyContent: "center",
-                    paddingLeft: "15px",
+                    paddingX: "15px",
                     borderRadius: "5px",
                     [theme.breakpoints.up("md")]: {
                       width: "491px  !important",
@@ -461,7 +472,6 @@ export const CreateEndUser = () => {
           </Form>
         </Box>
       )
-    );;
+    );
   }
 };
-;
