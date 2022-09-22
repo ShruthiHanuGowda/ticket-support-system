@@ -80,7 +80,7 @@ const addTicket = async (req, res) => {
   }
   const { ticketId, name, department, fileupload, issuetype, message, status } =
     req.body;
-  // console.log(ticketExist, "ticketExist");
+  console.log(req.body);
   try {
     let ticket;
     ticket = new ticketModel({
@@ -101,7 +101,7 @@ const addTicket = async (req, res) => {
     }
     return res.status(201).json({ ticket, message: "Ticket Add Successfully" });
   } catch (err) {
-    console.log(err, "eorrr");
+    return res.status(500).json({ message: "Something Went Wrong!" });
   }
 };
 const getTicketByStatus = async (req, res) => {
@@ -161,7 +161,7 @@ const getTicketByStatus = async (req, res) => {
           return res.status(200).json({ message: "data fetched succesfully", data: result });
         })
         .catch((err) => {
-          return res.status(500).json({ mesage: "something went wrong", description: err });
+          return res.status(500).json({ message: "something went wrong", description: err });
         });
     }
   }

@@ -25,6 +25,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import DailogBoxModel from "../TicketDetails/dailogBox";
+import { formateDate } from '../../utils/formateDate'
 import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
@@ -37,6 +38,8 @@ export const TicketDetails = () => {
   const [statusOpen, setStatusOpen] = React.useState(false);
   const [flagValue, setFlagValue] = useState(null);
   const id = useParams().id;
+
+
   useEffect(() => {
 
     fecthTicketDetail();
@@ -324,11 +327,10 @@ export const TicketDetails = () => {
                           {fileData && fileData.imageName}
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary" component="div">
-                          Mac Miller
                         </Typography>
                       </CardContent>
                       <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-
+                        {formateDate(data.createdAt, "en-US")}
                       </Box>
                     </Box>
                     <CardMedia sx={{ textAlign: 'center', marginRight: '10px', verticalAlign: 'center' }}>
@@ -387,7 +389,7 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  {data.createdAt}
+                  {formateDate(data.createdAt, "en-US")}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -403,7 +405,8 @@ export const TicketDetails = () => {
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
                 >
-                  {data.updatedAt}
+
+                  {data && data.updatedAt ? formateDate(data.updatedAt, "en-US") : "----"}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -418,8 +421,8 @@ export const TicketDetails = () => {
                 <TableCell
                   textalign="right"
                   sx={{ color: "#3B3B3B", border: "none" }}
-                >
-                  {data.solvedAt}
+                >{data && data.solvedAt ? formateDate(data.solvedAt, "en-US") : "----"}
+
                 </TableCell>
               </TableRow>
             </Table>
