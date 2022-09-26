@@ -1,6 +1,6 @@
 import { Box, TextField, Button, styled, Typography, AppBar, Toolbar, Grid, Alert, AlertTitle, FormControl, InputLabel, OutlinedInput } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, } from "react-router-dom";
 import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -13,7 +13,7 @@ const Component = styled(Box)`
   height: 542px;
   background: #f4fbff;
   margin-top: 80px;
-  margin-left: 440px;
+   margin-left: 440px;
   box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 `;
@@ -58,13 +58,13 @@ export const Login = ({ setIsLoggedin }) => {
     showPassword: false,
   });
   useEffect(() => {
-    console.log(Location);
+    console.count()
     if (Location.state) {
       if (Location.state.status === "404") {
         toast.error((t) => (
           <span>
             <Typography variant="h6">Unauthorized</Typography>
-            {Location.state.message} — <Button onClick={() => navigate(-1)}>GO BACK</Button>
+            {Location.state.message} — <Button onClick={() => navigate(-2)}>GO BACK</Button>
           </span>
         ));
       }
@@ -89,7 +89,6 @@ export const Login = ({ setIsLoggedin }) => {
     e.preventDefault();
     const url = "/login";
     const res = await axios.post(url, data);
-    console.log(res);
     const userLogin = res.data.userLoginData;
     const userData = JSON.stringify(userLogin);
     sessionStorage.setItem("userData", userData);
@@ -100,8 +99,10 @@ export const Login = ({ setIsLoggedin }) => {
       navigate("/client-dashboard", { state: userLogin });
     } else if (userLogin?.role === "user") {
       navigate("/create-ticket", { state: userLogin });
-    } else {
+    }
+    else {
       navigate("/");
+
       toast.error(res.data.message);
     }
   };

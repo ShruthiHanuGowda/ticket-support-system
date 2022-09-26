@@ -273,22 +273,7 @@ export const CreateClient = () => {
                   <MenuItem value={4}>senior</MenuItem>
                 </Select>
               </Grid>
-              {/* <Grid item md={6} xs={12}>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked onClick={checkBoxClientAccess} value="view"/>}
-                    label="View"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox  onClick={checkBoxClientAccess}  value="edit"/>}
-                    label="Edit"
-                  />
-                  <FormControlLabel
-                  control={<Checkbox  onClick={checkBoxClientAccess}  value="transfer"/>}
-                  label="Transfer"
-                />
-                </FormGroup>
-              </Grid> */}
+             
               <Grid item mt={4}>
                 <Button
                   variant="contained"

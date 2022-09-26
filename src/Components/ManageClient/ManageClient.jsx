@@ -110,7 +110,7 @@ export const ManageClient = ({ loggedin, isClient }) => {
             }}
           >
             <AddCircleOutlineIcon style={{ color: "white" }} />
-            &nbsp;Add New User
+            &nbsp;Add Client
           </Button>
         </Grid>
       </Grid>
