@@ -122,7 +122,7 @@ export const TicketDetails = () => {
       <Grid container spacing={6} justify="space-between">
         <Grid item xs={6} md={6}>
           <Grid container alignItems={"center "}>
-            <Grid item xs={5} >
+            <Grid item xs={2} >
               <Toolbar>
                 <Typography
                   variant="paragraph"
@@ -138,7 +138,7 @@ export const TicketDetails = () => {
                 </Typography>
               </Toolbar>
             </Grid>
-            <Grid item xs={7} md={9} sx={{ m: 0, p: 0, mt: 0, mr: "auto" }}>
+            <Grid item xs={9} md={9} sx={{ m: 0, p: 0,  mt: 0 , mr: "auto"}}>
               <Divider></Divider>
             </Grid>
           </Grid>
