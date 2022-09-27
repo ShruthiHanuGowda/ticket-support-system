@@ -12,6 +12,9 @@ export const CreateEndUser = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
+
+//  
+
   // const [message , setMessage] =useState({})
   const [singleUser, setSingleUser] = useState({});
   console.log(singleUser);
@@ -191,7 +194,7 @@ export const CreateEndUser = () => {
               </Grid>
 
               <Grid item md={6} xs={12}>
-                <InputLabel htmlFor="grouped-select">
+                <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold" }}>
                   Position <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <Select
@@ -203,6 +206,7 @@ export const CreateEndUser = () => {
                   label="Grouping"
                   placeholder="Select Position"
                   disableUnderline
+                  required
                   variant="standard"
                   sx={{
                     border: "none",
@@ -243,6 +247,7 @@ export const CreateEndUser = () => {
                   id="grouped-select"
                   label="Grouping"
                   disableUnderline
+                  required
                   variant="standard"
                   sx={{
                     border: "none",
