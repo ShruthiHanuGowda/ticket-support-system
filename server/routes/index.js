@@ -41,6 +41,9 @@ router.post("/ticketid", ticketController.ticketId);
 router.get("/deleteImageIncloudy/:id", ticketController.DeleteAttechment);
 
 
+router.post('/email-send', userController.emailSend);
+router.post('/change-password', userController.changePassword);
+
 
 // const transporter = nodemailer.createTransport({
 //   service:"gmail",
@@ -91,42 +94,6 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ message: "Credentials does not match" });
   }
 });
-// const transporter = nodemailer.createTransport({
-//   service:"gmail",
-//   auth:{
-//     user:"dtthakur2197@gmail.com",
-//     pass:"1234567"
-//   }
-
-// })
-// sendpassword link
-router.post("/sendpasswordlink",async(req,res)=> {
-  // return res.status(200).json({ msg: 'valid email' })
-  // console.log("a::::::::::::::::::::::::::::::::")
-  console.log(req.body)
-  const { email } = req.body;
-
-  if(!email){
-    res.status(200).json({status:200, message: "enter your email"})
-  }
-
-  try{
-    const userfind = await userdb.findOne({email:email});
-    
-
-    // token generate for reset password
-    const token = jwt.sign({id:userfind._id},{
-      expiresIn:"120s"
-    });
-
-    const setusertoken = await userdb.findByIdUpdate({_id:userfind._id},{verifytoken:token});
-
-    Console.log("setusertoken", setusertoken)
-
-  }catch (error) {
-
-  }
-})
 
 router.delete("/user/:deleteId", userController.deleteUser);
 module.exports = router;

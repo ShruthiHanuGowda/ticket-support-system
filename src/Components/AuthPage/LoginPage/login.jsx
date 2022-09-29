@@ -4,8 +4,8 @@ import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+// import Visibility from "@mui/icons-material/Visibility";
+// import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 const Section = styled(Box)`
@@ -52,6 +52,7 @@ const Fields = styled(TextField)`
 export const Login = ({ setIsLoggedin }) => {
   const navigate = useNavigate();
   const Location = useLocation();
+  const values = useState();
   const [data, setData] = useState({
     userName: "",
     password: "",
@@ -78,7 +79,7 @@ export const Login = ({ setIsLoggedin }) => {
   };
   const handleClickShowPassword = () => {
     setData({
-      ...data,
+      ...values,
       showPassword: !data.showPassword,
     });
   };
@@ -137,8 +138,8 @@ export const Login = ({ setIsLoggedin }) => {
               id="outlined-adornment-password"
               name="password"
               onChange={checkValidation}
-              type={data.showPassword ? "text" : "password"}
-              value={data.password}
+              type={values.showPassword ? "text" : "password"}
+              value={values.password}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -147,7 +148,7 @@ export const Login = ({ setIsLoggedin }) => {
                     onMouseDown={handleMouseDownPassword}
                     edge="end"
                   >
-                    {data.showPassword ? <VisibilityOff /> : <Visibility />}
+                    {/* {values.showPassword ? <VisibilityOff /> : <Visibility />} */}
                   </IconButton>
                 </InputAdornment>
               }
@@ -155,8 +156,8 @@ export const Login = ({ setIsLoggedin }) => {
             />
             {/* <Fields hintText="At least 8 characters"floatingLabelText="Enter your password"errorText="Your password is too short"/> */}
             <Box>
-              <Forgot style={{ color: "black", fontWeight: "bold" }}>
-                {" "}
+             <Forgot style={{ color: "black", fontWeight: "bold" }}>
+               
                 <NavLink to="/password-reset">Forgot Password</NavLink>
               </Forgot>
             </Box>

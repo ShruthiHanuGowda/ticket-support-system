@@ -6,12 +6,15 @@ const {
 const userDataService = require("../services/userDataService");
 const express = require("express");
 const { userModel } = require("../models/userSchema");
+const { otpModel } = require("../models/otp");
+
 const { default: axios } = require("axios");
 const { Navigate } = require("react-router-dom");
 const app = express.Router();
 const bcrypt = require("bcrypt");
 const EmailSend = require("../services/emailSend");
 const { ticketModel } = require("../models/ticketSchema");
+// const { responsivePropType } = require("react-bootstrap/esm/createUtilityClasses");
 
 app.get("/", async (req, res) => {
   const data = await userModel.find();
@@ -21,11 +24,13 @@ const getAllUserData = async (req, res, next) => {
   const Role = req.params.role;
   console.log(req.headers);
   const { searchstring } = req.headers;
-  console.log("searchS----------------", searchstring)
+  console.log("searchS----------------", searchstring);
   const regex = new RegExp(searchstring, "i");
   // console.log("getAllUserData", Role);
   // if (typeof Role == undefined) return res.send({ message: 'no option selected' })
-  const data = await userModel.find({ $and: [{ role: Role }, { $or: [{ name: regex }, { department: regex }] }] });
+  const data = await userModel.find({
+    $and: [{ role: Role }, { $or: [{ name: regex }, { department: regex }] }],
+  });
   // console.warn(data);
 
   return successResponseWithData(res, "users array", data);
@@ -39,15 +44,24 @@ const getUserByStatus = async (req, res) => {
     await userModel
       .find({})
       .then((result) => {
-        return res.status(200).json({ message: "data fetched succesfully", data: result });
+        return res
+          .status(200)
+          .json({ message: "data fetched succesfully", data: result });
       })
       .catch((err) => {
-        return res.status(500).json({ mesage: "something went wrong", description: err });
+        return res
+          .status(500)
+          .json({ mesage: "something went wrong", description: err });
       });
     // return res.status(400).json({ mesage: 'no flags passed' })
   } else {
     console.log("flags passed", data);
-    if (data.includes(1) || data.includes(2) || data.includes(3) || data.includes(4)) {
+    if (
+      data.includes(1) ||
+      data.includes(2) ||
+      data.includes(3) ||
+      data.includes(4)
+    ) {
       const flagArray = [];
       for (let i of data) {
         // console.log(i)
@@ -72,7 +86,9 @@ const getUserByStatus = async (req, res) => {
       await userModel
         .find({ role: { $in: flagArray } })
         .then((result) => {
-          return res.status(200).json({ message: "data fetched succesfully", data: result });
+          return res
+            .status(200)
+            .json({ message: "data fetched succesfully", data: result });
         })
         .catch((err) => {
           return res
@@ -83,7 +99,9 @@ const getUserByStatus = async (req, res) => {
       await userModel
         .find({})
         .then((result) => {
-          return res.status(200).json({ message: "data fetched succesfully", data: result });
+          return res
+            .status(200)
+            .json({ message: "data fetched succesfully", data: result });
         })
         .catch((err) => {
           return res
@@ -215,11 +233,88 @@ app.delete("/:id", async (req, res) => {
     ErrorResponse(res, "something went wrong " + ex.message);
   }
 });
+
+const emailSend = async (req, res) => {
+  let data = await User.findOne({ email: req.body.email });
+  console.log(data)
+  const responseType = {};
+  if (data) {
+    let otpcode = Math.floor(Math.random() * 10000 + 1);
+    let otpData = new otpModel({
+      email: req.body.email,
+      code: otpcode,
+      expireIn: new Date().getTime() + 300 + 1000,
+    });
+    let otpResponse = await otpData.save();
+    responseType.statusText = "success";
+    response.message = "Please Check Your Email Id";
+  } else {
+    responseType.statusText = "error";
+    responseType.statusText = "Email Id not Exist";
+  }
+  res.status(200).json(responseType);
+};
+
+const changePassword = async (req, res) => {
+  let data = await Otp.find({email:req.body.email,code:req.body.otpCode});
+  const response = {}
+  if(data){
+    let currentTime = new Date().getTime();
+    let diff = data.expiresIn - currentTime;
+    if(diff < 0){
+      response.message = 'Token Expires'
+      response.statusText = 'error'
+    }else{
+      let user = await User.findOne({email:req.body.email})
+      user.password= req.body.password;
+      user.save();
+      response.message = 'Password chnaged successfully'
+      response.statusText = 'Success'
+
+    }
+
+
+    }else{
+      response.message = 'Invalid Otp'
+      response.statusText = 'error'
+    }
+
+    }
+
+
+const mailer = (email,otp)=>{
+  var nodemailer = require('nodemailer');
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    port: 587,
+    secure: false,
+    auth: {
+      user: 'dtthakur2197@gmail.com',
+      pass: 'wygrnrrigedgvxki',
+    }
+  });
+  var mailOptions = {
+    from: 'code@gmail.com',
+    to: 'ram@gmail.com',
+    subject: 'Sending Email using Node.js',
+    text: 'Thanku you sir !'
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+
+}
+
 exports.addUser = addUser;
 exports.getAllUserData = getAllUserData;
 exports.deleteUser = deleteUser;
 exports.getUserById = getUserById;
 exports.UpdateUser = UpdateUser;
 exports.getUserByStatus = getUserByStatus;
+exports.emailSend = emailSend;
+exports.changePassword = changePassword;
 
 //   module.exports = app;
