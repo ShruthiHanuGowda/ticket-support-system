@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { Box, Grid, InputLabel, ListSubheader, MenuItem, Select, TextField, Typography, Button, Link } from "@mui/material";
+import { Box, Grid, InputLabel, ListSubheader, MenuItem, Select, TextField, Typography, Button, Link, MenuList } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Form } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 export const CreateEndUser = () => {
@@ -29,7 +29,6 @@ export const CreateEndUser = () => {
       [e.target.name]: e.target.value,
     }));
   };
-
   function generatePassword() {
     var length = 8,
       charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
@@ -68,7 +67,6 @@ export const CreateEndUser = () => {
     let a = generatePassword();
     console.log(a);
     sendData(a);;
-
   };
   // ----------------for Update User Data
   const _id = useParams().id;
@@ -100,7 +98,6 @@ export const CreateEndUser = () => {
         toast.error(error.response?.data?.message);
       });
   };
-
   const updateRequest = async () => {
     return await axios
       .put(`/user/${_id}`, {
@@ -113,7 +110,6 @@ export const CreateEndUser = () => {
       })
       .then((res) => res.data);
   };
-
   if (!_id) {
     return (
       (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
@@ -189,7 +185,6 @@ export const CreateEndUser = () => {
                   }}
                 />
               </Grid>
-
               <Grid item md={6} xs={12}>
                 <InputLabel htmlFor="grouped-select">
                   Position <span style={{ color: "red" }}>*</span>
@@ -200,8 +195,7 @@ export const CreateEndUser = () => {
                   onChange={onchageTextFilid}
                   defaultValue=""
                   id="grouped-select"
-                  label="Grouping"
-                  placeholder="Select Position"
+                  label="Select Position"
                   disableUnderline
                   variant="standard"
                   sx={{
@@ -218,9 +212,6 @@ export const CreateEndUser = () => {
                     },
                   }}
                 >
-                  <MenuItem value="">
-                    <em>Choose Position</em>
-                  </MenuItem>
                   <MenuItem value={"Head of Product"}>Head of Product</MenuItem>
                   <MenuItem value={"Product Manager"}>Product Manager</MenuItem>
                   <MenuItem value={"VP of Marketing"}>VP of Marketing</MenuItem>
@@ -231,7 +222,6 @@ export const CreateEndUser = () => {
                   <MenuItem value={"Intern Software Developer"}>Intern Software Developer</MenuItem>
                 </Select>
               </Grid>
-
               <Grid item md={6} xs={12}>
                 <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold" }}>
                   Department <span style={{ color: "red" }}>*</span>
@@ -258,9 +248,6 @@ export const CreateEndUser = () => {
                     },
                   }}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
                   <ListSubheader>Software Engineer</ListSubheader>
                   <MenuItem value={"traineSE"}>traine</MenuItem>
                   <MenuItem value={"seniorSE"}>senior</MenuItem>
@@ -281,7 +268,7 @@ export const CreateEndUser = () => {
                 >
                   Create
                 </Button>
-                <Link variant="outlined" spacing={8} sx={{ marginTop: "22px", marginBottom: "15px" }}>
+                <Link variant="outlined" onClick={() => { navigate(-1) }} spacing={8} sx={{ marginTop: "22px", marginBottom: "15px" }}>
                   Discard
                 </Link>
               </Grid>
@@ -381,8 +368,7 @@ export const CreateEndUser = () => {
                   onChange={onchageTextFilid}
                   defaultValue=""
                   id="grouped-select"
-                  label="Grouping"
-                  placeholder="Select Position"
+                  label="Select Position"
                   disableUnderline
                   variant="standard"
                   sx={{
@@ -399,9 +385,6 @@ export const CreateEndUser = () => {
                     },
                   }}
                 >
-                  <MenuItem value="">
-                    <em>Choose Position</em>
-                  </MenuItem>
                   <MenuItem value={"Head of Product"}>Head of Product</MenuItem>
                   <MenuItem value={"Product Manager"}>Product Manager</MenuItem>
                   <MenuItem value={"VP of Marketing"}>VP of Marketing</MenuItem>
@@ -441,9 +424,6 @@ export const CreateEndUser = () => {
                     },
                   }}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
                   <ListSubheader>Software Engineer</ListSubheader>
                   <MenuItem value={"traineSE"}>traine</MenuItem>
                   <MenuItem value={"seniorSE"}>senior</MenuItem>
@@ -464,7 +444,7 @@ export const CreateEndUser = () => {
                 >
                   Update
                 </Button>
-                <Link variant="outlined" spacing={8} sx={{ marginTop: "22px", marginBottom: "15px" }}>
+                <Link onClick={() => { navigate(-1) }} variant="outlined" spacing={8} sx={{ marginTop: "22px", marginBottom: "15px" }}>
                   Discard
                 </Link>
               </Grid>

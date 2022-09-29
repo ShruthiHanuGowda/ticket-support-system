@@ -273,7 +273,7 @@ export const CreateClient = () => {
                   <MenuItem value={4}>senior</MenuItem>
                 </Select>
               </Grid>
-             
+
               <Grid item mt={4}>
                 <Button
                   variant="contained"
@@ -287,6 +287,7 @@ export const CreateClient = () => {
                   Update
                 </Button>
                 <Link
+                  onClick={() => { navigate(-1) }}
                   variant="outlined"
                   spacing={8}
                   sx={{ marginTop: "22px", marginBottom: "15px" }}
@@ -453,6 +454,7 @@ export const CreateClient = () => {
                 Create
               </Button>
               <Link
+                onClick={() => { navigate(-1) }}
                 variant="outlined"
                 spacing={8}
                 sx={{ marginTop: "22px", marginBottom: "15px" }}
