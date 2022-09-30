@@ -10,14 +10,9 @@ import {
   Typography,
   Button,
   Link,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Checkbox,
-  FormGroup,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 import axios from "axios";
@@ -32,7 +27,10 @@ export const CreateClient = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   let navigate = useNavigate();
-  // const [checkBoxClient , setcheckBoxClient]=useState([])
+
+  const [Error, setError] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
+
   const [input, setInput] = useState({
     name: "",
     email: "",
@@ -56,9 +54,10 @@ export const CreateClient = () => {
     if (id) {
       fetchUserData();
     }
-    console.log(fetchUserData);
-  }, [])
+    //console.log(fetchUserData);
+  }, []);
 
+  ////--------- For textFields-----//////
   const onchageTextFilid = (e) => {
     // console.log(e.target.value);
     setInput((prevState) => ({
@@ -66,15 +65,58 @@ export const CreateClient = () => {
       [e.target.name]: e.target.value,
     }));
   };
-  const handleSubmit = (e) => {
+
+
+/////////////------ For Email Validation----------/////////
+const validate = () => {
+  // const regex = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/i;
+
+   if (input.name === "") {
+     toast.error("name is empty");
+     setError(false)
+   } else {
+     if (input.email === "") {
+       toast.error("email is empty");
+       setError(false)
+     } else {
+       if (!input.email.match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/)) {
+         toast.error("please enter valid email address");
+         setError(false)
+       }else{
+        
+         console.log("hiiiiiiiiiiiiiiiiiiiiiiiii" , Error)
+      
+        return true;
+       }
+       
+     }
+   }
+ };
+ 
+
+  /////////-------For handleSubmit-------///////////
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    let validation = await validate();
+    setError(validation)
+    console.log("hiii validation" , validation)
+    if(Error === true){
+      let a = generatePassword();
+      sendData(a).then((a) => {
+        console.log("i ear then function =====", a);
+      });
+  
+    }else{
+      toast.error("Please Enter A Valid Details")
 
-
-    let a = generatePassword();
-    sendData(a).then((a) => {
-      console.log("i ear then function =====", a);
-    });
+    }
+    return true;
+    
   };
+  
+
+  
 
   function generatePassword() {
     var length = 8,
@@ -103,11 +145,11 @@ export const CreateClient = () => {
         navigate("/manage-client", {
           state: { message: res.data.message, status: res.status },
         })
-      ).catch(function (error) {
+      )
+      .catch(function (error) {
         toast.error(error.response?.data?.message);
       });
   };
-
 
   // const checkBoxClientAccess =(e)=>{
   //   setcheckBoxClient((prevState) => ({
@@ -145,7 +187,6 @@ export const CreateClient = () => {
       .then((res) => res.data);
   };
 
-
   if (id) {
     return (
       (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
@@ -168,7 +209,7 @@ export const CreateClient = () => {
           <Form onSubmit={handleUpdate}>
             <Grid container justify="center" spacing={4}>
               <Grid item md={6} xs={12}>
-                <InputLabel>
+                <InputLabel style={{fontWeight: "bold"}}>
                   Full Name <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <TextField
@@ -176,20 +217,25 @@ export const CreateClient = () => {
                   name="name"
                   onChange={onchageTextFilid}
                   type="text"
-                  required
+                  InputProps={{ disableUnderline: true}}
+                  variant="standard"
                   value={input.name}
                   sx={{
-                    background: "#F4FBFF",
-                    width: "100%",
-                    [theme.breakpoints.up("md")]: {
-                      width: "491px  !important",
-                    },
+                    marginTop: "10px",                  background: "#F4FBFF",
+                  width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingLeft: "15px",
+                  borderRadius: "5px",
+                  [theme.breakpoints.up("md")]: {
+                    width: "491px  !important",
+                  },
                   }}
                 />
               </Grid>
 
               <Grid item md={6} xs={12}>
-                <InputLabel>
+                <InputLabel style={{ fontWeight: "bold"}}>
                   Email <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <TextField
@@ -197,11 +243,18 @@ export const CreateClient = () => {
                   value={input.email}
                   name="email"
                   type="email"
-                  required
                   onChange={onchageTextFilid}
+                  required
+                  InputProps={{ disableUnderline: true}}
+                  variant="standard"
                   sx={{
+                    marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
+                    height: 50,
+                    justifyContent: "center",
+                    paddingLeft: "15px",
+                    borderRadius: "5px",
                     [theme.breakpoints.up("md")]: {
                       width: "491px  !important",
                     },
@@ -210,85 +263,78 @@ export const CreateClient = () => {
               </Grid>
 
               <Grid item md={6} xs={12}>
-                <InputLabel htmlFor="grouped-select">
-                  Position <span style={{ color: "red" }}>*</span>
+                <InputLabel htmlFor="grouped-select" style={{fontWeight: "bold"}}>
+                  Position 
                 </InputLabel>
                 <Select
-
                   id="grouped-select"
                   name="position"
-                  required
+                  
                   value={input.position}
                   onChange={onchageTextFilid}
+                  disableUnderline
+                  variant="standard"
                   label="Grouping"
                   placeholder="Select Position"
                   sx={{
-                    background: "#F4FBFF",
-                    width: "100%",
-                    [theme.breakpoints.up("md")]: {
-                      width: "491px  ",
-                    },
+                    marginTop: "10px",
+                  background: "#F4FBFF",
+                  width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingLeft: "15px",
+                  borderRadius: "5px",
+                  [theme.breakpoints.up("md")]: {
+                    width: "491px  !important",
+                  },
                   }}
                 >
-                  <MenuItem value=""
-                  >
-                    <em>None</em>
-                  </MenuItem>
-                  <ListSubheader>Software Engineer</ListSubheader>
-                  <MenuItem value={1}>traine</MenuItem>
-                  <MenuItem value={2}>senior</MenuItem>
-                  <ListSubheader>hr</ListSubheader>
-                  <MenuItem value={3}>junior</MenuItem>
-                  <MenuItem value={4}>senior</MenuItem>
+                   
+                  <ListSubheader style={{fontWeight: "bold"}}>Software Engineer</ListSubheader>
+                  <MenuItem value={1}>Trainee</MenuItem>
+                  <MenuItem value={2}>Senior</MenuItem>
+                  <ListSubheader style={{fontWeight: "bold"}}>HR</ListSubheader>
+                  <MenuItem value={3}>Junior</MenuItem>
+                  <MenuItem value={4}>Senior</MenuItem>
                 </Select>
               </Grid>
 
               <Grid item md={6} xs={12}>
-                <InputLabel htmlFor="grouped-select">
-                  Department <span style={{ color: "red" }}>*</span>
+                <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold"}}>
+                  Department 
                 </InputLabel>
                 <Select
                   value={input.department}
                   name="department"
-
                   id="grouped-select"
                   label="Grouping"
+              
                   onChange={onchageTextFilid}
+                  disableUnderline
+                  variant="standard"
                   sx={{
+                    marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
+                    height: 50,
+                    justifyContent: "center",
+                    paddingLeft: "15px",
+                    borderRadius: "5px",
                     [theme.breakpoints.up("md")]: {
-                      width: "491px ",
+                      width: "491px  !important",
                     },
                   }}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <ListSubheader>Software Engineer</ListSubheader>
-                  <MenuItem value={1}>traine</MenuItem>
-                  <MenuItem value={2}>senior</MenuItem>
-                  <ListSubheader>hr</ListSubheader>
-                  <MenuItem value={3}>junior</MenuItem>
-                  <MenuItem value={4}>senior</MenuItem>
+                  
+                  <ListSubheader style={{fontWeight: "bold"}}>Software Engineer</ListSubheader>
+                  <MenuItem value={1}>Trainee</MenuItem>
+                  <MenuItem value={2}>Senior</MenuItem>
+                  <ListSubheader style={{fontWeight: "bold"}}>HR</ListSubheader>
+                  <MenuItem value={3}>Junior</MenuItem>
+                  <MenuItem value={4}>Senior</MenuItem>
                 </Select>
               </Grid>
-              {/* <Grid item md={6} xs={12}>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox defaultChecked onClick={checkBoxClientAccess} value="view"/>}
-                    label="View"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox  onClick={checkBoxClientAccess}  value="edit"/>}
-                    label="Edit"
-                  />
-                  <FormControlLabel
-                  control={<Checkbox  onClick={checkBoxClientAccess}  value="transfer"/>}
-                  label="Transfer"
-                />
-                </FormGroup>
-              </Grid> */}
+
               <Grid item mt={4}>
                 <Button
                   variant="contained"
@@ -313,8 +359,9 @@ export const CreateClient = () => {
           </Form>
         </Box>
       )
-    )
-  } else { }
+    );
+  } else {
+  }
   return (
     (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
     (
@@ -343,14 +390,20 @@ export const CreateClient = () => {
                 placeholder="Full Name"
                 name="name"
                 onChange={onchageTextFilid}
+                InputProps={{ disableUnderline: true }}
+                variant="standard"
                 type="text"
-                required
                 sx={{
-                  background: "#F4FBFF",
-                  width: "100%",
-                  [theme.breakpoints.up("md")]: {
-                    width: "491px  !important",
-                  },
+                  marginTop: "10px",
+                    background: "#F4FBFF",
+                    width: "100%",
+                    height: 50,
+                    justifyContent: "center",
+                    paddingLeft: "15px",
+                    borderRadius: "5px",
+                    [theme.breakpoints.up("md")]: {
+                      width: "491px  !important",
+                    },
                 }}
               />
             </Grid>
@@ -364,11 +417,18 @@ export const CreateClient = () => {
                 value={input.email}
                 name="email"
                 type="email"
-                required
                 onChange={onchageTextFilid}
+                
+                InputProps={{ disableUnderline: true }}
+                variant="standard"
                 sx={{
+                  marginTop: "10px",
                   background: "#F4FBFF",
                   width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingLeft: "15px",
+                  borderRadius: "5px",
                   [theme.breakpoints.up("md")]: {
                     width: "491px  !important",
                   },
@@ -384,28 +444,31 @@ export const CreateClient = () => {
                 defaultValue=""
                 id="grouped-select"
                 name="position"
-                required
                 onChange={onchageTextFilid}
+                disableUnderline
+                variant="standard"
                 label="Grouping"
                 placeholder="Select Position"
                 sx={{
+                  marginTop: "10px",
                   background: "#F4FBFF",
                   width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingLeft: "15px",
+                  borderRadius: "5px",
                   [theme.breakpoints.up("md")]: {
-                    width: "491px  ",
+                    width: "491px  !important",
                   },
                 }}
               >
-                <MenuItem value=""
-                >
-                  <em>None</em>
-                </MenuItem>
-                <ListSubheader>Software Engineer</ListSubheader>
-                <MenuItem value={1}>traine</MenuItem>
-                <MenuItem value={2}>senior</MenuItem>
-                <ListSubheader>hr</ListSubheader>
-                <MenuItem value={3}>junior</MenuItem>
-                <MenuItem value={4}>senior</MenuItem>
+                
+                <ListSubheader style={{fontWeight: "bold"}}>Software Engineer</ListSubheader>
+                  <MenuItem value={1}>Trainee</MenuItem>
+                  <MenuItem value={2}>Senior</MenuItem>
+                  <ListSubheader style={{fontWeight: "bold"}}>HR</ListSubheader>
+                  <MenuItem value={3}>Junior</MenuItem>
+                  <MenuItem value={4}>Senior</MenuItem>
               </Select>
             </Grid>
 
@@ -420,23 +483,28 @@ export const CreateClient = () => {
                 id="grouped-select"
                 label="Grouping"
                 onChange={onchageTextFilid}
+                disableUnderline
+                variant="standard"
                 sx={{
+                  marginTop: "10px",
                   background: "#F4FBFF",
                   width: "100%",
+                  height: 50,
+                  justifyContent: "center",
+                  paddingLeft: "15px",
+                  borderRadius: "5px",
                   [theme.breakpoints.up("md")]: {
-                    width: "491px ",
+                    width: "491px  !important",
                   },
                 }}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <ListSubheader>Software Engineer</ListSubheader>
-                <MenuItem value={1}>traine</MenuItem>
-                <MenuItem value={2}>senior</MenuItem>
-                <ListSubheader>hr</ListSubheader>
-                <MenuItem value={3}>junior</MenuItem>
-                <MenuItem value={4}>senior</MenuItem>
+                
+                <ListSubheader style={{fontWeight: "bold"}}>Software Engineer</ListSubheader>
+                  <MenuItem value={1}>Trainee</MenuItem>
+                  <MenuItem value={2}>Senior</MenuItem>
+                  <ListSubheader style={{fontWeight: "bold"}}>HR</ListSubheader>
+                  <MenuItem value={3}>Junior</MenuItem>
+                  <MenuItem value={4}>Senior</MenuItem>
               </Select>
             </Grid>
             {/* <Grid item md={6} xs={12}>
@@ -467,6 +535,7 @@ export const CreateClient = () => {
               >
                 Create
               </Button>
+
               <Link
                 variant="outlined"
                 spacing={8}
@@ -479,9 +548,5 @@ export const CreateClient = () => {
         </Form>
       </Box>
     )
-  )
-
-
-
-
-}
+  );
+};

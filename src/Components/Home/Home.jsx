@@ -1,7 +1,9 @@
 import * as React from "react";
 import {
+  Backdrop,
   Button,
   Checkbox,
+  CircularProgress,
   Divider,
   FormControlLabel,
   FormGroup,
@@ -23,7 +25,6 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 // import { makeStyles } from '@material-ui/core/styles';
-
 import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -37,16 +38,13 @@ import SearchBar from "../Common/SearchBar";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { NotFoundImage } from "../Common/NotFoundImage";
-
 const CheckboxFiled = styled(FormControlLabel)({
   marginRight: "30px",
   color: "#777777",
 });
-
 function createData(srno, department, name, position, status) {
   return { srno, department, name, position, status };
 }
-
 let serText = "";
 export const Home = () => {
   const navigate = useNavigate();
@@ -58,7 +56,6 @@ export const Home = () => {
     { label: "Hold", id: 3 },
     { label: "In Progress", id: 4 },
   ]);
-
   let [selectedOptions, setSelectedOptions] = useState([]);
   let [data, setData] = React.useState([]);
   //  console.log(data);
@@ -66,6 +63,7 @@ export const Home = () => {
     fecthTicketData(serText);
   }, []);
   const fecthTicketData = async (searchStr) => {
+    setLoading(true);
     // data = [];
     console.log("filterValue received :", searchStr);
     const { data } = await axios.post(`/getDataByFilter`, {
@@ -78,7 +76,10 @@ export const Home = () => {
     console.log("data from api", data.data);
     console.log(data.message);
     setData(data.data);
-
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 1500);
+    setLoading(false);
     // .then((res)=> console.log(res.data.data));
   };
   //--------------------------------------------------------------------
@@ -92,7 +93,6 @@ export const Home = () => {
       // console.log('exists')
     } else {
       console.log("not exists");
-
       // setSelectedOptions((prevState) => [...prevState, filterValue]);
       selectedOptions.push(filterValue);
     }
@@ -100,6 +100,7 @@ export const Home = () => {
     fecthTicketData(serText);
   };
   // ------for openAction in table Row---
+  const [isloading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [SingleData, setSingleData] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -125,7 +126,6 @@ export const Home = () => {
       });
     console.log("ASDFG", searchText);
   };
-
   const statusColors = {
     Open: "#0B9611",
     Hold: "#E05D5D",
@@ -248,86 +248,104 @@ export const Home = () => {
               </TableRow>
               <TableRow></TableRow>
             </TableHead>
-            <TableBody>
-              {data.map((row) => (
-                <TableRow
-                  className="tableRow"
-                  key={row.ticketId}
-                  style={{ background: "#F4FBFF" }}
-                >
-                  <TableCell component="th" align="center" scope="row">
-                    {row.ticketId}
-                  </TableCell>
-                  <TableCell align="center">{row.department}</TableCell>
-                  <TableCell align="center">{row.name}</TableCell>
-                  <TableCell align="center">{row.issuetype}</TableCell>
+            {isloading ? (
+              <TableBody container width={12} sx={{ textAlign: "center" }}>
+                <TableRow item width={12}>
                   <TableCell
-                    align="center"
-                    sx={{
-                      color: statusColors[row.status] ?? "black",
-                      fontWeight: "600",
-                      fontSize: "16px",
+                    colSpan={6}
+                    style={{
+                      textAlign: "center",
+                      width: "100%",
+                      height: "50vh",
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    {row.status}
-                  </TableCell>
-
-                  <TableCell align="center">
-                    <Tooltip title="Action">
-                      <IconButton onClick={(e) => handleClick(e, row)}>
-                        <MoreVertIcon sx={{ color: "#777777" }} />
-                      </IconButton>
-                    </Tooltip>
-
-                    <Menu
-                      id="basic-menu"
-                      sx={{
-                        "& .MuiPaper-root": {
-                          backgroundColor: "#C0D2E9",
-                          boxShadow: "none",
-                          width: "100px",
-                        },
-                        "& .MuiList-root": {
-                          padding: "0",
-                        },
-                        "& .MuiMenuItem-root": {
-                          padding: "5px 10px ",
-                          fontSize: "13px",
-                          justifyContent: "space-between",
-                        },
-                      }}
-                      anchorEl={anchorEl}
-                      open={open}
-                      SingleData={SingleData}
-                      onClose={handleClose}
-                      MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                      }}
-                    >
-                      <MenuItem
-                        onClick={handleClose}
-                        component={Link}
-                        to={`/ticket-details/${SingleData?._id}`}
-                      >
-                        Views <RemoveRedEyeIcon fontSize="14px" />
-                      </MenuItem>
-                      <MenuItem
-                        onClick={handleClose}
-                        component={Link}
-                        to={`/ticket-details/${SingleData?._id}`}
-                      >
-                        Edit
-                        <EditIcon fontSize="14px" />
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        Transfer
-                        <CompareArrowsIcon fontSize="14px" />
-                      </MenuItem>
-                    </Menu>
+                    <CircularProgress color="inherit" />
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
+              </TableBody>
+            ) : (
+              <TableBody>
+                {data.map((row) => (
+                  <TableRow
+                    className="tableRow"
+                    key={row.ticketId}
+                    style={{ background: "#F4FBFF" }}
+                  >
+                    <TableCell component="th" align="center" scope="row">
+                      {row.ticketId}
+                    </TableCell>
+                    <TableCell align="center">{row.department}</TableCell>
+                    <TableCell align="center">{row.name}</TableCell>
+                    <TableCell align="center">{row.issuetype}</TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: statusColors[row.status] ?? "black",
+                        fontWeight: "600",
+                        fontSize: "16px",
+                      }}
+                    >
+                      {row.status}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Tooltip title="Action">
+                        <IconButton onClick={(e) => handleClick(e, row)}>
+                          <MoreVertIcon sx={{ color: "#777777" }} />
+                        </IconButton>
+                      </Tooltip>
+                      <Menu
+                        id="basic-menu"
+                        sx={{
+                          "& .MuiPaper-root": {
+                            backgroundColor: "#C0D2E9",
+                            boxShadow: "none",
+                            width: "100px",
+                          },
+                          "& .MuiList-root": {
+                            padding: "0",
+                          },
+                          "& .MuiMenuItem-root": {
+                            padding: "5px 10px ",
+                            fontSize: "13px",
+                            justifyContent: "space-between",
+                          },
+                        }}
+                        anchorEl={anchorEl}
+                        open={open}
+                        SingleData={SingleData}
+                        onClose={handleClose}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem
+                          onClick={handleClose}
+                          component={Link}
+                          to={`/ticket-details/${SingleData?._id}`}
+                        >
+                          Views <RemoveRedEyeIcon fontSize="14px" />
+                        </MenuItem>
+                        <MenuItem
+                          onClick={handleClose}
+                          component={Link}
+                          to={`/ticket-details/${SingleData?._id}`}
+                        >
+                          Edit
+                          <EditIcon fontSize="14px" />
+                        </MenuItem>
+                        <MenuItem onClick={handleClose}>
+                          Transfer
+                          <CompareArrowsIcon fontSize="14px" />
+                        </MenuItem>
+                      </Menu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            )}
           </Table>
         ) : (
           <div
@@ -337,7 +355,7 @@ export const Home = () => {
               justifyContent: "center",
             }}
           >
-            <NotFoundImage />
+            {isloading ? "" : <NotFoundImage />}
           </div>
         )}
       </TableContainer>
