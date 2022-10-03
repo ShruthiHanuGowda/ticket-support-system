@@ -33,7 +33,7 @@ export const CreateClient = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   let navigate = useNavigate();
-  // const [checkBoxClient , setcheckBoxClient]=useState([])
+  const [checkBoxClient , setcheckBoxClient]=useState([])
   const [input, setInput] = useState({
     name: "",
     email: "",
@@ -41,7 +41,7 @@ export const CreateClient = () => {
     position: "",
     password: "",
     role: "client",
-    // clientAccess:,
+    clientAccess: "",
   });
 
   const id = useParams().id;
@@ -110,13 +110,22 @@ export const CreateClient = () => {
   };
 
 
-  // const checkBoxClientAccess =(e)=>{
-  //   setcheckBoxClient((prevState) => ({
-  //     ...prevState,
-  //     'clientAccess': e.target.value,
-  //   }));
-  //   console.log(checkBoxClient)
-  // }
+  const checkBoxClientAccess =(e)=>{
+    const { value, checked } = e.target
+    setcheckBoxClient((prevState) => ({
+      ...prevState,
+      'clientAccess': e.target.value,
+    }));
+    console.log(`${value} is ${checked}`)
+
+    if(checked){
+      setcheckBoxClient([...checkBoxClientAccess, value])
+    }else{
+      setcheckBoxClient(checkBoxClientAccess.filter((e) => e !== value))
+    }
+ 
+   
+  }
 
   // --------------Update CLie-nt-----------
   const handleUpdate = (e) => {
@@ -274,7 +283,7 @@ export const CreateClient = () => {
                   <MenuItem value={4}>senior</MenuItem>
                 </Select>
               </Grid>
-              {/* <Grid item md={6} xs={12}>
+              <Grid item md={6} xs={12}>
                 <FormGroup>
                   <FormControlLabel
                     control={<Checkbox defaultChecked onClick={checkBoxClientAccess} value="view"/>}
@@ -289,7 +298,7 @@ export const CreateClient = () => {
                   label="Transfer"
                 />
                 </FormGroup>
-              </Grid> */}
+              </Grid>
               <Grid item mt={4}>
                 <Button
                   variant="contained"
@@ -440,7 +449,7 @@ export const CreateClient = () => {
                 <MenuItem value={4}>senior</MenuItem>
               </Select>
             </Grid>
-            {/* <Grid item md={6} xs={12}>
+            <Grid item md={6} xs={12} >
               <FormGroup>
                 <FormControlLabel
                   control={<Checkbox defaultChecked onClick={checkBoxClientAccess} value="view"/>}
@@ -455,8 +464,8 @@ export const CreateClient = () => {
                 label="Transfer"
               />
               </FormGroup>
-            </Grid> */}
-            <Grid item mt={4}>
+            </Grid>
+            <Grid item mt={4} >
               <Button
                 variant="contained"
                 type="submit"
@@ -471,7 +480,7 @@ export const CreateClient = () => {
               <Link
                 variant="outlined"
                 spacing={8}
-                sx={{ marginTop: "22px", marginBottom: "15px" }}
+                sx={{ marginTop: "90px", marginBottom: "15px" }}
               >
                 Discard
               </Link>

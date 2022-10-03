@@ -55,17 +55,17 @@ export const ManageClient = ({ loggedin, isClient }) => {
     setAnchorEl(null);
   };
   const statusColors = {
-    Open: "#0B9611",
-    Hold: "#E05D5D",
-    Progress: "#FFB344",
-    Closed: "#777777",
+    "trainee": "#0B9611",
+    "senior": "#E05D5D",
+    "junior": "#FFB344",
+    "senior": "#777777",
   };
 
   const deleteUser = async (id) => {
     const response = await axios.delete(`/user/${id}`);
     toast.success(response.data.message)
     setUserData([]);
-    fecthUserData();
+    fecthUserData(serText);
     // window.location.reload(false);
     //navigate("#")
   };
@@ -85,8 +85,8 @@ export const ManageClient = ({ loggedin, isClient }) => {
         <Grid item xm={10} md={6} lg={6}>
           <SearchBar
 
-            onClick={(seach) => {
-              serText = seach;
+            onClick={(search) => {
+              serText = search;
               // handleSearch(serText);
               fecthUserData(serText);
 
