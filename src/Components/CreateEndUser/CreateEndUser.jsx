@@ -436,6 +436,7 @@ export const CreateEndUser = () => {
                   label="Grouping"
                   placeholder="Select Position"
                   disableUnderline
+                  required
                   variant="standard"
                   sx={{
                     border: "none",
@@ -483,6 +484,7 @@ export const CreateEndUser = () => {
                   id="grouped-select"
                   label="Grouping"
                   disableUnderline
+                  required
                   variant="standard"
                   sx={{
                     border: "none",

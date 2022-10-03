@@ -65,7 +65,7 @@ export const ManageClient = ({ loggedin, isClient }) => {
     const response = await axios.delete(`/user/${id}`);
     toast.success(response.data.message)
     setUserData([]);
-    fecthUserData();
+    fecthUserData(serText);
     // window.location.reload(false);
     //navigate("#")
   };
@@ -76,6 +76,7 @@ export const ManageClient = ({ loggedin, isClient }) => {
   };
   return (
     <Box>
+      <Toaster/>
       <Grid container justifyContent={"space-between"}>
         <Grid item xm={2} md={3} lg={3}>
           <Typography variant="h5" letterSpacing={1}>
