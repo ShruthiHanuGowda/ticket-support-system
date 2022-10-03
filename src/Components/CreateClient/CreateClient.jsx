@@ -217,6 +217,7 @@ const validate = () => {
                   name="name"
                   onChange={onchageTextFilid}
                   type="text"
+                  required
                   InputProps={{ disableUnderline: true}}
                   variant="standard"
                   value={input.name}
