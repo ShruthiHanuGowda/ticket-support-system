@@ -336,7 +336,8 @@ export const Home = () => {
                           Edit
                           <EditIcon fontSize="14px" />
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={handleClose}  component={Link}
+                          to={`/ticket-details/${SingleData?._id}`}>
                           Transfer
                           <CompareArrowsIcon fontSize="14px" />
                         </MenuItem>
