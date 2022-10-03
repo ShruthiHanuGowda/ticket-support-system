@@ -1,3 +1,5 @@
+// import { useNavigate } from 'react-router-dom'
+
 const jwt = require('jsonwebtoken')
 
 const { userModel } = require('../models/userSchema')
@@ -12,9 +14,11 @@ const checkUserAuth = async (req, res, next) => {
       token = authorization.split(' ')[1]
       // Verify Token
       jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, result) => {
-        console.warn(err)
+        console.log("hhhhhhhhhh33", err)
+        console.log("hhhhhhhhhh33", result)
         if (err) {
-          return res.json({ message: 'something went wrongg', description: err })
+
+          return res.json({ status: 'failed', message: 'something went wrong', description: err })
         }
         // res.status(200).send('OK')
         // req.user = await userModel.findById(userID).select('-password')
@@ -26,7 +30,7 @@ const checkUserAuth = async (req, res, next) => {
 
       //   next()
     } catch (error) {
-      console.log(error)
+      console.log("error", error)
       res.status(401).send({ status: 'failed', message: 'Unauthorized User' })
     }
   }

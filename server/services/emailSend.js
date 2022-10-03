@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 console.log("yoyu Are In EMailsend File ====================");
 // async..await is not allowed in global scope, must use a wrapper
 const sendMail = async (name, email, password) => {
-  console.log("calling ====================", email, password, name);
+
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
   let testAccount = await nodemailer.createTestAccount();
@@ -24,7 +24,7 @@ const sendMail = async (name, email, password) => {
     to: email, // list of receivers
     subject: "TSS Tempoary Password  ", // Subject line
     text: "Hello world?", // plain text body
-
+    
     html: `
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
   <head>
@@ -51,25 +51,25 @@ const sendMail = async (name, email, password) => {
       				}
     </style>
     <!--<![endif]-->
-    <!--[if mso]> 
-		<xml> 
-			<o:OfficeDocumentSettings> 
-				<o:AllowPNG/> 
-				<o:PixelsPerInch>96</o:PixelsPerInch> 
-			</o:OfficeDocumentSettings> 
+    <!--[if mso]>
+		<xml>
+			<o:OfficeDocumentSettings>
+				<o:AllowPNG/>
+				<o:PixelsPerInch>96</o:PixelsPerInch>
+			</o:OfficeDocumentSettings>
 		</xml>
 		<![endif]-->
-    <!--[if lte mso 11]> 
-		<style type="text/css"> 
+    <!--[if lte mso 11]>
+		<style type="text/css">
 			.outlook-group-fix{width:100% !important;}
 		</style>
 		<![endif]-->
     <style type="text/css">
       @media only screen and (max-width:480px) {
-      
+
       			  table.full-width-mobile { width: 100% !important; }
       				td.full-width-mobile { width: auto !important; }
-      
+
       }
       @media only screen and (min-width:480px) {
       .dys-column-per-100 {
@@ -84,10 +84,10 @@ const sendMail = async (name, email, password) => {
       }
       }
       @media only screen and (max-width:480px) {
-      
+
       			  table.full-width-mobile { width: 100% !important; }
       				td.full-width-mobile { width: auto !important; }
-      
+
       }
       @media only screen and (min-width:480px) {
       .dys-column-per-100 {
@@ -353,7 +353,7 @@ const sendMail = async (name, email, password) => {
 </html>`
   });
 
-  console.log("Message sent: %s", info.response);
+  console.log("Message sentaa", info);
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
   // Preview only available when sending through an Ethereal account

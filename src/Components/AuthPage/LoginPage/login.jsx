@@ -68,6 +68,14 @@ export const Login = ({ setIsLoggedin }) => {
           </span>
         ));
       }
+      if (Location.state.status === '400') {
+        toast.error((t) => (
+          <span>
+            <Typography variant="h6">Token Expired</Typography>
+            {Location.state.message}<span> Please Login</span>
+          </span>
+        ));
+      }
     }
   }, []);
   const checkValidation = (e) => {
@@ -116,7 +124,7 @@ export const Login = ({ setIsLoggedin }) => {
           </Toolbar>
         </AppBar>
       </Box>
-      <Component className="Component">
+      <Component >
         <Heading>Welcome to Kadel Labs</Heading>
         <Detail>Login</Detail>
         <Wrapper component="form" onSubmit={onsubmit}>
