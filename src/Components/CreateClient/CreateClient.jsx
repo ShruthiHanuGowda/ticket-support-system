@@ -24,9 +24,9 @@ import { useParams } from "react-router-dom";
 export const CreateClient = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
-  let navigate = useNavigate();
-  const [Error, setError] = useState(false);
-  const [isSubmit, setIsSubmit] = useState(false);
+  const navigate = useNavigate();
+  const [Error, setError] = React.useState(false);
+  
   const [input, setInput] = useState({
     name: "",
     email: "",
@@ -63,19 +63,24 @@ export const CreateClient = () => {
 const validate = () => {
      if (input.name === "") {
      toast.error("name is empty");
-     setError(false)
+     return false;
    } else {
      if (input.email === "") {
        toast.error("email is empty");
-       setError(false)
+       return false;
      } else {
        if (!input.email.match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/)) {
          toast.error("please enter valid email address");
-         setError(false)
-       }else{
-         console.log("hiiiiiiiiiiiiiiiiiiiiiiiii" , Error)
-         setError(true)
-       }
+         return false;
+       }else {
+        console.log(input.department, input.position);
+        if (input.department == "" || input.position == "") {
+          toast.error("All Fields Are Required");
+          return false;
+        } else {
+          return true;
+        }
+      }
      }
    }
  };
@@ -83,18 +88,17 @@ const validate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let validation = await validate();
-    console.log(validation)
     setError(validation)
+    console.log(validation)
     console.log("hiii validation" , validation)
     if(Error === true){
       let a = generatePassword();
       sendData(a).then((a) => {
+        console.log("hhhhhhhhhhhhhh" , )
         console.log("i ear then function =====", a);
       });
-    }else{
-      toast.error("Please Enter A Valid Details")
     }
-  };
+    };
   function generatePassword() {
     var length = 8,
       charset =
