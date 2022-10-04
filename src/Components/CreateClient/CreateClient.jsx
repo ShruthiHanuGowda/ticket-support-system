@@ -353,7 +353,7 @@ const validate = () => {
         <Form onSubmit={handleSubmit}>
           <Grid container justify="center" spacing={4}>
             <Grid item md={6} xs={12}>
-              <InputLabel>
+              <InputLabel style={{ fontWeight: "bold" }}>
                 Full Name <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <TextField
@@ -378,7 +378,7 @@ const validate = () => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <InputLabel>
+              <InputLabel style={{ fontWeight: "bold" }}>
                 Email <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <TextField
@@ -404,7 +404,7 @@ const validate = () => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <InputLabel htmlFor="grouped-select">
+              <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold" }}>
                 Position <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <Select
