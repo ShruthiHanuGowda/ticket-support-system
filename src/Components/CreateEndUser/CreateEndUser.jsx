@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -14,7 +14,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Form } from "react-bootstrap";
-import { useState } from "react";
+// import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
@@ -23,7 +23,7 @@ export const CreateEndUser = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
-  const [Error, setError] = useState(false);
+  const [Error, setError] = React.useState(false);
   const [singleUser, setSingleUser] = useState({});
   console.log(singleUser);
   const [input, setInput] = useState({
@@ -78,11 +78,11 @@ export const CreateEndUser = () => {
   const validate = () => {
     if (input.name == "") {
       toast.error("Name is Empty!!");
-      setError(false);
+      return false;
     } else {
       if (input.email == "") {
-        toast.error("Email is Email");
-        setError(false);
+        toast.error("Email is Empty!!");
+        return false;
       } else {
         if (
           !input.email.match(
@@ -90,10 +90,15 @@ export const CreateEndUser = () => {
           )
         ) {
           toast.error("please enter valid email address");
-          setError(false);
+          return false;
         } else {
-          console.log("hiiiiiiiiiiiiiiiiiiiiiiiii", Error);
-          return true;
+          console.log(input.department, input.position);
+          if (input.department == "" || input.position == "") {
+            toast.error("All Fields Are Required");
+            return false;
+          } else {
+            return true;
+          }
         }
       }
     }
@@ -103,16 +108,15 @@ export const CreateEndUser = () => {
     e.preventDefault();
     let validation = await validate();
     setError(validation);
-    console.log("hiii validation", validation);
-    if (Error === true) {
+    console.log(validation);
+    console.log("hiii validation", validation, Error);
+    if (Error == true) {
+      console.log("ddhdhhd", Error);
       let a = generatePassword();
       sendData(a).then((a) => {
         console.log("i ear then function =====", a);
       });
-    } else {
-      toast.error("Please Enter A Valid Details");
     }
-    return true;
   };
 
   const _id = useParams().id;
@@ -367,7 +371,7 @@ export const CreateEndUser = () => {
           <Form onSubmit={handleUpdate}>
             <Grid container justify="center" spacing={5}>
               <Grid item md={6} xs={12}>
-                <InputLabel style={{ fontWeight: "bold"}}>
+                <InputLabel style={{ fontWeight: "bold" }}>
                   Full Name <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <TextField
@@ -540,24 +544,6 @@ export const CreateEndUser = () => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import React, { useEffect } from "react";
 // import { Box, Grid, InputLabel, ListSubheader, MenuItem, Select, TextField, Typography, Button, Link } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
@@ -625,7 +611,6 @@ export const CreateEndUser = () => {
 //       });
 //   };
 
-
 //   /////////// For Email Validation////////////////////
 
 //   const validate = () =>{
@@ -642,23 +627,21 @@ export const CreateEndUser = () => {
 //           toast.error("please enter valid email address");
 //           setError(false)
 //         }else{
-         
+
 //           console.log("hiiiiiiiiiiiiiiiiiiiiiiiii" , Error)
-       
+
 //          return true;
 //         }
-        
+
 //       }
-//     } 
-    
-//   } 
+//     }
 
+//   }
 
-  
 //   /////////-------For handleSubmit-------///////////
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
-    
+
 //     let validation = await validate();
 //     setError(validation)
 //     console.log("hiii validation" , validation)
@@ -667,13 +650,13 @@ export const CreateEndUser = () => {
 //       sendData(a).then((a) => {
 //         console.log("i ear then function =====", a);
 //       });
-  
+
 //     }else{
 //       toast.error("Please Enter A Valid Details")
 
 //     }
 //     return true;
-    
+
 //   };
 
 //   // const handleSubmit = (e) => {
@@ -759,7 +742,7 @@ export const CreateEndUser = () => {
 //                   onChange={onchageTextFilid}
 //                   type="text"
 //                   InputProps={{ disableUnderline: true }}
-                  
+
 //                   variant="standard"
 //                   sx={{
 //                     marginTop: "10px",
@@ -785,7 +768,7 @@ export const CreateEndUser = () => {
 //                   InputProps={{ disableUnderline: true }}
 //                   name="email"
 //                   type="email"
-            
+
 //                   onChange={onchageTextFilid}
 //                   variant="standard"
 //                   sx={{
@@ -816,7 +799,7 @@ export const CreateEndUser = () => {
 //                   label="Grouping"
 //                   placeholder="Select Position"
 //                   disableUnderline
-                
+
 //                   variant="standard"
 //                   sx={{
 //                     border: "none",
@@ -832,7 +815,7 @@ export const CreateEndUser = () => {
 //                     },
 //                   }}
 //                 >
-                   
+
 //                   <MenuItem value={"Head of Product"}>Head of Product</MenuItem>
 //                   <MenuItem value={"Product Manager"}>Product Manager</MenuItem>
 //                   <MenuItem value={"VP of Marketing"}>VP of Marketing</MenuItem>
@@ -1088,83 +1071,3 @@ export const CreateEndUser = () => {
 //     );
 //   }
 // };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

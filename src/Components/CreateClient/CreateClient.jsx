@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useState, useEffect } from "react";
-
 import useMediaQuery from "@mui/material/useMediaQuery";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -22,15 +21,12 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-
 export const CreateClient = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   let navigate = useNavigate();
-
   const [Error, setError] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
-
   const [input, setInput] = useState({
     name: "",
     email: "",
@@ -40,7 +36,6 @@ export const CreateClient = () => {
     role: "client",
     // clientAccess:,
   });
-
   const id = useParams().id;
   useEffect(() => {
     const fetchUserData = async () => {
@@ -56,7 +51,6 @@ export const CreateClient = () => {
     }
     //console.log(fetchUserData);
   }, []);
-
   ////--------- For textFields-----//////
   const onchageTextFilid = (e) => {
     // console.log(e.target.value);
@@ -65,13 +59,9 @@ export const CreateClient = () => {
       [e.target.name]: e.target.value,
     }));
   };
-
-
 /////////////------ For Email Validation----------/////////
 const validate = () => {
-  // const regex = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/i;
-
-   if (input.name === "") {
+     if (input.name === "") {
      toast.error("name is empty");
      setError(false)
    } else {
@@ -83,22 +73,17 @@ const validate = () => {
          toast.error("please enter valid email address");
          setError(false)
        }else{
-        
          console.log("hiiiiiiiiiiiiiiiiiiiiiiiii" , Error)
-      
-        return true;
+         setError(true)
        }
-       
      }
    }
  };
- 
-
   /////////-------For handleSubmit-------///////////
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     let validation = await validate();
+    console.log(validation)
     setError(validation)
     console.log("hiii validation" , validation)
     if(Error === true){
@@ -106,18 +91,10 @@ const validate = () => {
       sendData(a).then((a) => {
         console.log("i ear then function =====", a);
       });
-  
     }else{
       toast.error("Please Enter A Valid Details")
-
     }
-    return true;
-    
   };
-  
-
-  
-
   function generatePassword() {
     var length = 8,
       charset =
@@ -128,7 +105,6 @@ const validate = () => {
     }
     return retVal;
   }
-
   const sendData = async (temPass) => {
     // console.log("in send data", temPass);
     await axios
@@ -150,7 +126,6 @@ const validate = () => {
         toast.error(error.response?.data?.message);
       });
   };
-
   // const checkBoxClientAccess =(e)=>{
   //   setcheckBoxClient((prevState) => ({
   //     ...prevState,
@@ -158,7 +133,6 @@ const validate = () => {
   //   }));
   //   console.log(checkBoxClient)
   // }
-
   // --------------Update CLie-nt-----------
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -173,7 +147,6 @@ const validate = () => {
         toast.error(error.response?.data?.message);
       });
   };
-
   const updateRequest = async () => {
     return await axios
       .put(`/user/${id}`, {
@@ -186,7 +159,6 @@ const validate = () => {
       })
       .then((res) => res.data);
   };
-
   if (id) {
     return (
       (<span>{`theme.breakpoints.up('sm') matches: ${matches}`}</span>),
@@ -234,7 +206,6 @@ const validate = () => {
                   }}
                 />
               </Grid>
-
               <Grid item md={6} xs={12}>
                 <InputLabel style={{ fontWeight: "bold"}}>
                   Email <span style={{ color: "red" }}>*</span>
@@ -262,7 +233,6 @@ const validate = () => {
                   }}
                 />
               </Grid>
-
               <Grid item md={6} xs={12}>
                 <InputLabel htmlFor="grouped-select" style={{fontWeight: "bold"}}>
                   Position 
@@ -270,7 +240,6 @@ const validate = () => {
                 <Select
                   id="grouped-select"
                   name="position"
-                  
                   value={input.position}
                   onChange={onchageTextFilid}
                   disableUnderline
@@ -290,7 +259,6 @@ const validate = () => {
                   },
                   }}
                 >
-                   
                   <ListSubheader style={{fontWeight: "bold"}}>Software Engineer</ListSubheader>
                   <MenuItem value={1}>Trainee</MenuItem>
                   <MenuItem value={2}>Senior</MenuItem>
@@ -299,7 +267,6 @@ const validate = () => {
                   <MenuItem value={4}>Senior</MenuItem>
                 </Select>
               </Grid>
-
               <Grid item md={6} xs={12}>
                 <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold"}}>
                   Department 
@@ -309,7 +276,6 @@ const validate = () => {
                   name="department"
                   id="grouped-select"
                   label="Grouping"
-              
                   onChange={onchageTextFilid}
                   disableUnderline
                   variant="standard"
@@ -326,7 +292,6 @@ const validate = () => {
                     },
                   }}
                 >
-                  
                   <ListSubheader style={{fontWeight: "bold"}}>Software Engineer</ListSubheader>
                   <MenuItem value={1}>Trainee</MenuItem>
                   <MenuItem value={2}>Senior</MenuItem>
@@ -335,7 +300,6 @@ const validate = () => {
                   <MenuItem value={4}>Senior</MenuItem>
                 </Select>
               </Grid>
-
               <Grid item mt={4}>
                 <Button
                   variant="contained"
@@ -408,7 +372,6 @@ const validate = () => {
                 }}
               />
             </Grid>
-
             <Grid item md={6} xs={12}>
               <InputLabel>
                 Email <span style={{ color: "red" }}>*</span>
@@ -419,7 +382,6 @@ const validate = () => {
                 name="email"
                 type="email"
                 onChange={onchageTextFilid}
-                
                 InputProps={{ disableUnderline: true }}
                 variant="standard"
                 sx={{
@@ -436,7 +398,6 @@ const validate = () => {
                 }}
               />
             </Grid>
-
             <Grid item md={6} xs={12}>
               <InputLabel htmlFor="grouped-select">
                 Position <span style={{ color: "red" }}>*</span>
@@ -463,18 +424,27 @@ const validate = () => {
                   },
                 }}
               >
-                
-                <ListSubheader style={{fontWeight: "bold"}}>Software Engineer</ListSubheader>
-                  <MenuItem value={1}>Trainee</MenuItem>
-                  <MenuItem value={2}>Senior</MenuItem>
-                  <ListSubheader style={{fontWeight: "bold"}}>HR</ListSubheader>
-                  <MenuItem value={3}>Junior</MenuItem>
-                  <MenuItem value={4}>Senior</MenuItem>
-              </Select>
+                <MenuItem value={"Head of Product"}>Head of Product</MenuItem>
+                  <MenuItem value={"Product Manager"}>Product Manager</MenuItem>
+                  <MenuItem value={"VP of Marketing"}>VP of Marketing</MenuItem>
+                  <MenuItem value={"Technical Lead"}>Technical Lead</MenuItem>
+                  <MenuItem value={"Senior Software Engineer"}>
+                    Senior Software Engineer
+                  </MenuItem>
+                  <MenuItem value={"Software Developer"}>
+                    Software Developer
+                  </MenuItem>
+                  <MenuItem value={"Junior Software Developer"}>
+                    Junior Software Developer
+                  </MenuItem>
+                  <MenuItem value={"Intern Software Developer"}>
+                    Intern Software Developer
+                  </MenuItem>
+                  </Select>
             </Grid>
-
             <Grid item md={6} xs={12}>
-              <InputLabel htmlFor="grouped-select">
+              <InputLabel htmlFor="grouped-select"                   style={{ fontWeight: "bold" }}
+                  >
                 Department <span style={{ color: "red" }}>*</span>
               </InputLabel>
               <Select
@@ -499,13 +469,16 @@ const validate = () => {
                   },
                 }}
               >
-                
-                <ListSubheader style={{fontWeight: "bold"}}>Software Engineer</ListSubheader>
-                  <MenuItem value={1}>Trainee</MenuItem>
-                  <MenuItem value={2}>Senior</MenuItem>
-                  <ListSubheader style={{fontWeight: "bold"}}>HR</ListSubheader>
-                  <MenuItem value={3}>Junior</MenuItem>
-                  <MenuItem value={4}>Senior</MenuItem>
+                <ListSubheader style={{ fontWeight: "bold" }}>
+                    Software Engineer
+                  </ListSubheader>
+                  <MenuItem value={"TraineSE"}>Trainee</MenuItem>
+                  <MenuItem value={"SeniorSE"}>Senior</MenuItem>
+                  <ListSubheader style={{ fontWeight: "bold" }}>
+                    HR
+                  </ListSubheader>
+                  <MenuItem value={"JuniorHR"}>Junior</MenuItem>
+                  <MenuItem value={"SeniorHR"}>Senior</MenuItem>
               </Select>
             </Grid>
             {/* <Grid item md={6} xs={12}>
@@ -536,7 +509,6 @@ const validate = () => {
               >
                 Create
               </Button>
-
               <Link
                 variant="outlined"
                 spacing={8}

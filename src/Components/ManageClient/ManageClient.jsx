@@ -74,6 +74,20 @@ export const ManageClient = ({ loggedin, isClient }) => {
     navigate(`/manage-client/create-client/${id}`);
     // await axios.post(`http://localhost:8000/user/${id}`).then((res)=>console.log(res))
   };
+
+
+  const statusColor = {
+    "Head of Product": "#044BA9",
+    "Product Manager": "#E05D5D",
+    "VP of Marketing": "#0B9611",
+    "Technical Lead": "#0392cf",
+    "Senior Software Engineer": "#f5c305",
+    "Software Developer": "#bf548a",
+    "Junior Software Developer": "#76b4bd",
+    "Intern Software Developer": "#603601",
+  };
+
+
   return (
     <Box>
       <Toaster/>
@@ -160,7 +174,9 @@ export const ManageClient = ({ loggedin, isClient }) => {
                     {index + 1}
                   </TableCell>
                   <TableCell align="center">{row.name}</TableCell>
-                  <TableCell align="center">{row.position}</TableCell>
+                  <TableCell align="center" sx={{
+                      color: statusColor[row.position] ?? "black",
+                    }}>{row.position}</TableCell>
                   <TableCell align="center">{row.department}</TableCell>
                   <TableCell
                     align="center">
