@@ -12,7 +12,7 @@ export const CreateEndUser = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
-  // const [message , setMessage] =useState({})
+  const [Error, setError] = React.useState(false);
   const [singleUser, setSingleUser] = useState({});
   const [isloading, setLoading] = useState(false);
   const [input, setInput] = useState({
@@ -31,7 +31,8 @@ export const CreateEndUser = () => {
   };
   function generatePassword() {
     var length = 8,
-      charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      charset =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
       retVal = "";
     for (var i = 0, n = charset.length; i < length; ++i) {
       retVal += charset.charAt(Math.floor(Math.random() * n));
@@ -83,15 +84,48 @@ export const CreateEndUser = () => {
       toast.error(error.response?.data?.message);
     }
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let a = generatePassword();
-    console.log(a);
-    sendData(a);
-
+  /////////// For Email Validation////////////////////
+  const validate = () => {
+    if (input.name == "") {
+      toast.error("Name is Empty!!");
+      return false;
+    } else {
+      if (input.email == "") {
+        toast.error("Email is Empty!!");
+        return false;
+      } else {
+        if (!input.email.match(
+            /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/)) {
+          toast.error("please enter valid email address");
+          return false;
+        } else {
+          console.log(input.department, input.position);
+          if (input.department == "" || input.position == "") {
+            toast.error("All Fields Are Required");
+            return false;
+          } else {
+            return true;
+          }
+        }
+      }
+    }
   };
-  // ----------------for Update User Data
+  /////////-------For handleSubmit-------///////////
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let validation = await validate();
+    setError(validation);
+    console.log(validation);
+    console.log("hiii validation", validation, Error);
+    if (Error == true) {
+      console.log("ddhdhhd", Error);
+      let a = generatePassword();
+      sendData(a).then((a) => {
+        console.log("i ear then function =====", a);
+      });
+    }
+  };
+
   const _id = useParams().id;
   console.log(_id);
   useEffect(() => {
@@ -165,7 +199,6 @@ export const CreateEndUser = () => {
                   onChange={onchageTextFilid}
                   type="text"
                   InputProps={{ disableUnderline: true }}
-                  required
                   variant="standard"
                   sx={{
                     marginTop: "10px",
@@ -191,7 +224,6 @@ export const CreateEndUser = () => {
                   InputProps={{ disableUnderline: true }}
                   name="email"
                   type="email"
-                  required
                   onChange={onchageTextFilid}
                   variant="standard"
                   sx={{
@@ -209,7 +241,10 @@ export const CreateEndUser = () => {
                 />
               </Grid>
               <Grid item md={6} xs={12}>
-                <InputLabel htmlFor="grouped-select">
+                <InputLabel
+                  htmlFor="grouped-select"
+                  style={{ fontWeight: "bold" }}
+                >
                   Position <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <Select
@@ -239,14 +274,25 @@ export const CreateEndUser = () => {
                   <MenuItem value={"Product Manager"}>Product Manager</MenuItem>
                   <MenuItem value={"VP of Marketing"}>VP of Marketing</MenuItem>
                   <MenuItem value={"Technical Lead"}>Technical Lead</MenuItem>
-                  <MenuItem value={"Senior Software Engineer"}>Senior Software Engineer</MenuItem>
-                  <MenuItem value={"Software Developer"}>Software Developer</MenuItem>
-                  <MenuItem value={"Junior Software Developer"}>Junior Software Developer</MenuItem>
-                  <MenuItem value={"Intern Software Developer"}>Intern Software Developer</MenuItem>
+                  <MenuItem value={"Senior Software Engineer"}>
+                    Senior Software Engineer
+                  </MenuItem>
+                  <MenuItem value={"Software Developer"}>
+                    Software Developer
+                  </MenuItem>
+                  <MenuItem value={"Junior Software Developer"}>
+                    Junior Software Developer
+                  </MenuItem>
+                  <MenuItem value={"Intern Software Developer"}>
+                    Intern Software Developer
+                  </MenuItem>
                 </Select>
               </Grid>
               <Grid item md={6} xs={12}>
-                <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold" }}>
+                <InputLabel
+                  htmlFor="grouped-select"
+                  style={{ fontWeight: "bold" }}
+                >
                   Department <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <Select
@@ -271,12 +317,16 @@ export const CreateEndUser = () => {
                     },
                   }}
                 >
-                  <ListSubheader>Software Engineer</ListSubheader>
-                  <MenuItem value={"traineSE"}>traine</MenuItem>
-                  <MenuItem value={"seniorSE"}>senior</MenuItem>
-                  <ListSubheader>hr</ListSubheader>
-                  <MenuItem value={"juniorHR"}>junior</MenuItem>
-                  <MenuItem value={"seniorHR"}>senior</MenuItem>
+                  <ListSubheader style={{ fontWeight: "bold" }}>
+                    Software Engineer
+                  </ListSubheader>
+                  <MenuItem value={"TraineSE"}>Trainee</MenuItem>
+                  <MenuItem value={"SeniorSE"}>Senior</MenuItem>
+                  <ListSubheader style={{ fontWeight: "bold" }}>
+                    HR
+                  </ListSubheader>
+                  <MenuItem value={"JuniorHR"}>Junior</MenuItem>
+                  <MenuItem value={"SeniorHR"}>Senior</MenuItem>
                 </Select>
               </Grid>
               <Grid item mt={4}>
@@ -332,7 +382,7 @@ export const CreateEndUser = () => {
           <Form onSubmit={handleUpdate}>
             <Grid container justify="center" spacing={5}>
               <Grid item md={6} xs={12}>
-                <InputLabel>
+                <InputLabel style={{ fontWeight: "bold" }}>
                   Full Name <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <TextField
@@ -341,11 +391,10 @@ export const CreateEndUser = () => {
                   name="name"
                   onChange={onchageTextFilid}
                   type="text"
-                  InputProps={{ disableUnderline: true }}
                   required
+                  InputProps={{ disableUnderline: true }}
                   variant="standard"
                   sx={{
-                    // border: "none",
                     marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
@@ -373,7 +422,6 @@ export const CreateEndUser = () => {
                   InputProps={{ disableUnderline: true }}
                   variant="standard"
                   sx={{
-                    // border: "none",
                     marginTop: "10px",
                     background: "#F4FBFF",
                     width: "100%",
@@ -399,6 +447,7 @@ export const CreateEndUser = () => {
                   id="grouped-select"
                   label="Select Position"
                   disableUnderline
+                  required
                   variant="standard"
                   sx={{
                     border: "none",
@@ -418,10 +467,18 @@ export const CreateEndUser = () => {
                   <MenuItem value={"Product Manager"}>Product Manager</MenuItem>
                   <MenuItem value={"VP of Marketing"}>VP of Marketing</MenuItem>
                   <MenuItem value={"Technical Lead"}>Technical Lead</MenuItem>
-                  <MenuItem value={"Senior Software Engineer"}>Senior Software Engineer</MenuItem>
-                  <MenuItem value={"Software Developer"}>Software Developer</MenuItem>
-                  <MenuItem value={"Junior Software Developer"}>Junior Software Developer</MenuItem>
-                  <MenuItem value={"Intern Software Developer"}>Intern Software Developer</MenuItem>
+                  <MenuItem value={"Senior Software Engineer"}>
+                    Senior Software Engineer
+                  </MenuItem>
+                  <MenuItem value={"Software Developer"}>
+                    Software Developer
+                  </MenuItem>
+                  <MenuItem value={"Junior Software Developer"}>
+                    Junior Software Developer
+                  </MenuItem>
+                  <MenuItem value={"Intern Software Developer"}>
+                    Intern Software Developer
+                  </MenuItem>
                 </Select>
               </Grid>
               <Grid item md={6} xs={12}>
@@ -435,6 +492,7 @@ export const CreateEndUser = () => {
                   id="grouped-select"
                   label="Grouping"
                   disableUnderline
+                  required
                   variant="standard"
                   sx={{
                     border: "none",
@@ -450,12 +508,16 @@ export const CreateEndUser = () => {
                     },
                   }}
                 >
-                  <ListSubheader>Software Engineer</ListSubheader>
-                  <MenuItem value={"traineSE"}>traine</MenuItem>
-                  <MenuItem value={"seniorSE"}>senior</MenuItem>
-                  <ListSubheader>hr</ListSubheader>
-                  <MenuItem value={"juniorHR"}>junior</MenuItem>
-                  <MenuItem value={"seniorHR"}>senior</MenuItem>
+                  <ListSubheader style={{ fontWeight: "bold" }}>
+                    Software Engineer
+                  </ListSubheader>
+                  <MenuItem value={"TraineeSE"}>Trainee</MenuItem>
+                  <MenuItem value={"SeniorSE"}>Senior</MenuItem>
+                  <ListSubheader style={{ fontWeight: "bold" }}>
+                    HR
+                  </ListSubheader>
+                  <MenuItem value={"JuniorHR"}>Junior</MenuItem>
+                  <MenuItem value={"SeniorHR"}>Senior</MenuItem>
                 </Select>
               </Grid>
               <Grid item mt={4}>

@@ -78,7 +78,7 @@ export const ManageUser = ({ loggedin }) => {
     "Senior Software Engineer": "#f5c305",
     "Software Developer": "#bf548a",
     "Junior Software Developer": "#76b4bd",
-    "Intern Software Developer": "#603601",
+    "Intern Software Developer": "#603611",
   };
   return (
     <Box>

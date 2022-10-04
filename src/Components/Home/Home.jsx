@@ -1,5 +1,28 @@
 import * as React from "react";
-import { Backdrop, Button, Checkbox, CircularProgress, Divider, FormControlLabel, FormGroup, Grid, IconButton, InputAdornment, InputBase, Menu, MenuItem, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
+import {
+  Backdrop,
+  Button,
+  Checkbox,
+  CircularProgress,
+  Divider,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputBase,
+  Menu,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 // import { makeStyles } from '@material-ui/core/styles';
 import { styled } from "@mui/material/styles";
@@ -111,7 +134,13 @@ export const Home = () => {
   };
   return (
     <Box>
-      <Typography sx={{ fontSize: "18px", color: "#3B3B3B" }}>Welcome {JSON.parse(sessionStorage.getItem("userData")).role === "admin" ? "Admin" : "Client"},</Typography>
+      <Typography sx={{ fontSize: "18px", color: "#3B3B3B" }}>
+        Welcome{" "}
+        {JSON.parse(sessionStorage.getItem("userData")).role === "admin"
+          ? "Admin"
+          : "Client"}
+        ,
+      </Typography>
       <Grid container justifyContent={"space-between"}>
         <Grid item xm={2} md={3} lg={3}>
           <Typography variant="h5" letterSpacing={1}>
@@ -152,7 +181,19 @@ export const Home = () => {
       <Grid container marginTop={3}>
         <Grid item xs={12} md={10} component={FormGroup}>
           {options.map((item, index) => {
-            return <CheckboxFiled control={<Checkbox color="default" defaultChecked={false} onClick={() => onCheckBoxFillter(item.id)} />} label={item.label} key={item.id} />;
+            return (
+              <CheckboxFiled
+                control={
+                  <Checkbox
+                    color="default"
+                    defaultChecked={false}
+                    onClick={() => onCheckBoxFillter(item.id)}
+                  />
+                }
+                label={item.label}
+                key={item.id}
+              />
+            );
           })}
         </Grid>
         <Grid item xs={12} md={2} textAlign="right">
@@ -210,7 +251,17 @@ export const Home = () => {
             {isloading ? (
               <TableBody container width={12} sx={{ textAlign: "center" }}>
                 <TableRow item width={12}>
-                  <TableCell colSpan={6} style={{ textAlign: "center", width: "100%", height: "50vh", flex: 1, alignItems: "center", justifyContent: "center" }}>
+                  <TableCell
+                    colSpan={6}
+                    style={{
+                      textAlign: "center",
+                      width: "100%",
+                      height: "50vh",
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
                     <CircularProgress color="inherit" />
                   </TableCell>
                 </TableRow>
@@ -218,13 +269,17 @@ export const Home = () => {
             ) : (
               <TableBody>
                 {data.map((row) => (
-                  <TableRow className="tableRow" key={row.ticketId} style={{ background: "#F4FBFF" }}>
+                  <TableRow
+                    className="tableRow"
+                    key={row.ticketId}
+                    style={{ background: "#F4FBFF" }}
+                  >
                     <TableCell component="th" align="center" scope="row">
                       {row.ticketId}
                     </TableCell>
                     <TableCell align="center">{row.department}</TableCell>
                     <TableCell align="center">{row.name}</TableCell>
-                    <TableCell align="center">{row.department}</TableCell>
+                    <TableCell align="center">{row.issuetype}</TableCell>
                     <TableCell
                       align="center"
                       sx={{
@@ -266,14 +321,23 @@ export const Home = () => {
                           "aria-labelledby": "basic-button",
                         }}
                       >
-                        <MenuItem onClick={handleClose} component={Link} to={`/ticket-details/${SingleData?._id}`}>
+                        <MenuItem
+                          onClick={handleClose}
+                          component={Link}
+                          to={`/ticket-details/${SingleData?._id}`}
+                        >
                           Views <RemoveRedEyeIcon fontSize="14px" />
                         </MenuItem>
-                        <MenuItem onClick={handleClose} component={Link} to={`/ticket-details/${SingleData?._id}`}>
+                        <MenuItem
+                          onClick={handleClose}
+                          component={Link}
+                          to={`/ticket-details/${SingleData?._id}`}
+                        >
                           Edit
                           <EditIcon fontSize="14px" />
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={handleClose}  component={Link}
+                          to={`/ticket-details/${SingleData?._id}`}>
                           Transfer
                           <CompareArrowsIcon fontSize="14px" />
                         </MenuItem>
@@ -285,7 +349,15 @@ export const Home = () => {
             )}
           </Table>
         ) : (
-          <div style={{ textAlign: "center", alignItems: "center", justifyContent: "center" }}>{isloading ? "" : <NotFoundImage />}</div>
+          <div
+            style={{
+              textAlign: "center",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {isloading ? "" : <NotFoundImage />}
+          </div>
         )}
       </TableContainer>
     </Box>

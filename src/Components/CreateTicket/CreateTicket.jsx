@@ -224,6 +224,7 @@ export const CreateTicket = () => {
                   placeholder="Browser Files"
                   name="fileupload"
                   value={input.fileupload}
+                  required 
                   onChange={uploadFile}
                   sx={{
                     marginTop: "10px",

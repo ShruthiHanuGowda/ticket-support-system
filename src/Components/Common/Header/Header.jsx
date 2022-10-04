@@ -25,6 +25,7 @@ import Kadellogo from "../../../Assets/Images/kadellabslogo.png";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import Kl from "../../../Assets/Images/KL.png";
 import Bharat from "../../../Assets/Images/Bharat.png";
+//import crack from "../../../Assets/Images/crack.tiff"
 import { BrowserRouter, Link, Outlet, useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -280,7 +281,7 @@ export const Header = ({ setIsLoggedin }) => {
           <Box sx={{ flexGrow: 0, position: "absolute", right: "20px" }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="person" src={Bharat} />
+                <Avatar alt="Bharat" src={Bharat} />
                 <ArrowDropDownIcon />
               </IconButton>
             </Tooltip>
