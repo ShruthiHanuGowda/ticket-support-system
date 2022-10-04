@@ -12,6 +12,7 @@ const app = express.Router();
 const bcrypt = require("bcrypt");
 const EmailSend = require("../services/emailSend");
 const { ticketModel } = require("../models/ticketSchema");
+const { default: toast } = require("react-hot-toast");
 
 app.get("/", async (req, res) => {
   const data = await userModel.find();
@@ -159,7 +160,8 @@ const addUser = async (req, res) => {
 
     return res.status(201).json({ user, message: "User Add Susscesfully" });
   } catch (err) {
-    console.log(err, "eorrr");
+    console.log(err)
+    // toast.error(err.res)
   }
 };
 const sendMailNodemailer = async (name, email, password) => {
