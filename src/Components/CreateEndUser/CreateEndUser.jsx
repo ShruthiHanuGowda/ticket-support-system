@@ -12,7 +12,7 @@ export const CreateEndUser = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
-  const [Error, setError] = React.useState(false);
+  // const [Error, setError] = React.useState(false);
   const [singleUser, setSingleUser] = useState({});
   const [isloading, setLoading] = useState(false);
   const [input, setInput] = useState({
@@ -95,7 +95,7 @@ export const CreateEndUser = () => {
         return false;
       } else {
         if (!input.email.match(
-            /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/)) {
+          /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/)) {
           toast.error("please enter valid email address");
           return false;
         } else {
@@ -112,16 +112,15 @@ export const CreateEndUser = () => {
   };
   /////////-------For handleSubmit-------///////////
   const handleSubmit = async (e) => {
+    console.count("submited")
     e.preventDefault();
-    let validation = await validate();
-    setError(validation);
-    console.log(validation);
-    console.log("hiii validation", validation, Error);
-    if (Error == true) {
-      console.log("ddhdhhd", Error);
+    // let validation = validate();
+    // setError(validation);
+    // console.log(validation);
+    // console.log("hiii validation", validation, Error);
+    if (validate()) {
       let a = generatePassword();
       sendData(a).then((a) => {
-        console.log("i ear then function =====", a);
       });
     }
   };
@@ -145,27 +144,53 @@ export const CreateEndUser = () => {
   const handleUpdate = (e) => {
     e.preventDefault();
     updateRequest()
-      .then((res) => {
-        navigate("/manage-user", {
-          state: { message: res.message, status: res.status },
-        });
-        console.log("called");
-      })
-      .catch(function (error) {
-        toast.error(error.response?.data?.message);
-      });
+
   };
   const updateRequest = async () => {
-    return await axios
-      .put(`/user/${_id}`, {
-        name: String(input.name),
-        email: String(input.email),
-        department: String(input.department),
-        position: String(input.position),
-        role: String("user"),
-        password: String(input.temPass),
-      })
-      .then((res) => res.data);
+    setLoading(true)
+    const toastId = toast.loading("Please Wait...", {
+      style: {
+        fontSize: '16px',
+        color: '#fff',
+        background: 'rgb(126,186,1,0.9)',
+        paddingLeft: '30px',
+        paddingRight: '30px',
+        marginTop: '50px'
+      },
+      iconTheme: {
+        primary: '#fff',
+        secondary: 'rgb(126,186,1)',
+      }
+    })
+    try {
+      await axios
+        .put(`/user/${_id}`, {
+          name: String(input.name),
+          email: String(input.email),
+          department: String(input.department),
+          position: String(input.position),
+          role: String("user"),
+          password: String(input.temPass),
+        })
+        .then((res) => {
+          if (res.status === "500") {
+            toast.dismiss(toastId);
+            setLoading(false)
+            toast.error(res.data.message);
+          } else {
+            toast.dismiss(toastId);
+            setLoading(false)
+            navigate("/manage-user", {
+              state: { message: res.data.message, status: res.status },
+            });
+          }
+        });
+    } catch (error) {
+      toast.dismiss(toastId);
+      setLoading(false)
+      toast.error(error.response?.data?.message);
+    }
+
   };
   if (!_id) {
     return (
