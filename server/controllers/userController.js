@@ -127,6 +127,7 @@ const addUser = async (req, res) => {
   console.log(req.body);
   const { name, email, department, position, role, password } = req.body;
   console.log(name, email, password);
+
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
   console.log(hashPassword);
@@ -136,6 +137,8 @@ const addUser = async (req, res) => {
     if (userExist) {
       return res.status(422).json({ message: "Email already exists! " });
     }
+    const mailResp = await sendMailNodemailer(name, email, password);
+    console.log("mailResp$$$%%%%%%%%%", mailResp)
     let user;
     user = new userModel({
       name,
@@ -153,7 +156,7 @@ const addUser = async (req, res) => {
     // <EmailSend email={user.email} />
     console.log("haysdyy---------------------", name, email, password);
     // await EmailSend.sendMail(name, email, password)
-    sendMailNodemailer(name, email, password);
+
     return res.status(201).json({ user, message: "User Add Susscesfully" });
   } catch (err) {
     console.log(err, "eorrr");

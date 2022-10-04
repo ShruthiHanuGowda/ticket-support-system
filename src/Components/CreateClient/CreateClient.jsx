@@ -313,6 +313,7 @@ const validate = () => {
                   Update
                 </Button>
                 <Link
+                  onClick={() => { navigate(-1) }}
                   variant="outlined"
                   spacing={8}
                   sx={{ marginTop: "22px", marginBottom: "15px" }}
@@ -510,6 +511,7 @@ const validate = () => {
                 Create
               </Button>
               <Link
+                onClick={() => { navigate(-1) }}
                 variant="outlined"
                 spacing={8}
                 sx={{ marginTop: "22px", marginBottom: "15px" }}

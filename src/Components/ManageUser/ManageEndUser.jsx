@@ -67,6 +67,9 @@ export const ManageUser = ({ loggedin }) => {
     const userData = await axios.get(`/getUser/${Role}`, {
       headers: { "Authorization": `Bearer ${sessionStorage.getItem('token')}`, 'searchString': serText }
     });
+    if (userData.data.status == 'failed') {
+      navigate("/", { state: { message: data.message, status: "400" } })
+    }
     console.log(userData.data.data);
     setData(userData.data.data);
 

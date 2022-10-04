@@ -1,22 +1,11 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Grid,
-  InputLabel,
-  ListSubheader,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-  Button,
-  Link,
-} from "@mui/material";
+import React, { useEffect } from "react";
+import { Box, Grid, InputLabel, ListSubheader, MenuItem, Select, TextField, Typography, Button, Link, MenuList } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Form } from "react-bootstrap";
-// import { useState } from "react";
+ import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 export const CreateEndUser = () => {
@@ -84,11 +73,8 @@ export const CreateEndUser = () => {
         toast.error("Email is Empty!!");
         return false;
       } else {
-        if (
-          !input.email.match(
-            /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/
-          )
-        ) {
+        if (!input.email.match(
+            /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/)) {
           toast.error("please enter valid email address");
           return false;
         } else {
@@ -246,8 +232,7 @@ export const CreateEndUser = () => {
                   onChange={onchageTextFilid}
                   defaultValue=""
                   id="grouped-select"
-                  label="Grouping"
-                  placeholder="Select Position"
+                  label="Select Position"
                   disableUnderline
                   variant="standard"
                   sx={{
@@ -335,11 +320,7 @@ export const CreateEndUser = () => {
                 >
                   Create
                 </Button>
-                <Link
-                  variant="outlined"
-                  spacing={8}
-                  sx={{ marginTop: "22px", marginBottom: "15px" }}
-                >
+                <Link variant="outlined" onClick={() => { navigate(-1) }} spacing={8} sx={{ marginTop: "22px", marginBottom: "15px" }}>
                   Discard
                 </Link>
               </Grid>
@@ -437,8 +418,7 @@ export const CreateEndUser = () => {
                   onChange={onchageTextFilid}
                   defaultValue=""
                   id="grouped-select"
-                  label="Grouping"
-                  placeholder="Select Position"
+                  label="Select Position"
                   disableUnderline
                   required
                   variant="standard"
@@ -528,11 +508,7 @@ export const CreateEndUser = () => {
                 >
                   Update
                 </Button>
-                <Link
-                  variant="outlined"
-                  spacing={8}
-                  sx={{ marginTop: "22px", marginBottom: "15px" }}
-                >
+                <Link onClick={() => { navigate(-1) }} variant="outlined" spacing={8} sx={{ marginTop: "22px", marginBottom: "15px" }}>
                   Discard
                 </Link>
               </Grid>

@@ -27,10 +27,12 @@ import Paper from "@mui/material/Paper";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 export const CreateTicket = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [imageArr, setImageArr] = useState([]);
   console.log(imageArr);
@@ -376,7 +378,7 @@ export const CreateTicket = () => {
                 Create
               </Button>
               <Link
-                to="#"
+                onClick={() => { navigate(-1) }}
                 variant="outlined"
                 spacing={8}
                 sx={{ marginTop: "22px", marginBottom: "15px" }}

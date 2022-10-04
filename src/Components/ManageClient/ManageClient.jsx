@@ -40,6 +40,10 @@ export const ManageClient = ({ loggedin, isClient }) => {
   const fecthUserData = async (serText) => {
     const Role = "client";
     const { data } = await axios.get(`/getUser/${Role}`, { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}`, 'searchString': serText } });
+    console.log(data);
+    if (data.status == 'failed') {
+      navigate("/", { state: { message: data.message, status: "400" } })
+    }
     console.log(data.data);
     setUserData(data.data);
     setData(data.data);

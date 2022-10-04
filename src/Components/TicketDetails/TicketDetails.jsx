@@ -138,7 +138,7 @@ export const TicketDetails = () => {
                 </Typography>
               </Toolbar>
             </Grid>
-            <Grid item xs={9} md={9} sx={{ m: 0, p: 0,  mt: 0 , mr: "auto"}}>
+            <Grid item xs={9} md={9} sx={{ m: 0, p: 0, mt: 0, mr: "auto" }}>
               <Divider></Divider>
             </Grid>
           </Grid>
