@@ -159,7 +159,7 @@ export const ManageUser = ({ loggedin }) => {
                   <TableCell component="th" align="center" scope="row">
                     {index + 1}
                   </TableCell>
-                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell sx={{ textTransform: 'capitalize' }} align="center">{row.name}</TableCell>
                   <TableCell
                     align="center"
                     sx={{
@@ -168,7 +168,7 @@ export const ManageUser = ({ loggedin }) => {
                   >
                     {row.position}
                   </TableCell>
-                  <TableCell align="center">{row.department}</TableCell>
+                  <TableCell align="center" sx={{ textTransform: 'capitalize' }}>{row.department}</TableCell>
                   <TableCell align="center">
                     <IconButton
                       onClick={() => {
