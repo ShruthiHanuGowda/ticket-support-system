@@ -157,7 +157,7 @@ export const Login = ({ setIsLoggedin }) => {
             {/* <Fields hintText="At least 8 characters"floatingLabelText="Enter your password"errorText="Your password is too short"/> */}
             <Box>
              <Forgot style={{ color: "black", fontWeight: "bold" }}>
-               
+                {" "}
                 <NavLink to="/password-reset">Forgot Password</NavLink>
               </Forgot>
             </Box>

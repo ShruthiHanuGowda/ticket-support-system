@@ -4,7 +4,7 @@ const userController = require("../controllers/userController");
 const { userModel } = require("../models/userSchema");
 const ticketController = require("../controllers/ticketController");
 const bcrypt = require("bcrypt");
-// const nodemailer = require("noadmailer");
+const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const checkUserAuth = require("../middlewares/tokenMiddlewares");
@@ -40,19 +40,19 @@ router.get("/getUser/:role?", checkUserAuth, userController.getAllUserData);
 router.post("/ticketid", ticketController.ticketId);
 router.get("/deleteImageIncloudy/:id", ticketController.DeleteAttechment);
 
+router.post("/sendpasswordlink",userController.resetPassword)
+// router.post('/email-send', userController.emailSend);
+// router.post('/change-password', userController.changePassword);
 
-router.post('/email-send', userController.emailSend);
-router.post('/change-password', userController.changePassword);
 
+const transporter = nodemailer.createTransport({
+  service:"gmail",
+  auth:{
+    user:"dtthakur2197@gmail.com",
+    pass:"wygrnrrigedgvxki"
+  }
 
-// const transporter = nodemailer.createTransport({
-//   service:"gmail",
-//   auth:{
-//     user:"dtthakur2197@gmail.com",
-//     pass:"1234567"
-//   }
-
-// })
+})
 // ******for Upload Ticket File*************
 router.post("/upload", upload.any(), async function (req, res, next) {
   console.log("body received", req.files[0]);
@@ -94,6 +94,37 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ message: "Credentials does not match" });
   }
 });
+
+
+
+
+router.post("/sendpasswordlink",async(req,res)=> {
+  // return res.status(200).json({ msg: 'valid email' })
+  // console.log("a::::::::::::::::::::::::::::::::")
+  console.log(req.body)
+  const { email } = req.body;
+
+  if(!email){
+    res.status(200).json({status:200, message: "enter your email"})
+  }
+
+  try{
+    const userfind = await userdb.findOne({email:email});
+    
+
+    // token generate for reset password
+    const token = jwt.sign({id:userfind._id},{
+      expiresIn:"120s"
+    });
+
+    const setusertoken = await userdb.findByIdUpdate({_id:userfind._id},{verifytoken:token});
+
+    Console.log("setusertoken", setusertoken)
+
+  }catch (error) {
+
+  }
+})
 
 router.delete("/user/:deleteId", userController.deleteUser);
 module.exports = router;

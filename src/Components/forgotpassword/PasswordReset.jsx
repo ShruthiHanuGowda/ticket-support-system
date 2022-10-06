@@ -7,6 +7,7 @@ import {toast } from 'react-toastify';
 // import axios from 'axios';
 import { server } from "../../Services/Server";
 
+
 const PasswordReset = () => {
 
     const [email,setEmail] = useState("");
@@ -61,3 +62,6 @@ const PasswordReset = () => {
 }
 
 export default PasswordReset;
+
+
+

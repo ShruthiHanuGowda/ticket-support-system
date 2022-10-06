@@ -10,8 +10,8 @@ import { Login } from "../Components/AuthPage/LoginPage/login";
 import { CreateClient } from "../Components/CreateClient/CreateClient";
 import { CreateEndUser } from "../Components/CreateEndUser/CreateEndUser";
 import { TicketDetails } from "../Components/TicketDetails/TicketDetails";
-import PasswordReset from "../Components/forgotpassword/PasswordReset.jsx";
-import ForgotPassword from "../Components/forgotpassword/ForgotPassword.jsx";
+import PasswordReset from "../Components/forgotpassword/PasswordReset";
+import ForgotPassword from "../Components/forgotpassword/ForgotPassword";
 
 import { CreateTicket } from "../Components/CreateTicket/CreateTicket";
 import RequireAuth from "../Components/Common/RequireAuth";
@@ -31,6 +31,7 @@ export const Router = () => {
         {/* public routes */}
         <Route path="/" exact element={<Login />} />
         <Route path="*" element={<PageNotFound />} />
+        <Route path="/password-reset" exact  element={<PasswordReset />} />
         <Route path="/" element={<Header setIsLoggedin={setIsLoggedin} />}>
           {/* we want to protect these routes */}
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
@@ -38,9 +39,7 @@ export const Router = () => {
             <Route path="/manage-user" exact element={<ManageUser loggedin={isLoggedin} />} />
             <Route path="/manage-client" exact element={<ManageClient loggedin={isLoggedin} />} />
             <Route path="/manage-client/create-client" exact element={<CreateClient />} />
-            <Route path="/manage-client/create-client/:id" exact element={<CreateClient />} />
-            <Route path="/password-reset"  element={<PasswordReset />} />
-            
+            <Route path="/manage-client/create-client/:id" exact element={<CreateClient />} />           
             <Route path="/forgotpassword/:id/:token" exact element={<ForgotPassword />} />
             {/* <Route path="/ticket-details" exact element={<TicketDetails />} /> */}
             <Route path="/manage-user/create-enduser" exact element={<CreateEndUser />} />
@@ -48,6 +47,7 @@ export const Router = () => {
           </Route>
           <Route element={<RequireAuth allowedRoles={["user"]} />}>
             <Route path="/create-ticket" exact element={<CreateTicket loggedin={isLoggedin} />} />
+           
           </Route>
           
        
