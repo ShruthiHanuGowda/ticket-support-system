@@ -148,13 +148,13 @@ export const CreateTicket = () => {
             <Grid container justify="center" spacing={6}>
               <Grid item md={6} xs={12}>
                 <InputLabel style={{ fontWeight: "bold" }}>
-                  Full Name<span style={{ color: "red" }}>*</span>
+                  Full Name 
                 </InputLabel>
                 <TextField
                   InputProps={{ readOnly: true, disableUnderline: true }}
                   type="text"
                   name="name"
-                  required
+                   
                   variant="standard"
                   value={input.name}
                   placeholder="Name"
@@ -177,13 +177,13 @@ export const CreateTicket = () => {
               </Grid>
               <Grid item md={6} xs={12}>
                 <InputLabel style={{ fontWeight: "bold" }}>
-                  Department <span style={{ color: "red" }}>*</span>
+                  Department  
                 </InputLabel>
                 <Select
                   label="Grouping"
                   // placeholder="Select Position"
                   name="department"
-                  required
+                   
                   disableUnderline
                   variant="standard"
                   value={input.department}
@@ -202,16 +202,17 @@ export const CreateTicket = () => {
                     },
                   }}
                 >
-                  <MenuItem value="">
-                    <em>hello</em>
-                  </MenuItem>
-                  <ListSubheader>Software Engineer</ListSubheader>
-                  <MenuItem value={"SE Tranie"}>traine</MenuItem>
-                  <MenuItem value={"Senior"}>senior</MenuItem>
-                  <ListSubheader>hr</ListSubheader>
-                  <MenuItem value={"HR Junior"}>junior</MenuItem>
-                  <MenuItem value={"HR Senior"}>senior</MenuItem>
-                </Select>
+                 <ListSubheader style={{ fontWeight: "bold" }}>
+                    Software Engineer
+                  </ListSubheader>
+                  <MenuItem value={"TraineSE"}>Trainee</MenuItem>
+                  <MenuItem value={"SeniorSE"}>Senior</MenuItem>
+                  <ListSubheader style={{ fontWeight: "bold" }}>
+                    HR
+                  </ListSubheader>
+                  <MenuItem value={"JuniorHR"}>Junior</MenuItem>
+                  <MenuItem value={"SeniorHR"}>Senior</MenuItem>            
+              </Select>
               </Grid>
               <Grid item md={6} xs={12}>
                 <InputLabel style={{ fontWeight: "bold" }}>
@@ -325,15 +326,16 @@ export const CreateTicket = () => {
                   }}
                 >
                   {console.log("hiiiiiiiiiiiiiiiii", input.issuetype === "")}
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <ListSubheader>Software Engineer</ListSubheader>
-                  <MenuItem value={"SE Traniee"}>traine</MenuItem>
-                  <MenuItem value={"Senior"}>senior</MenuItem>
-                  <ListSubheader>hr</ListSubheader>
-                  <MenuItem value={"HR Junior"}>junior</MenuItem>
-                  <MenuItem value={"HR Senior"}>senior</MenuItem>
+                  <ListSubheader style={{ fontWeight: "bold" }}>
+                    Software Engineer
+                  </ListSubheader>
+                  <MenuItem value={"TraineSE"}>Trainee</MenuItem>
+                  <MenuItem value={"SeniorSE"}>Senior</MenuItem>
+                  <ListSubheader style={{ fontWeight: "bold" }}>
+                    HR
+                  </ListSubheader>
+                  <MenuItem value={"JuniorHR"}>Junior</MenuItem>
+                  <MenuItem value={"SeniorHR"}>Senior</MenuItem>     
                 </Select>
               </Grid>
               <Grid item md={6} xs={12}>

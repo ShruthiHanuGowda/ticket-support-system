@@ -3,7 +3,7 @@ import { Box, Grid, InputLabel, ListSubheader, MenuItem, Select, TextField, Typo
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Form } from "react-bootstrap";
- import { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
@@ -12,9 +12,9 @@ export const CreateEndUser = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
-  const [Error, setError] = React.useState(false);
+  // const [Error, setError] = React.useState(false);
   const [singleUser, setSingleUser] = useState({});
-  console.log(singleUser);
+  const [isloading, setLoading] = useState(false);
   const [input, setInput] = useState({
     name: "",
     email: "",
@@ -40,28 +40,49 @@ export const CreateEndUser = () => {
     return retVal;
   }
   const sendData = async (temPass) => {
-    await axios
-      .post("/user", {
-        name: String(input.name),
-        email: String(input.email),
-        department: String(input.department),
-        position: String(input.position),
-        role: String("user"),
-        password: String(temPass),
-      })
-      .then((res) =>
-        navigate("/manage-user", {
-          state: { message: res.data.message, status: res.status },
-        }).then((res) => {
-          console.log(res);
-          if (res.status === "201") {
-            console.log("hiii");
-          }
+    setLoading(true)
+    const toastId = toast.loading("Please Wait...", {
+      style: {
+        fontSize: '16px',
+        color: '#fff',
+        background: 'rgb(126,186,1,0.9)',
+        paddingLeft: '30px',
+        paddingRight: '30px',
+        marginTop: '50px'
+      },
+      iconTheme: {
+        primary: '#fff',
+        secondary: 'rgb(126,186,1)',
+      }
+    })
+    try {
+      await axios
+        .post("/user", {
+          name: String(input.name),
+          email: String(input.email),
+          department: String(input.department),
+          position: String(input.position),
+          role: String("user"),
+          password: String(temPass),
         })
-      )
-      .catch(function (error) {
-        toast.error(error.response?.data?.message);
-      });
+        .then((res) => {
+          if (res.status === "500") {
+            toast.dismiss(toastId);
+            setLoading(false)
+            toast.error(res.data.message);
+          } else {
+            toast.dismiss(toastId);
+            setLoading(false)
+            navigate("/manage-user", {
+              state: { message: res.data.message, status: res.status },
+            });
+          }
+        });
+    } catch (error) {
+      toast.dismiss(toastId);
+      setLoading(false)
+      toast.error(error.response?.data?.message);
+    }
   };
   /////////// For Email Validation////////////////////
   const validate = () => {
@@ -74,7 +95,7 @@ export const CreateEndUser = () => {
         return false;
       } else {
         if (!input.email.match(
-            /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/)) {
+          /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/)) {
           toast.error("please enter valid email address");
           return false;
         } else {
@@ -91,16 +112,15 @@ export const CreateEndUser = () => {
   };
   /////////-------For handleSubmit-------///////////
   const handleSubmit = async (e) => {
+    console.count("submited")
     e.preventDefault();
-    let validation = await validate();
-    setError(validation);
-    console.log(validation);
-    console.log("hiii validation", validation, Error);
-    if (Error == true) {
-      console.log("ddhdhhd", Error);
+    // let validation = validate();
+    // setError(validation);
+    // console.log(validation);
+    // console.log("hiii validation", validation, Error);
+    if (validate()) {
       let a = generatePassword();
       sendData(a).then((a) => {
-        console.log("i ear then function =====", a);
       });
     }
   };
@@ -124,27 +144,53 @@ export const CreateEndUser = () => {
   const handleUpdate = (e) => {
     e.preventDefault();
     updateRequest()
-      .then((res) => {
-        navigate("/manage-user", {
-          state: { message: res.message, status: res.status },
-        });
-        console.log("called");
-      })
-      .catch(function (error) {
-        toast.error(error.response?.data?.message);
-      });
+
   };
   const updateRequest = async () => {
-    return await axios
-      .put(`/user/${_id}`, {
-        name: String(input.name),
-        email: String(input.email),
-        department: String(input.department),
-        position: String(input.position),
-        role: String("user"),
-        password: String(input.temPass),
-      })
-      .then((res) => res.data);
+    setLoading(true)
+    const toastId = toast.loading("Please Wait...", {
+      style: {
+        fontSize: '16px',
+        color: '#fff',
+        background: 'rgb(126,186,1,0.9)',
+        paddingLeft: '30px',
+        paddingRight: '30px',
+        marginTop: '50px'
+      },
+      iconTheme: {
+        primary: '#fff',
+        secondary: 'rgb(126,186,1)',
+      }
+    })
+    try {
+      await axios
+        .put(`/user/${_id}`, {
+          name: String(input.name),
+          email: String(input.email),
+          department: String(input.department),
+          position: String(input.position),
+          role: String("user"),
+          password: String(input.temPass),
+        })
+        .then((res) => {
+          if (res.status === "500") {
+            toast.dismiss(toastId);
+            setLoading(false)
+            toast.error(res.data.message);
+          } else {
+            toast.dismiss(toastId);
+            setLoading(false)
+            navigate("/manage-user", {
+              state: { message: res.data.message, status: res.status },
+            });
+          }
+        });
+    } catch (error) {
+      toast.dismiss(toastId);
+      setLoading(false)
+      toast.error(error.response?.data?.message);
+    }
+
   };
   if (!_id) {
     return (
@@ -317,10 +363,19 @@ export const CreateEndUser = () => {
                     marginRight: "11px",
                     marginBottom: "19px",
                   }}
+                  disabled={isloading}
                 >
                   Create
                 </Button>
-                <Link variant="outlined" onClick={() => { navigate(-1) }} spacing={8} sx={{ marginTop: "22px", marginBottom: "15px" }}>
+                <Link
+                  variant="outlined"
+                  onClick={() => {
+                    navigate(-1);
+                  }}
+                  spacing={8}
+                  sx={{ marginTop: "22px", marginBottom: "15px" }}
+                  hidden={isloading}
+                >
                   Discard
                 </Link>
               </Grid>
@@ -406,10 +461,7 @@ export const CreateEndUser = () => {
                 />
               </Grid>
               <Grid item md={6} xs={12}>
-                <InputLabel
-                  htmlFor="grouped-select"
-                  style={{ fontWeight: "bold" }}
-                >
+                <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold" }}>
                   Position <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <Select
@@ -455,10 +507,7 @@ export const CreateEndUser = () => {
                 </Select>
               </Grid>
               <Grid item md={6} xs={12}>
-                <InputLabel
-                  htmlFor="grouped-select"
-                  style={{ fontWeight: "bold" }}
-                >
+                <InputLabel htmlFor="grouped-select" style={{ fontWeight: "bold" }}>
                   Department <span style={{ color: "red" }}>*</span>
                 </InputLabel>
                 <Select
@@ -508,7 +557,14 @@ export const CreateEndUser = () => {
                 >
                   Update
                 </Button>
-                <Link onClick={() => { navigate(-1) }} variant="outlined" spacing={8} sx={{ marginTop: "22px", marginBottom: "15px" }}>
+                <Link
+                  onClick={() => {
+                    navigate(-1);
+                  }}
+                  variant="outlined"
+                  spacing={8}
+                  sx={{ marginTop: "22px", marginBottom: "15px" }}
+                >
                   Discard
                 </Link>
               </Grid>
@@ -519,5 +575,3 @@ export const CreateEndUser = () => {
     );
   }
 };
-
-  

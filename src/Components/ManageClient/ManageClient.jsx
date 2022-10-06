@@ -24,7 +24,7 @@ export const ManageClient = ({ loggedin, isClient }) => {
   let location = useLocation();
   const [usersData, setUserData] = useState([]);
   const [data, setData] = useState(usersData);
-  useEffect(() => {
+  React.useEffect(() => {
     console.log(data)
     //---- for Toster
     console.count("useEffect called");
