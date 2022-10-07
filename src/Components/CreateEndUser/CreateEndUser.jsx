@@ -170,7 +170,6 @@ export const CreateEndUser = () => {
           department: String(input.department),
           position: String(input.position),
           role: String("user"),
-          password: String(input.temPass),
         })
         .then((res) => {
           if (res.status === "500") {

@@ -28,7 +28,7 @@ router.get("/getSingleTicket/:id", ticketController.getTIcketById);
 router.get("/getImageUrl/:id", ticketController.getImageById);
 router.put("/ticket/Update-ticket/:id", ticketController.UpdateTicket);
 router.get("/getUser/:role?", checkUserAuth, userController.getAllUserData);
-router.post("/ticketid", ticketController.ticketId);
+// router.post("/ticketid", ticketController.ticketId);
 router.get("/deleteImageIncloudy/:id", ticketController.DeleteAttechment);
 
 // ******for Upload Ticket File*************

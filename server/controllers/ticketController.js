@@ -5,6 +5,8 @@ const { ticketModel } = require("../models/ticketSchema");
 const { TicketCounter } = require("../models/ticketCounter")
 const { default: axios } = require("axios");
 const { getImgUrl, deleteFile } = require("../services/cloudinary");
+const { updateSendMail } = require("../services/emailSend");
+const { userModel } = require("../models/userSchema");
 //const multer = require("multer");
 const app = express.Router();
 app.get("/", async (req, res) => {
@@ -41,34 +43,34 @@ const getTIcketById = async (req, res, next) => {
 };
 
 // @@@@@@@@@@@@@@@@@@@@@@ ticketId @@@@@@@@@@@@@@@@@@@@ //
-const ticketId = async (req, res) => {
-  ticketModel.findOneAndUpdate(
-    { id: "autoval" },
-    { $inc: { seq: 1 } },
-    { new: true },
-    (err, cd) => {
-      console.log("ticket value", cd);
-      if (cd == null) {
-        const newval = new ticketModel({ id: "autoval", seq: 1 });
-        newval.save();
-      }
-    }
-  );
-  const data = new ticketModel({
-    ticketId: req.body.ticketId,
-    name: req.body.name,
-    department: req.body.department,
-    fileupload: req.body.fileupload,
-    issuetype: req.body.issuetype,
-    message: req.body.message,
-    status: req.body.status,
-    createdAt: { type: String },
-    updatedAt: { type: String },
-    solvedAt: { type: String },
-  });
-  data.save();
-  res.send("Add id!!!!");
-};
+// const ticketId = async (req, res) => {
+//   ticketModel.findOneAndUpdate(
+//     { id: "autoval" },
+//     { $inc: { seq: 1 } },
+//     { new: true },
+//     (err, cd) => {
+//       console.log("ticket value", cd);
+//       if (cd == null) {
+//         const newval = new ticketModel({ id: "autoval", seq: 1 });
+//         newval.save();
+//       }
+//     }
+//   );
+//   const data = new ticketModel({
+//     ticketId: req.body.ticketId,
+//     name: req.body.name,
+//     department: req.body.department,
+//     fileupload: req.body.fileupload,
+//     issuetype: req.body.issuetype,
+//     message: req.body.message,
+//     status: req.body.status,
+//     createdAt: { type: String },
+//     updatedAt: { type: String },
+//     solvedAt: { type: String },
+//   });
+//   data.save();
+//   res.send("Add id!!!!");
+// };
 
 
 
@@ -78,7 +80,7 @@ const addTicket = async (req, res) => {
   if (count && count.ticketId) {
     ticketNumber = parseInt(count.ticketId) + 1
   }
-  const { ticketId, name, department, fileupload, issuetype, message, status } =
+  const { ticketId, name, department, fileupload, issuetype, message, status, createdUserID } =
     req.body;
   console.log(req.body);
   try {
@@ -91,6 +93,7 @@ const addTicket = async (req, res) => {
       issuetype,
       message,
       status,
+      createdUserID,
       createdAt: new Date().toISOString(),
       updatedAt: "",
       solvedAt: "",
@@ -180,8 +183,10 @@ const searchUser = async (req, res) => {
 const UpdateTicket = async (req, res) => {
   const _id = req.params.id;
   let data = req.body;
+  sendMailOnUpdateTicket(_id, data)
   data.updatedAt = new Date().toISOString();
   console.log("hiaddyyastt=000000=====", data);
+
   try {
     if (_id) {
       await ticketModel.updateOne({ _id: _id }, { $set: data });
@@ -192,6 +197,12 @@ const UpdateTicket = async (req, res) => {
     ErrorResponse(res, "something went wrong " + ex.message);
   }
 };
+const sendMailOnUpdateTicket = async (_id, data) => {
+  const ticketData = await ticketModel.findById(_id);
+  const userData = await userModel.findById(ticketData.createdUserID)
+  console.log("~~~~`", userData)
+  await updateSendMail(userData?.name, userData?.email, ticketData.ticketId, data);
+}
 const DeleteAttechment = async (req, res) => {
   const id = req.params.id;
   console.log("id here received:::::::::::", id);
@@ -204,6 +215,6 @@ exports.getTIcketById = getTIcketById;
 exports.UpdateTicket = UpdateTicket;
 exports.getImageById = getImageById;
 exports.DeleteAttechment = DeleteAttechment;
-exports.ticketId = ticketId;
+// exports.ticketId = ticketId;
 exports.searchUser = searchUser;
 exports.getTicketByStatus = getTicketByStatus;

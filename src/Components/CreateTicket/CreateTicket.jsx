@@ -49,11 +49,14 @@ export const CreateTicket = () => {
     fileupload: "",
     issuetype: "",
     message: "",
+    createdUserID: "",
   });
   useEffect(() => {
     const userdata = JSON.parse(sessionStorage.getItem("userData"));
-    console.log(userdata);
     setInput(userdata);
+    console.log("userdata", userdata);
+    console.log("inprurrbh", input)
+
   }, []);
   //   console.log(input)
   const handleChange = (e) => {
@@ -93,6 +96,7 @@ export const CreateTicket = () => {
         issuetype: String(input.issuetype),
         message: String(input.message),
         status: String("Open"),
+        createdUserID: String(JSON.parse(sessionStorage.getItem("userData"))._id)
       })
       .then((res) => {
         if (res.status === "500") {
@@ -224,7 +228,7 @@ export const CreateTicket = () => {
                   placeholder="Browser Files"
                   name="fileupload"
                   value={input.fileupload}
-                  required 
+                  required
                   onChange={uploadFile}
                   sx={{
                     marginTop: "10px",

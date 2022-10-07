@@ -109,14 +109,12 @@ const getUserById = async (req, res, next) => {
   }
   return res.status(200).json({ user });
 };
-
 const UpdateUser = async (req, res) => {
   const _id = req.params.id;
   try {
     if (_id) {
       const data = req.body;
       await userDataService.updateUser(data, _id);
-
       return res.status(200).json({ message: "user updated " });
       // return successResponseWithData(res, 'user updated', user_resp)
     } else return successResponse(res, "sorry user couldnt be updated");
@@ -133,7 +131,6 @@ const addUser = async (req, res) => {
   const hashPassword = await bcrypt.hash(password, salt);
   console.log(hashPassword);
   const userExist = await userModel.findOne({ email: email });
-
   try {
     if (userExist) {
       return res.status(422).json({ message: "Email already exists! " });
@@ -150,18 +147,15 @@ const addUser = async (req, res) => {
       password: hashPassword,
     });
     await user.save();
-
     if (!user) {
       return res.status(500).json({ message: "unable to add" });
     }
     // <EmailSend email={user.email} />
     console.log("haysdyy---------------------", name, email, password);
     // await EmailSend.sendMail(name, email, password)
-
     return res.status(201).json({ user, message: "User Add Susscesfully" });
   } catch (err) {
-    console.log(err)
-    // toast.error(err.res)
+    toast.error(err.res)
   }
 };
 const sendMailNodemailer = async (name, email, password) => {

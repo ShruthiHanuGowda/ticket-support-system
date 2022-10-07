@@ -4,6 +4,7 @@ class UserDataService {
     if (Object.values(data).length !== 0) return await userModel.create(data);
   }
   async updateUser(data, id) {
+    // console.log("***************", data)
     const _id = await userModel.findOne({ _id: id });
     if (_id) return await userModel.updateOne({ _id: _id }, { $set: data });
   }
